@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 
 public class petbus_action extends FragmentActivity implements OnClickListener {
@@ -25,6 +26,9 @@ public class petbus_action extends FragmentActivity implements OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.petbus_action);
+
+        TextView tv = (TextView) findViewById(R.id.sample_text);
+        tv.setOnClickListener(this);
 
         active_fragment( 0 );
         init_button();
@@ -104,8 +108,6 @@ public class petbus_action extends FragmentActivity implements OnClickListener {
         if (m_action_fragment_overview != null) {
             transaction.hide(m_action_fragment_overview);
         }
-
-
     }
 
 }
