@@ -1,4 +1,4 @@
-package com.petbus.tj.petbus;
+package com.petbus.tj.petbus.ui;
 
 import android.os.Bundle;
 import android.widget.TextView;
