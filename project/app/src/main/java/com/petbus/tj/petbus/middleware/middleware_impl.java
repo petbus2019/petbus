@@ -1,32 +1,34 @@
-package com.petbus.tj.petbus.business;
+package com.petbus.tj.petbus.middleware;
 
-import com.petbus.tj.petbus.database.database;
-import com.petbus.tj.petbus.database.database_impl;
+import com.petbus.tj.petbus.dbmanager.dbmanager;
+import com.petbus.tj.petbus.dbmanager.dbmanager_impl;
 
 import android.content.Context;
 import android.app.Application;
 import android.util.Log;
 
-public class business_impl extends Application implements business {
-    private database m_database = null;
-    private static business_impl m_instance = null;//new business_impl();
-    public business_impl(){
-        Log.i( "PetBusApp", "PetBusBusiness:business_impl" );
+
+public class middleware_impl extends Application implements middleware {
+    private dbmanager m_database = null;
+    private static middleware_impl m_instance = null;//new business_impl();
+    public middleware_impl(){
+        Log.i( "PetBusApp", "PetBusBusiness:middleware_impl" );
         if( null == m_instance )
         {
             m_instance = this;
         }
     }
 
-    public static business_impl getInstance(){
+    public static middleware_impl getInstance(){
         return m_instance;
     }
     @Override
     public int get_petnumber()
     {
         Log.i( "PetBusApp", "PetBusBusiness:get_petnumber" );
-        m_database.get_value();
-        return 10;
+        int re = m_database.get_petnumber();
+        re = 10;
+        return re;
     }
 
     @Override
@@ -34,7 +36,7 @@ public class business_impl extends Application implements business {
         super.onCreate();
         String packageName = getPackageName();
         Log.d("PetBusApp", "PetBusBusiness:package name is " + packageName);
-        m_database = new database_impl( getApplicationContext() ) ;
+        m_database = new dbmanager_impl( getApplicationContext() ) ;
         Log.d("PetBusApp", "PetBusBusiness:the database is " + m_database );
     }
 

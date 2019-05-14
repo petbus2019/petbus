@@ -9,22 +9,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:name="com.petbus.tj.petbus.business.business_impl">
-        <activity android:name=".petbus_petmanage">
+        android:name="com.petbus.tj.petbus.middleware.middleware_impl">
+        <activity android:name=".petbus_welcome">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".petbus_petmanage">
+            <intent-filter>
+                <action android:name="android.intent.action.petbus_welcome" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity android:name=".petbus_action">
             <intent-filter>
                 <action android:name="android.intent.action.petbus_action" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".petbus_welcome">
-            <intent-filter>
-                <action android:name="android.intent.action.petbus_welcome" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

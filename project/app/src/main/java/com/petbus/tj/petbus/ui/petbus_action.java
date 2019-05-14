@@ -1,7 +1,5 @@
 package com.petbus.tj.petbus.ui;
-
 //https://blog.csdn.net/chaoshenzhaoxichao/article/details/79871145
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,8 +12,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.petbus.tj.petbus.business.business;
-import com.petbus.tj.petbus.business.business_impl;
+import com.petbus.tj.petbus.middleware.middleware;
+import com.petbus.tj.petbus.middleware.middleware_impl;
 
 public class petbus_action extends FragmentActivity implements OnClickListener {
     private Fragment m_action_fragment_recode;
@@ -29,14 +27,14 @@ public class petbus_action extends FragmentActivity implements OnClickListener {
     private ImageButton m_button_actiondiary;
     private ImageButton m_button_actionalarm;
 
-    private business m_business;
+    private middleware m_middleware;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.petbus_action);
 
-        m_business = business_impl.getInstance();
+        m_middleware = middleware_impl.getInstance();
 
         TextView tv = (TextView) findViewById(R.id.sample_text);
         tv.setOnClickListener(this);
@@ -72,7 +70,7 @@ public class petbus_action extends FragmentActivity implements OnClickListener {
                 break;
         }
 
-        m_business.get_petnumber();
+        m_middleware.get_petnumber();
     }
 
     private void init_button()
@@ -92,7 +90,6 @@ public class petbus_action extends FragmentActivity implements OnClickListener {
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         hide_fragment( transaction );
-        reset_actionbutton();
         switch (i) {
             case 0:
                 if (m_action_fragment_recode == null) {
@@ -102,7 +99,6 @@ public class petbus_action extends FragmentActivity implements OnClickListener {
                 } else {
                     transaction.show(m_action_fragment_recode);
                 }
-                m_button_actionrecode.setImageResource( R.mipmap.recode_pressed );
                 break;
             case 1:
                 if ( m_action_fragment_overview == null )
@@ -115,7 +111,6 @@ public class petbus_action extends FragmentActivity implements OnClickListener {
                 {
                     transaction.show( m_action_fragment_overview );
                 }
-                m_button_actionoverview.setImageResource( R.mipmap.overview_pressed );
                 break;
             case 2:
                 if ( m_action_fragment_diary == null )
@@ -127,7 +122,6 @@ public class petbus_action extends FragmentActivity implements OnClickListener {
                 {
                     transaction.show( m_action_fragment_diary );
                 }
-                m_button_actiondiary.setImageResource( R.mipmap.diary_pressed );
                 break;
             case 3:
                 if ( m_action_fragment_alarm == null )
@@ -139,15 +133,28 @@ public class petbus_action extends FragmentActivity implements OnClickListener {
                 {
                     transaction.show( m_action_fragment_alarm );
                 }
-                m_button_actionalarm.setImageResource( R.mipmap.alarm_presssed );
                 break;
 
         }
         transaction.commit();
     }
 
-    private void reset_actionbutton()
+    private void reset_actionbutton( int id )
     {
+        switch (id) {
+            case 0:
+                m_button_actionrecode.setImageResource( R.mipmap.recode_pressed );
+                break;
+            case 1:
+                m_button_actionoverview.setImageResource( R.mipmap.overview_pressed );
+                break;
+            case 2:
+                m_button_actiondiary.setImageResource( R.mipmap.diary_pressed );
+                break;
+            case 3:
+                m_button_actionalarm.setImageResource( R.mipmap.alarm_presssed );
+                break;
+        }
         m_button_actionrecode.setImageResource( R.mipmap.recode_normal );
         m_button_actionoverview.setImageResource( R.mipmap.overview_normal );
         m_button_actiondiary.setImageResource( R.mipmap.diary_normal );

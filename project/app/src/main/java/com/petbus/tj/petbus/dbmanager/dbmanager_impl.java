@@ -1,11 +1,11 @@
-package com.petbus.tj.petbus.database;
+package com.petbus.tj.petbus.dbmanager;
 
 import android.util.Log;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class database_impl extends SQLiteOpenHelper implements database
+public class dbmanager_impl extends SQLiteOpenHelper implements dbmanager
 {
 
     public static final String DB_NAME = "petbus_db.db";
@@ -14,16 +14,16 @@ public class database_impl extends SQLiteOpenHelper implements database
     public static final int DB_VERSION = 1;
 
     @Override
-    public int get_value()
+    public int get_petnumber()
     {
-        Log.i( "PetBusApp", "PetBusDatabase:get_value" );
+        Log.i( "PetBusApp", "PetBusDatabase:get_petnumber" );
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL( "insert into petbus_picture(picture_file_name) values(\"TeJing\")" );
         db.close();
-        return 10;
+        return 0;
     }
 
-    public database_impl(Context context) {
+    public dbmanager_impl(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
     @Override
