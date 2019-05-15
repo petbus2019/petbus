@@ -7,121 +7,71 @@
     android:orientation="vertical"
     tools:context=".petbus_action">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:orientation="vertical"
-                  android:background="@android:drawable/title_bar"
-                  android:gravity="center"
-                  android:layout_width="match_parent"
-                  android:layout_height="45dp">
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:id="@+id/topbar_lineralayout"
+        android:orientation="horizontal">
+
         <TextView
+            android:id="@+id/title_text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:gravity="center_horizontal"
+            android:text="@string/petdiary"
+            android:textColor="#ffffff"
+            android:textStyle="bold" />
+        <ImageButton
+            android:id="@+id/leftreturn_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/sample_text"
-            android:text="PetBus"
-            android:textColor="#ffffff"
-            android:textSize="20sp"
-            android:clickable="true"
-            android:textStyle="bold"/>
-    </LinearLayout>
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="3dp"
+            android:background="#00000000"
+            android:clickable="false"
+            android:layout_alignParentLeft ="true"
+            android:src="@mipmap/arrarryleft_normal" />
+        <ImageButton
+            android:id="@+id/setting_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="3dp"
+            android:background="#00000000"
+            android:clickable="false"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/setting_normal" />
+
+        <ImageButton
+            android:id="@+id/add_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="3dp"
+            android:background="#00000000"
+            android:clickable="false"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/add_normal" />
+        <ImageButton
+            android:id="@+id/overview_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="3dp"
+            android:background="#00000000"
+            android:clickable="false"
+            android:layout_toLeftOf="@+id/setting_button"
+            android:src="@mipmap/overview_normal" />
+    </RelativeLayout>
+
     <FrameLayout
         android:id="@+id/fragment"
         android:layout_width="match_parent"
-        android:layout_weight="1"
-        android:layout_height="0dp">
+        android:layout_height="0dp"
+        android:layout_weight="1">
     </FrameLayout>
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="55dp"
-              android:gravity="center"
-              android:background="@color/colorPrimary"
-              android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:id="@+id/id_tab_weixin"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageButton
-                    android:id="@+id/action_recode"
-                    android:clickable="false"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/recode_pressed"
-                    android:background="#00000000"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="#ffffff"
-                    android:text="记录"/>
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/id_tab_frd"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageButton
-                    android:id="@+id/action_overview"
-                    android:clickable="false"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/overview_normal"
-                    android:background="#00000000"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="#ffffff"
-                    android:text="统计"/>
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/id_tab_address"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageButton
-                    android:id="@+id/action_diary"
-                    android:clickable="false"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/diary_normal"
-                    android:background="#00000000"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="#ffffff"
-                    android:text="日记"/>
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/id_tab_setting"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageButton
-                    android:id="@+id/action_alarm"
-                    android:clickable="false"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/alarm_normal"
-                    android:background="#00000000"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="#ffffff"
-                    android:text="提醒"/>
-            </LinearLayout>
-
-        </LinearLayout>
 
 </LinearLayout>

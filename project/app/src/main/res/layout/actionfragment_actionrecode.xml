@@ -3,10 +3,61 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
-    <TextView
+    
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="100sp"
+        android:background="@color/colorBlack"
         android:gravity="center"
-        android:textSize="30sp"
-        android:text="The actionrecode Tab!"/>
+        android:id="@+id/information_layout"
+        android:orientation="horizontal">
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/text_lastaction1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="10sp"
+                android:layout_alignParentBottom="true"
+                android:text="上次喂食：7小时前"/>
+
+            <TextView
+                android:id="@+id/text_lastaction2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/text_lastaction1"
+                android:textSize="10sp"
+                android:text="上次铲屎：昨天"/>
+            <TextView
+                android:id="@+id/text_lastaction3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/text_lastaction2"
+                android:textSize="10sp"
+                android:text="上次洗澡：3天前"/>
+        </RelativeLayout>
+
+    </LinearLayout>
+    <View
+        android:layout_width="fill_parent"
+        android:layout_marginTop="10dp"
+        android:layout_height="1dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="#aa000000" /> 
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/colorPrimaryDark"
+        android:gravity="center"
+        android:id="@+id/actionview_lineralayout"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+    </LinearLayout>
 </LinearLayout>
