@@ -13,7 +13,7 @@
         android:orientation="horizontal">
 
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="300dp"
+            android:layout_width="100dp"
             android:layout_height="match_parent"
             android:background="@color/colorBlack"
             android:gravity="center"
@@ -42,6 +42,67 @@
                 android:textSize="10sp"
                 android:text="上次洗澡：3天前"/>
         </RelativeLayout>
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="@color/colorBlack"
+                android:gravity="center"
+                android:layout_marginRight="50dp"
+                android:orientation="horizontal">
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorBlack"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                </LinearLayout>
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorBlack"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <ImageButton
+                        android:id="@+id/photo_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="3dp"
+                        android:background="#00000000"
+                        android:clickable="false"
+                        android:src="@mipmap/photo_normal" />
+                    <TextView
+                        android:id="@+id/title_text"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:gravity="center_horizontal"
+                        android:text="@string/petname"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+            <ImageButton
+                android:id="@+id/allview_buttom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="3dp"
+                android:background="#00000000"
+                android:clickable="false"
+                android:src="@mipmap/arrayright_normal" />
+
+
+        </LinearLayout>
 
     </LinearLayout>
     <View
@@ -59,5 +120,10 @@
         android:id="@+id/actionview_lineralayout"
         android:layout_weight="1"
         android:orientation="horizontal">
+        <ListView
+            android:id="@+id/list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </ListView>
     </LinearLayout>
 </LinearLayout>

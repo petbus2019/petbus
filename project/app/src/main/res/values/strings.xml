@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">萌宠日记</string>
     <string name="petdiary">萌宠日记</string> 
-    <string name="overview">统计</string> 
-    <string name="settting">设置</string> 
+    <string name="overview">统计</string>
+    <string name="settting">设置</string>
+    <string name="petname">宠物名字</string>
 </resources>
