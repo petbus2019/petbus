@@ -19,7 +19,6 @@ import java.util.List;
 import com.petbus.tj.petbus.middleware.middleware;
 import com.petbus.tj.petbus.middleware.middleware_impl;
 
-//ÏÂÀ­
 //https://www.cnblogs.com/guichun/p/4352546.html
 class action_adapter extends BaseAdapter {
     private List<String> mList;

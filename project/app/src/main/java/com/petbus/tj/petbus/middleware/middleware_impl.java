@@ -28,7 +28,14 @@ public class middleware_impl extends Application implements middleware {
     }
 
     public int new_recode( String time, String petname, String action, String remark, ArrayList<String> m_recode_pic ){
+        String patten = "yyyy-MM-dd HH:mm:ss";
+        // SimpleDateFormat format = new SimpleDateFormat(patten);
+        String dateFormatStr = patten; //format.format(new Date());
+
         Log.i( "PetBusApp", "PetBusBusiness:new_recode(" + time + ")-(" + petname + ")-(" + action + ")-(" + remark + ")-(" );
+        String sql = "INSERT INTO " + dbmanager_impl.TABLE_PETNFO + "(pet_id,picture,operation,time)"
+                   + " values( 1," + "\"picture_name\"," + "\'å–‚é£Ÿ\',\'" + dateFormatStr + "\');";
+        m_database.execute_sql( sql );
         return middleware_diaryrecode.MIDDLEWARE_RETURN_OK;
     }
     public ArrayList<String> get_action_list()
@@ -57,14 +64,14 @@ public class middleware_impl extends Application implements middleware {
         m_database = new dbmanager_impl( getApplicationContext() ) ;
         Log.d("PetBusApp", "PetBusBusiness:the database is " + m_database );
 
-        m_action_list.add("Î¹Ê³");
-        m_action_list.add("²ùÊº");
-        m_action_list.add("Ï´Ôè");
-        m_action_list.add("åŞÍä");
+        m_action_list.add("å–‚é£Ÿ");
+        m_action_list.add("é“²å±");
+        m_action_list.add("æ´—æ¾¡");
+        m_action_list.add("é›å¼¯");
 
-        m_petname_list.add( "ß÷ß÷1" );
-        m_petname_list.add( "ß÷ß÷2" );
-        m_petname_list.add( "ß÷ß÷3" );
+        m_petname_list.add( "å–µå–µ1" );
+        m_petname_list.add( "å–µå–µ2" );
+        m_petname_list.add( "å–µå–µ3" );
     }
 
     @Override  

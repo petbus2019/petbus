@@ -75,7 +75,7 @@ class recode_daily_listview extends ArrayAdapter<action_recode> {
                                                                            , parent, false);
                     TextView date = (TextView) convertView.findViewById(R.id.daily_text);
                     convertView.setTag(R.layout.recode_date, date_view);
-                    date.setText( "2019052" + recode.get_recode_id() + " ÐÇÆÚXX" );
+                    date.setText( "2019052" + recode.get_recode_id() + " XX" );
                     break;
                 case RECODE_TYPE_RECODE:
                     recode_view = new view_holder_recode();
