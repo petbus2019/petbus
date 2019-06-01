@@ -81,38 +81,7 @@ public class dbmanager_impl extends SQLiteOpenHelper implements dbmanager
         Log.i( "PetBusApp", "execSQL: " + sql );
         db.execSQL(sql);
 
-        //below is test only
-        long user_id = 0;
-        sql = "select id from " + TABLE_USERINFO + ";";
-        Log.i( "PetBusApp", "execSQL: " + sql );
-        Cursor c = db.rawQuery( sql , null );
-        if (c.moveToFirst()) {
-            do {
-                user_id = c.getLong(c.getColumnIndex("id"));
-                // String name = c.getString(c.getColumnIndex("name"));
-                // String age = c.getString(c.getColumnIndex("age"));
-            } while (c.moveToNext());
-        }
-
-        sql = "insert into " + TABLE_PETNFO + " (user_id,picture,nickname,sex,birthday,pettype)" 
-            + " values(" + String.valueOf(user_id) + ",\'test.jpg\'" + ",\'喵喵\'" + ",1" + ",2019-06-01" + ",1"  + ");";
-        Log.i( "PetBusApp", "execSQL: " + sql );
-        db.execSQL( sql );
-
-        sql = "insert into " + TABLE_PETNFO + " (user_id,picture,nickname,sex,birthday,pettype)" 
-            + " values(" + String.valueOf(user_id) + ",\'test.jpg\'" + ",\'喵喵1\'" + ",2" + ",2019-06-01" + ",1"  + ");";
-        Log.i( "PetBusApp", "execSQL: " + sql );
-        db.execSQL( sql );
-
-        sql = "insert into " + TABLE_PETNFO + " (user_id,picture,nickname,sex,birthday,pettype)" 
-            + " values(" + String.valueOf(user_id) + ",\'test.jpg\'" + ",\'喵喵2\'" + ",2" + ",2019-06-01" + ",1"  + ");";
-        Log.i( "PetBusApp", "execSQL: " + sql );
-        db.execSQL( sql );
-
-        sql = "insert into " + TABLE_PETNFO + " (user_id,picture,nickname,sex,birthday,pettype)" 
-            + " values(" + String.valueOf(user_id) + ",\'test.jpg\'" + ",\'喵喵3\'" + ",1" + ",2019-06-01" + ",1"  + ");";
-        Log.i( "PetBusApp", "execSQL: " + sql );
-        db.execSQL( sql );
+        add_test_data( db );
     }
     public int execute_sql( String sql ){
         SQLiteDatabase db = getWritableDatabase();
@@ -132,5 +101,44 @@ public class dbmanager_impl extends SQLiteOpenHelper implements dbmanager
     public void onOpen(SQLiteDatabase db) {
         Log.i("PetBusApp","open db");
         super.onOpen(db);
+    }
+
+
+    private void add_test_data(SQLiteDatabase db){
+        //below is test only
+        long user_id = 0;
+        String sql = "select id from " + TABLE_USERINFO + ";";
+        Log.i( "PetBusApp", "execSQL: " + sql );
+        Cursor c = db.rawQuery( sql , null );
+        if (c.moveToFirst()) {
+            do {
+                user_id = c.getLong(c.getColumnIndex("id"));
+                // String name = c.getString(c.getColumnIndex("name"));
+                // String age = c.getString(c.getColumnIndex("age"));
+            } while (c.moveToNext());
+        }
+
+        sql = "insert into " + TABLE_PETNFO + " (user_id,picture,nickname,sex,birthday,pettype)" 
+                   + " values(" + String.valueOf(user_id) + ",\'test.jpg\'" + ",\'喵喵\'" + ",1" + ",2019-06-01" + ",1"  + ");";
+        Log.i( "PetBusApp", "execSQL: " + sql );
+        db.execSQL( sql );
+
+        sql = "insert into " + TABLE_PETNFO + " (user_id,picture,nickname,sex,birthday,pettype)" 
+            + " values(" + String.valueOf(user_id) + ",\'test.jpg\'" + ",\'喵喵1\'" + ",2" + ",2019-06-01" + ",1"  + ");";
+        Log.i( "PetBusApp", "execSQL: " + sql );
+        db.execSQL( sql );
+
+        sql = "insert into " + TABLE_PETNFO + " (user_id,picture,nickname,sex,birthday,pettype)" 
+            + " values(" + String.valueOf(user_id) + ",\'test.jpg\'" + ",\'喵喵2\'" + ",2" + ",2019-06-01" + ",1"  + ");";
+        Log.i( "PetBusApp", "execSQL: " + sql );
+        db.execSQL( sql );
+
+        sql = "insert into " + TABLE_PETNFO + " (user_id,picture,nickname,sex,birthday,pettype)" 
+            + " values(" + String.valueOf(user_id) + ",\'test.jpg\'" + ",\'喵喵3\'" + ",1" + ",2019-06-01" + ",1"  + ");";
+        Log.i( "PetBusApp", "execSQL: " + sql );
+        db.execSQL( sql );
+
+
+        return;
     }
 }
