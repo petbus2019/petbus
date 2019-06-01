@@ -16,6 +16,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.petbus.tj.petbus.middleware.middleware;
+import com.petbus.tj.petbus.middleware.middleware_impl;
 
 //ÏÂÀ­
 //https://www.cnblogs.com/guichun/p/4352546.html
@@ -61,6 +63,7 @@ class action_adapter extends BaseAdapter {
 public class actionfragment_overview extends Fragment
 {
     private ArrayList<Double> m_ylist;
+    private middleware m_middleware;
 
     private Spinner m_spinner;
     private List<String> m_data_list;
@@ -73,6 +76,8 @@ public class actionfragment_overview extends Fragment
         View view = inflater.inflate(R.layout.actionfragment_overview, container, false);
         m_spinner = (Spinner) view.findViewById(R.id.spinner);
         LineGraphicView tabview = (LineGraphicView) view.findViewById(R.id.tabview_id);
+
+        m_middleware = middleware_impl.getInstance();
 
         m_ylist = new ArrayList<Double>();
         m_ylist.add((double) 2.103);
@@ -95,12 +100,7 @@ public class actionfragment_overview extends Fragment
         tabview.setData(m_ylist, xRawDatas, 8, 2);
 
 
-        m_data_list = new ArrayList<String>();
-        m_data_list.add("Î¹Ê³");
-        m_data_list.add("²ùÊº");
-        m_data_list.add("Ï´Ôè");
-
-        action_adapter arr_adapter = new action_adapter(this.getActivity(), m_data_list);
+        action_adapter arr_adapter = new action_adapter(this.getActivity(), m_middleware.get_action_list());
         // arr_adapter.setDropDownViewResource( R.layout.actionfragment_overview_selectitem );
         m_spinner.setAdapter(arr_adapter);
         return view;

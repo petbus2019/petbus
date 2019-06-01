@@ -7,10 +7,14 @@ import android.content.Context;
 import android.app.Application;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
 
 public class middleware_impl extends Application implements middleware {
     private dbmanager m_database = null;
-    private static middleware_impl m_instance = null;//new business_impl();
+    private static middleware_impl m_instance = null;
+    private ArrayList<String> m_action_list = new ArrayList<String>();
+    private ArrayList<String> m_petname_list = new ArrayList<String>();
     public middleware_impl(){
         Log.i( "PetBusApp", "PetBusBusiness:middleware_impl" );
         if( null == m_instance )
@@ -22,6 +26,20 @@ public class middleware_impl extends Application implements middleware {
     public static middleware_impl getInstance(){
         return m_instance;
     }
+
+    public int new_recode( String time, String petname, String action, String remark, ArrayList<String> m_recode_pic ){
+        Log.i( "PetBusApp", "PetBusBusiness:new_recode(" + time + ")-(" + petname + ")-(" + action + ")-(" + remark + ")-(" );
+        return middleware_diaryrecode.MIDDLEWARE_RETURN_OK;
+    }
+    public ArrayList<String> get_action_list()
+    {
+        return m_action_list;
+    }
+    public ArrayList<String> get_petname_list()
+    {
+        return m_petname_list;
+    }
+
     @Override
     public int get_petnumber()
     {
@@ -38,6 +56,15 @@ public class middleware_impl extends Application implements middleware {
         Log.d("PetBusApp", "PetBusBusiness:package name is " + packageName);
         m_database = new dbmanager_impl( getApplicationContext() ) ;
         Log.d("PetBusApp", "PetBusBusiness:the database is " + m_database );
+
+        m_action_list.add("Î¹Ê³");
+        m_action_list.add("²ùÊº");
+        m_action_list.add("Ï´Ôè");
+        m_action_list.add("åÞÍä");
+
+        m_petname_list.add( "ß÷ß÷1" );
+        m_petname_list.add( "ß÷ß÷2" );
+        m_petname_list.add( "ß÷ß÷3" );
     }
 
     @Override  

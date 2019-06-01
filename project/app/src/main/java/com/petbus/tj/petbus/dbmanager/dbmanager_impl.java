@@ -29,19 +29,21 @@ public class dbmanager_impl extends SQLiteOpenHelper implements dbmanager
     @Override
     public void onCreate(SQLiteDatabase db) {
         // 建表
+        Log.i( "PetBusApp", "PetBusDatabase:create the picture table" );
         String sql = "create table " +
                 TABLE_NAME_PICTURE +
                 "(id integer primary key autoincrement, " +
                 "picture_file_name" + " varchar " + ")";
 
         db.execSQL(sql);
-        Log.i( "PetBusApp", "PetBusDatabase:create the table" );
+        db.close();
     }
     @Override  
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.i( "PetBusApp", "PetBusDatabase:onUpgrade" );
         String sql = "DROP TABLE " + TABLE_NAME_PICTURE + ";";
         db.execSQL(sql);
+        db.close();
     }
     @Override
     public void onOpen(SQLiteDatabase db) {

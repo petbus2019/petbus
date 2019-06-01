@@ -8,7 +8,7 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="@color/colorBlack"
+        android:background="@color/colorAccent"
         android:layout_weight="1"
         android:gravity="center"
         android:orientation="horizontal">
@@ -57,7 +57,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_weight="1"
-        android:background="@color/colorBlack"
+        android:background="@color/colorAccent"
         android:id="@+id/information_layout"
         android:orientation="horizontal">
 
@@ -65,16 +65,14 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
-            android:background="@color/colorBlack"
+            android:background="@color/colorAccent"
             android:orientation="vertical">
-
             <ImageView
                 android:id="@+id/recode_petportrait_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:scaleType="center"
                 android:src="@mipmap/fade" />
-
             <TextView
                 android:id="@+id/recode_pet_nicname"
                 android:layout_width="match_parent"
@@ -94,7 +92,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
-            android:background="@color/colorBlack"
+            android:background="@color/colorAccent"
             android:orientation="vertical">
             <ImageView
                 android:id="@+id/recode_image"

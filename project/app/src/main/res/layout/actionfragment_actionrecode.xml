@@ -1,129 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
-    
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="100sp"
-        android:background="@color/colorBlack"
-        android:gravity="center"
-        android:id="@+id/information_layout"
-        android:orientation="horizontal">
-
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="100dp"
-            android:layout_height="match_parent"
-            android:background="@color/colorBlack"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/text_lastaction1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="10sp"
-                android:layout_alignParentBottom="true"
-                android:text="上次喂食：7小时前"/>
-
-            <TextView
-                android:id="@+id/text_lastaction2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/text_lastaction1"
-                android:textSize="10sp"
-                android:text="上次铲屎：昨天"/>
-            <TextView
-                android:id="@+id/text_lastaction3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/text_lastaction2"
-                android:textSize="10sp"
-                android:text="上次洗澡：3天前"/>
-        </RelativeLayout>
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"> 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="100sp"
             android:background="@color/colorBlack"
             android:gravity="center"
+            android:id="@+id/information_layout"
             android:orientation="horizontal">
+
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorBlack"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/text_lastaction1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="10sp"
+                    android:layout_alignParentBottom="true"
+                    android:text="上次喂食：7小时前"/>
+
+                <TextView
+                    android:id="@+id/text_lastaction2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/text_lastaction1"
+                    android:textSize="10sp"
+                    android:text="上次铲屎：昨天"/>
+                <TextView
+                    android:id="@+id/text_lastaction3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/text_lastaction2"
+                    android:textSize="10sp"
+                    android:text="上次洗澡：3天前"/>
+            </RelativeLayout>
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="match_parent"
                 android:background="@color/colorBlack"
                 android:gravity="center"
-                android:layout_marginRight="50dp"
                 android:orientation="horizontal">
                 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="match_parent"
                     android:background="@color/colorBlack"
                     android:gravity="center"
-                    android:orientation="vertical">
-                </LinearLayout>
-                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="@color/colorBlack"
-                    android:gravity="center"
-                    android:orientation="vertical">
-                    <ImageButton
-                        android:id="@+id/photo_button"
+                    android:layout_marginRight="50dp"
+                    android:orientation="horizontal">
+                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorBlack"
+                        android:gravity="center"
+                        android:orientation="vertical">
+                    </LinearLayout>
+                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="3dp"
-                        android:background="#00000000"
-                        android:clickable="false"
-                        android:src="@mipmap/photo_normal" />
-                    <TextView
-                        android:id="@+id/title_text"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:gravity="center_horizontal"
-                        android:text="@string/petname"
-                        android:textColor="#000000"
-                        android:textStyle="bold" />
+                        android:layout_height="match_parent"
+                        android:background="@color/colorBlack"
+                        android:gravity="center"
+                        android:orientation="vertical">
+                        <ImageButton
+                            android:id="@+id/photo_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="3dp"
+                            android:background="#00000000"
+                            android:clickable="false"
+                            android:src="@mipmap/photo_normal" />
+                        <TextView
+                            android:id="@+id/title_text"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:gravity="center_horizontal"
+                            android:text="@string/petname"
+                            android:textColor="#000000"
+                            android:textStyle="bold" />
+                    </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
-            <ImageButton
-                android:id="@+id/allview_buttom"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="3dp"
-                android:background="#00000000"
-                android:clickable="false"
-                android:src="@mipmap/arrayright_normal" />
+                <ImageButton
+                    android:id="@+id/allview_buttom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="3dp"
+                    android:background="#00000000"
+                    android:clickable="false"
+                    android:src="@mipmap/arrayright_normal" />
 
+
+            </LinearLayout>
 
         </LinearLayout>
-
-    </LinearLayout>
-    <View
-        android:layout_width="fill_parent"
-        android:layout_marginTop="10dp"
-        android:layout_height="1dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:background="#aa000000" /> 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@color/colorPrimaryDark"
-        android:gravity="center"
-        android:id="@+id/actionview_lineralayout"
-        android:layout_weight="1"
-        android:orientation="horizontal">
-        <ListView
-            android:id="@+id/list_view"
+        <View
+            android:layout_width="fill_parent"
+            android:layout_marginTop="10dp"
+            android:layout_height="1dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="#aa000000" /> 
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </ListView>
+            android:layout_height="0dp"
+            android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:id="@+id/actionview_lineralayout"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+            <ListView
+                android:id="@+id/list_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            </ListView>
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+
+    <Button
+        android:id="@+id/add_action_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dp"
+        android:layout_marginRight="20dp"
+        android:background="@mipmap/add_normal" />
+
+
+</RelativeLayout>

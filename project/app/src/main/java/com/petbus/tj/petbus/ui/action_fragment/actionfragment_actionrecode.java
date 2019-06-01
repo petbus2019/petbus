@@ -13,6 +13,10 @@ import android.widget.ArrayAdapter;
 import android.content.Context;
 import android.util.DisplayMetrics;
 import android.widget.LinearLayout;
+import android.util.AttributeSet;
+import android.view.MotionEvent;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +24,6 @@ import java.util.List;
 import com.petbus.tj.petbus.middleware.middleware;
 import com.petbus.tj.petbus.middleware.middleware_impl;
 
-//https://www.jianshu.com/p/26ce4fdf8210
-//https://blog.csdn.net/ghd2000/article/details/47663227?_t_t_t=0.11722124961357339
 class action_recode{
     public action_recode( int id, int type ){
         m_id = id;
@@ -104,10 +106,12 @@ class recode_daily_listview extends ArrayAdapter<action_recode> {
     }
 } 
 
-public class actionfragment_actionrecode extends Fragment
+
+public class actionfragment_actionrecode extends Fragment implements OnClickListener
 {
     private List<action_recode> m_daily_recode_list = new ArrayList<>();
     private middleware m_middleware;
+    private ui_interface m_tigger;
 
     private void init_list_data(){
         int i = 0;
@@ -123,6 +127,18 @@ public class actionfragment_actionrecode extends Fragment
         }
     }
 
+    public void onClick( View view ) {
+        Log.i( "PetBusApp", "actionfragment_actionrecode:onClick" );
+        switch( view.getId() )
+        {
+            case R.id.add_action_button:
+                Log.i( "PetBusApp", "add_action_button" );
+                m_tigger.trigger_change( ui_interface.SETTINGFRAMGENT_ID );
+                break;
+        }
+
+    }
+
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState ){
         m_middleware = middleware_impl.getInstance();
@@ -136,13 +152,20 @@ public class actionfragment_actionrecode extends Fragment
         listView.setAdapter(adapter);
         Log.i( "PetBusApp", "PetBus:getView " + m_daily_recode_list );
 
-        // listView.setOnItemClickListener(
-        //     new AdapterView.OnItemClickListener()
-        //         {
-        //             @Override public void onItemClick(AdapterView<?> parent, View view, final int position, long id)
-        //             {
-        //             }
-        //         });
+        Button button = ( Button )view.findViewById( R.id.add_action_button );
+        button.setOnClickListener(this);
+
         return view;
     }
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        m_tigger = (ui_interface)context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+    }
+
 }

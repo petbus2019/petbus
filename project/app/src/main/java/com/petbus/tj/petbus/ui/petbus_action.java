@@ -8,15 +8,28 @@ import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.view.LayoutInflater;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.NonNull;
+
+import android.Manifest;
 
 import com.petbus.tj.petbus.middleware.middleware;
 import com.petbus.tj.petbus.middleware.middleware_impl;
 
-public class petbus_action extends FragmentActivity implements OnClickListener {
+
+public class petbus_action extends FragmentActivity implements OnClickListener,ui_interface,
+                                                    ActivityCompat.OnRequestPermissionsResultCallback {
     private Fragment m_action_fragment_recode;
     private Fragment m_action_fragment_overview;
     private Fragment m_action_fragment_diary;
@@ -30,12 +43,9 @@ public class petbus_action extends FragmentActivity implements OnClickListener {
 
     private middleware m_middleware;
 
+    private static final int CAMERA_REQUEST = 1888;
 
-    private static final int MAINFRAMGENT_ID = 0;
-    private static final int OVERVIEWFRAMGENT_ID = 1;
-    private static final int SETTINGFRAMGENT_ID = 2;
-    private static final int PETMANAGEFRAMGENT_ID = 3;
-    private int m_fragment_id = MAINFRAMGENT_ID;
+    private int m_fragment_id = ui_interface.MAINFRAMGENT_ID;
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate(savedInstanceState);
@@ -48,19 +58,19 @@ public class petbus_action extends FragmentActivity implements OnClickListener {
     }
 
     public void onClick( View view ) {
-        Log.i( "PetBusApp", "PetBus:onClick" );
+        Log.i( "PetBusApp", "PetBus:onClick" + view.getId() );
         switch( view.getId() )
         {
             case R.id.leftreturn_button:
                 Log.i( "PetBusApp", "PetBus:action_recode" );
-                active_fragment(MAINFRAMGENT_ID);
+                active_fragment(ui_interface.MAINFRAMGENT_ID);
                 break;
             case R.id.overview_button:
-                active_fragment(OVERVIEWFRAMGENT_ID);
+                active_fragment(ui_interface.OVERVIEWFRAMGENT_ID);
                 Log.i( "PetBusApp", "PetBus:overview_button" );
                 break;
             case R.id.setting_button:
-                active_fragment(SETTINGFRAMGENT_ID);
+                active_fragment(ui_interface.SETTINGFRAMGENT_ID);
                 Log.i( "PetBusApp", "PetBus:setting_button" );
                 break;
         }
@@ -94,18 +104,18 @@ public class petbus_action extends FragmentActivity implements OnClickListener {
         m_button_addbutton.setVisibility(View.INVISIBLE);
 
         switch( id ) {
-            case MAINFRAMGENT_ID:
+            case ui_interface.MAINFRAMGENT_ID:
                 m_title_view.setText( R.string.petdiary );
                 m_button_overviewbutton.setVisibility(View.VISIBLE);
                 m_button_settingbutton.setVisibility(View.VISIBLE);
                 break;
-            case OVERVIEWFRAMGENT_ID:
+            case ui_interface.OVERVIEWFRAMGENT_ID:
                 m_title_view.setText( R.string.overview );
                 m_button_actionbutton.setVisibility(View.VISIBLE);
                 break;
-            case SETTINGFRAMGENT_ID:
+            case ui_interface.SETTINGFRAMGENT_ID:
                 m_button_actionbutton.setVisibility(View.VISIBLE);
-                m_title_view.setText( R.string.settting );
+                m_title_view.setText( R.string.addrecode );
                 break;
         }
     }
@@ -115,7 +125,7 @@ public class petbus_action extends FragmentActivity implements OnClickListener {
         FragmentTransaction transaction = manager.beginTransaction();
         hide_fragment( transaction );
         switch (i) {
-            case MAINFRAMGENT_ID:
+            case ui_interface.MAINFRAMGENT_ID:
                 if (m_action_fragment_recode == null) {
                     m_action_fragment_recode = new actionfragment_actionrecode();
                     transaction.add(R.id.fragment, m_action_fragment_recode);
@@ -123,7 +133,7 @@ public class petbus_action extends FragmentActivity implements OnClickListener {
                     transaction.show(m_action_fragment_recode);
                 }
                 break;
-            case OVERVIEWFRAMGENT_ID:
+            case ui_interface.OVERVIEWFRAMGENT_ID:
                 if ( m_action_fragment_overview == null )
                 {
                     m_action_fragment_overview = new actionfragment_overview();
@@ -134,7 +144,7 @@ public class petbus_action extends FragmentActivity implements OnClickListener {
                     transaction.show( m_action_fragment_overview );
                 }
                 break;
-            case SETTINGFRAMGENT_ID:
+            case ui_interface.SETTINGFRAMGENT_ID:
                 if ( m_action_fragment_diary == null )
                 {
                     m_action_fragment_diary = new actionfragment_diary();
@@ -168,4 +178,36 @@ public class petbus_action extends FragmentActivity implements OnClickListener {
         }
     }
 
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
+            // Bitmap photo = (Bitmap) data.getExtras().get("data");
+            // imageIV.setImageBitmap(photo);
+            Log.i( "PetBusApp", "PetBus:onActivityResult" );
+        }
+    }
+    
+
+
+    @Override
+    public void onRequestPermissionsResult(final int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        Log.i( "PetBusApp", "onRequestPermissionsResult" );
+        ActivityCompat.requestPermissions(this, new String[]{
+            Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE
+        },1);
+    }
+    public void trigger_camera(){
+        // Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE); 
+        // File outputImage = new File(Environment.getExternalStorageDirectory(),"tempImage" + ".jpg");
+        // Uri imageUri = Uri.fromFile(outputImage);
+        // cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        // startActivityForResult(cameraIntent, CAMERA_REQUEST); 
+    }
+
+    public void trigger_change( int fragment ){
+        active_fragment( fragment );
+        Log.i( "PetBusApp", "trigger_change  " + fragment );
+        return ;
+    }
 }
