@@ -4,6 +4,7 @@ import android.util.Log;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.Cursor;
 
 public class dbmanager_impl extends SQLiteOpenHelper implements dbmanager
 {
@@ -80,13 +81,44 @@ public class dbmanager_impl extends SQLiteOpenHelper implements dbmanager
         Log.i( "PetBusApp", "execSQL: " + sql );
         db.execSQL(sql);
 
-        // db.close();
+        //below is test only
+        long user_id = 0;
+        sql = "select id from " + TABLE_USERINFO + ";";
+        Log.i( "PetBusApp", "execSQL: " + sql );
+        Cursor c = db.rawQuery( sql , null );
+        if (c.moveToFirst()) {
+            do {
+                user_id = c.getLong(c.getColumnIndex("id"));
+                // String name = c.getString(c.getColumnIndex("name"));
+                // String age = c.getString(c.getColumnIndex("age"));
+            } while (c.moveToNext());
+        }
+
+        sql = "insert into " + TABLE_PETNFO + " (user_id,picture,nickname,sex,birthday,pettype)" 
+            + " values(" + String.valueOf(user_id) + ",\'test.jpg\'" + ",\'喵喵\'" + ",1" + ",2019-06-01" + ",1"  + ");";
+        Log.i( "PetBusApp", "execSQL: " + sql );
+        db.execSQL( sql );
+
+        sql = "insert into " + TABLE_PETNFO + " (user_id,picture,nickname,sex,birthday,pettype)" 
+            + " values(" + String.valueOf(user_id) + ",\'test.jpg\'" + ",\'喵喵1\'" + ",2" + ",2019-06-01" + ",1"  + ");";
+        Log.i( "PetBusApp", "execSQL: " + sql );
+        db.execSQL( sql );
+
+        sql = "insert into " + TABLE_PETNFO + " (user_id,picture,nickname,sex,birthday,pettype)" 
+            + " values(" + String.valueOf(user_id) + ",\'test.jpg\'" + ",\'喵喵2\'" + ",2" + ",2019-06-01" + ",1"  + ");";
+        Log.i( "PetBusApp", "execSQL: " + sql );
+        db.execSQL( sql );
+
+        sql = "insert into " + TABLE_PETNFO + " (user_id,picture,nickname,sex,birthday,pettype)" 
+            + " values(" + String.valueOf(user_id) + ",\'test.jpg\'" + ",\'喵喵3\'" + ",1" + ",2019-06-01" + ",1"  + ");";
+        Log.i( "PetBusApp", "execSQL: " + sql );
+        db.execSQL( sql );
     }
     public int execute_sql( String sql ){
         SQLiteDatabase db = getWritableDatabase();
         Log.i( "PetBusApp", "execSQL: " + sql );
-        // db.execSQL( sql );
-        // db.close();
+        db.execSQL( sql );
+        db.close();
         return 0;
     }
     @Override  

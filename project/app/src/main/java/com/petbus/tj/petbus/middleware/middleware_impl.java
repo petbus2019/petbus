@@ -9,6 +9,8 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class middleware_impl extends Application implements middleware {
     private dbmanager m_database = null;
@@ -29,11 +31,11 @@ public class middleware_impl extends Application implements middleware {
 
     public int new_recode( String time, String petname, String action, String remark, ArrayList<String> m_recode_pic ){
         String patten = "yyyy-MM-dd HH:mm:ss";
-        // SimpleDateFormat format = new SimpleDateFormat(patten);
-        String dateFormatStr = patten; //format.format(new Date());
+        SimpleDateFormat format = new SimpleDateFormat(patten);
+        String dateFormatStr = format.format(new Date());
 
         Log.i( "PetBusApp", "PetBusBusiness:new_recode(" + time + ")-(" + petname + ")-(" + action + ")-(" + remark + ")-(" );
-        String sql = "INSERT INTO " + dbmanager_impl.TABLE_PETNFO + "(pet_id,picture,operation,time)"
+        String sql = "INSERT INTO " + dbmanager_impl.TABLE_RECODE + "(pet_id,picture,operation,time)"
                    + " values( 1," + "\"picture_name\"," + "\'喂食\',\'" + dateFormatStr + "\');";
         m_database.execute_sql( sql );
         return middleware_diaryrecode.MIDDLEWARE_RETURN_OK;
