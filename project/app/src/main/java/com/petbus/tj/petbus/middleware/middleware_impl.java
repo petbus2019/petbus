@@ -3,6 +3,7 @@ package com.petbus.tj.petbus.middleware;
 import com.petbus.tj.petbus.dbmanager.dbmanager;
 import com.petbus.tj.petbus.dbmanager.dbmanager_impl;
 
+import android.database.Cursor;
 import android.content.Context;
 import android.app.Application;
 import android.util.Log;
@@ -29,14 +30,26 @@ public class middleware_impl extends Application implements middleware {
         return m_instance;
     }
 
-    public int new_recode( String time, String petname, String action, String remark, ArrayList<String> m_recode_pic ){
+    private static final String m_get_petid_by_name = "select id from petbus_petinfo where nickname = ";
+    public int new_recode( String time, String petname, String action, String remark, ArrayList<String> recode_pic ){
         String patten = "yyyy-MM-dd HH:mm:ss";
         SimpleDateFormat format = new SimpleDateFormat(patten);
         String dateFormatStr = format.format(new Date());
+        String sql = m_get_petid_by_name + "\'" + petname + "\'" + ";";
+        Log.i( "PetBusApp", "execSQL: " + sql );
+        int pet_id = 1;
+        Cursor c = m_database.get_result( sql );
+        if (c.moveToFirst()) {
+            do {
+                pet_id = c.getInt(c.getColumnIndex("id"));
+                // String name = c.getString(c.getColumnIndex("name"));
+                // String age = c.getString(c.getColumnIndex("age"));
+            } while (c.moveToNext());
+        }
 
         Log.i( "PetBusApp", "PetBusBusiness:new_recode(" + time + ")-(" + petname + ")-(" + action + ")-(" + remark + ")-(" );
-        String sql = "INSERT INTO " + dbmanager_impl.TABLE_RECODE + "(pet_id,picture,operation,time)"
-                   + " values( 1," + "\"picture_name\"," + "\'喂食\',\'" + dateFormatStr + "\');";
+        sql = "INSERT INTO " + dbmanager_impl.TABLE_RECODE + "(pet_id,picture,operation,remark,time)"
+                   + " values( " + String.valueOf(pet_id) + "," + "\"picture_name\",\'" + action + "\',\'" + remark + "\',\'" + dateFormatStr + "\');";
         m_database.execute_sql( sql );
         return middleware_diaryrecode.MIDDLEWARE_RETURN_OK;
     }
@@ -58,6 +71,8 @@ public class middleware_impl extends Application implements middleware {
         return re;
     }
 
+    private static final String m_get_nickname_sql = "select nickname from petbus_petinfo;";
+    private static final String m_get_operationname_sql = "select action_name from petbus_operationname;";
     @Override
     public void onCreate() {
         super.onCreate();
@@ -66,14 +81,28 @@ public class middleware_impl extends Application implements middleware {
         m_database = new dbmanager_impl( getApplicationContext() ) ;
         Log.d("PetBusApp", "PetBusBusiness:the database is " + m_database );
 
-        m_action_list.add("喂食");
-        m_action_list.add("铲屎");
-        m_action_list.add("洗澡");
-        m_action_list.add("遛弯");
+        Cursor cur = m_database.get_result(m_get_nickname_sql);
+        if (cur.moveToFirst()) {
+            do {
+                String nick_name = cur.getString(cur.getColumnIndex("nickname"));
+                m_petname_list.add( nick_name );
+                // String name = cur.getString(cur.getColumnIndex("name"));
+                // String age = cur.getString(cur.getColumnIndex("age"));
+            } while (cur.moveToNext());
+        }
+        Log.d("PetBusApp", "PetBusBusiness:the petnamelist is " + m_petname_list );
 
-        m_petname_list.add( "喵喵1" );
-        m_petname_list.add( "喵喵2" );
-        m_petname_list.add( "喵喵3" );
+        cur = m_database.get_result(m_get_operationname_sql);
+        if (cur.moveToFirst()) {
+            do {
+                String nick_name = cur.getString(cur.getColumnIndex("action_name"));
+                m_action_list.add( nick_name );
+                // String name = cur.getString(cur.getColumnIndex("name"));
+                // String age = cur.getString(cur.getColumnIndex("age"));
+            } while (cur.moveToNext());
+        }
+        Log.d("PetBusApp", "PetBusBusiness:the m_action_list is " + m_action_list );
+
     }
 
     @Override  

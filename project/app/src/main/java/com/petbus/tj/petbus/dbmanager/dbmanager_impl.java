@@ -14,6 +14,7 @@ public class dbmanager_impl extends SQLiteOpenHelper implements dbmanager
     public static final String TABLE_USERINFO = "petbus_userinfo";
     public static final String TABLE_PETNFO = "petbus_petinfo";
     public static final String TABLE_RECODE = "petbus_actionrecode";
+    public static final String TABLE_OPERATIONNAME = "petbus_operationname";
     public static final int DB_VERSION = 1;
 
     @Override
@@ -69,11 +70,21 @@ public class dbmanager_impl extends SQLiteOpenHelper implements dbmanager
                 "pet_id" + " integer," + 
                 "picture" + " TEXT," + 
                 "operation" + " TEXT," + 
-                "time" + " DATE," + 
+                "time" + " DATE," +
+                "remark" + " VARCHAR(256)," + 
                 "FOREIGN KEY ( pet_id ) REFERENCES " + TABLE_PETNFO + "(id));";
         Log.i( "PetBusApp", "execSQL: " + sql );
         db.execSQL(sql);
 
+        Log.i( "PetBusApp", "PetBusDatabase:create the " + TABLE_OPERATIONNAME + " table" );
+        sql = "create table " +
+                TABLE_OPERATIONNAME +
+                "(id integer PRIMARY KEY autoincrement, " +
+                "picture" + " TEXT," + 
+                "action_name" + " TEXT" + 
+                ");";
+        Log.i( "PetBusApp", "execSQL: " + sql );
+        db.execSQL(sql);
 
 
         String time_id = String.valueOf( System.currentTimeMillis() );
@@ -83,13 +94,6 @@ public class dbmanager_impl extends SQLiteOpenHelper implements dbmanager
 
         add_test_data( db );
     }
-    public int execute_sql( String sql ){
-        SQLiteDatabase db = getWritableDatabase();
-        Log.i( "PetBusApp", "execSQL: " + sql );
-        db.execSQL( sql );
-        db.close();
-        return 0;
-    }
     @Override  
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.i( "PetBusApp", "PetBusDatabase:onUpgrade" );
@@ -97,15 +101,31 @@ public class dbmanager_impl extends SQLiteOpenHelper implements dbmanager
         db.execSQL(sql);
         db.close();
     }
+
     @Override
     public void onOpen(SQLiteDatabase db) {
         Log.i("PetBusApp","open db");
         super.onOpen(db);
     }
 
+    public int execute_sql( String sql ){
+        SQLiteDatabase db = getWritableDatabase();
+        Log.i( "PetBusApp", "execSQL: " + sql );
+        db.execSQL( sql );
+        db.close();
+        return 0;
+    }
+
+    public Cursor get_result( String sql ){
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor c = db.rawQuery( sql , null );
+        return c;
+    }
 
     private void add_test_data(SQLiteDatabase db){
         //below is test only
+        
+        //Step1: get the user id
         long user_id = 0;
         String sql = "select id from " + TABLE_USERINFO + ";";
         Log.i( "PetBusApp", "execSQL: " + sql );
@@ -118,6 +138,7 @@ public class dbmanager_impl extends SQLiteOpenHelper implements dbmanager
             } while (c.moveToNext());
         }
 
+        //Step2: add four pet to databse
         sql = "insert into " + TABLE_PETNFO + " (user_id,picture,nickname,sex,birthday,pettype)" 
                    + " values(" + String.valueOf(user_id) + ",\'test.jpg\'" + ",\'喵喵\'" + ",1" + ",2019-06-01" + ",1"  + ");";
         Log.i( "PetBusApp", "execSQL: " + sql );
@@ -135,6 +156,27 @@ public class dbmanager_impl extends SQLiteOpenHelper implements dbmanager
 
         sql = "insert into " + TABLE_PETNFO + " (user_id,picture,nickname,sex,birthday,pettype)" 
             + " values(" + String.valueOf(user_id) + ",\'test.jpg\'" + ",\'喵喵3\'" + ",1" + ",2019-06-01" + ",1"  + ");";
+        Log.i( "PetBusApp", "execSQL: " + sql );
+        db.execSQL( sql );
+
+        //Step3: add base operation to databasea
+        sql = "insert into " + TABLE_OPERATIONNAME + " (picture,action_name)" 
+            + " values(\'test.jpg\'" + ",\'喂食\');";
+        Log.i( "PetBusApp", "execSQL: " + sql );
+        db.execSQL( sql );
+
+        sql = "insert into " + TABLE_OPERATIONNAME + " (picture,action_name)" 
+            + " values(\'test.jpg\'" + ",\'铲屎\');";
+        Log.i( "PetBusApp", "execSQL: " + sql );
+        db.execSQL( sql );
+
+        sql = "insert into " + TABLE_OPERATIONNAME + " (picture,action_name)" 
+            + " values(\'test.jpg\'" + ",\'洗澡\');";
+        Log.i( "PetBusApp", "execSQL: " + sql );
+        db.execSQL( sql );
+
+        sql = "insert into " + TABLE_OPERATIONNAME + " (picture,action_name)" 
+            + " values(\'test.jpg\'" + ",\'遛弯\');";
         Log.i( "PetBusApp", "execSQL: " + sql );
         db.execSQL( sql );
 
