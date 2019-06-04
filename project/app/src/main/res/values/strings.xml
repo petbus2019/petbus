@@ -1,14 +1,25 @@
-<resources>
-    <string name="app_name">�ȳ��ռ�</string>
-    <string name="petdiary">�ȳ��ռ�</string> 
-    <string name="overview">ͳ��</string>
-    <string name="setting">����</string>
-    <string name="addrecode">���Ӽ�¼</string>
-    <string name="petname">��������</string>
-    <string name="time">ʱ��</string>
-    <string name="lovepet">����</string>
-    <string name="actiontype">�����</string>
-    <string name="pleaseselect">��ѡ��</string>
-    <string name="remark">��ע</string>
-    <string name="save">����</string>
+﻿<resources>
+    <string name="app_name">萌宠日记</string>
+    <string name="petdiary">萌宠日记</string> 
+    <string name="overview">统计</string>
+    <string name="setting">设置</string>
+    <string name="addrecode">添加记录</string>
+    <string name="petname">宠物名字</string>
+    <string name="time">时间</string>
+    <string name="lovepet">爱宠</string>
+    <string name="actiontype">活动类型</string>
+    <string name="pleaseselect">请选择</string>
+    <string name="remark">备注</string>
+    <string name="save">保存</string>
+    <string name="infofirstvisit">请输入主子资料</string>
+    <string name="infoname">名字</string>
+    <string name="infobirth">生日</string>
+    <string name="infoweight">体重</string>
+    <string name="infogender">性别</string>
+    <string name="infogendermale">弟弟</string>
+    <string name="infogenderfemale">妹妹</string>
+    <string name="infospecies">星球</string>
+    <string name="infospeciesdog">汪星人</string>
+    <string name="infospeciescat">喵星人</string>
+    <string name="infofinish">确认  >></string>
 </resources>
