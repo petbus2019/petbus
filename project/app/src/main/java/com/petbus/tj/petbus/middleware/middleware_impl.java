@@ -42,8 +42,6 @@ public class middleware_impl extends Application implements middleware {
         if (c.moveToFirst()) {
             do {
                 pet_id = c.getInt(c.getColumnIndex("id"));
-                // String name = c.getString(c.getColumnIndex("name"));
-                // String age = c.getString(c.getColumnIndex("age"));
             } while (c.moveToNext());
         }
 

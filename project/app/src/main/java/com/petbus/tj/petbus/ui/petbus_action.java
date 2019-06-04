@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.annotation.NonNull;
+import android.content.pm.PackageManager;
 
 import android.Manifest;
 
@@ -33,7 +35,6 @@ public class petbus_action extends FragmentActivity implements OnClickListener,u
     private Fragment m_action_fragment_recode;
     private Fragment m_action_fragment_overview;
     private Fragment m_action_fragment_diary;
-    private Fragment m_action_fragment_alarm;
 
     private ImageButton m_button_actionbutton;
     private ImageButton m_button_overviewbutton;
@@ -74,8 +75,6 @@ public class petbus_action extends FragmentActivity implements OnClickListener,u
                 Log.i( "PetBusApp", "PetBus:setting_button" );
                 break;
         }
-
-        m_middleware.get_petnumber();
     }
 
     private void init_view()
@@ -173,9 +172,6 @@ public class petbus_action extends FragmentActivity implements OnClickListener,u
         if (m_action_fragment_diary != null) {
             transaction.hide(m_action_fragment_diary);
         }
-        if (m_action_fragment_alarm != null) {
-            transaction.hide(m_action_fragment_alarm);
-        }
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
@@ -186,8 +182,6 @@ public class petbus_action extends FragmentActivity implements OnClickListener,u
             Log.i( "PetBusApp", "PetBus:onActivityResult" );
         }
     }
-    
-
 
     @Override
     public void onRequestPermissionsResult(final int requestCode, @NonNull String[] permissions,
@@ -198,11 +192,17 @@ public class petbus_action extends FragmentActivity implements OnClickListener,u
         },1);
     }
     public void trigger_camera(){
-        // Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE); 
+        int checkCallPhonePermission = ContextCompat.checkSelfPermission( this, Manifest.permission.CAMERA);
+        if(checkCallPhonePermission != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.CAMERA},CAMERA_REQUEST);
+            return;
+        }
+        // https://www.cnblogs.com/dubo-/p/7927821.html
+        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE); 
         // File outputImage = new File(Environment.getExternalStorageDirectory(),"tempImage" + ".jpg");
         // Uri imageUri = Uri.fromFile(outputImage);
         // cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-        // startActivityForResult(cameraIntent, CAMERA_REQUEST); 
+        startActivityForResult(cameraIntent, CAMERA_REQUEST);
     }
 
     public void trigger_change( int fragment ){

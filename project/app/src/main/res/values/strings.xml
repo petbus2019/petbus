@@ -10,4 +10,5 @@
     <string name="actiontype">活动类型</string>
     <string name="pleaseselect">请选择</string>
     <string name="remark">备注</string>
+    <string name="save">保存</string>
 </resources>

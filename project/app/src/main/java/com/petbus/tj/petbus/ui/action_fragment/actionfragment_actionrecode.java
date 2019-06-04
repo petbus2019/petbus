@@ -136,7 +136,6 @@ public class actionfragment_actionrecode extends Fragment implements OnClickList
                 m_tigger.trigger_change( ui_interface.SETTINGFRAMGENT_ID );
                 break;
         }
-
     }
 
     @Override

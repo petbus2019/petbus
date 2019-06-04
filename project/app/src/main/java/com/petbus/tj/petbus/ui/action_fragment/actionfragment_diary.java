@@ -57,9 +57,7 @@ class diary_actionadapter extends BaseAdapter {
         if( convertView != null )
         {
             TextView _TextView1=(TextView)convertView.findViewById(R.id.action_text);
-            // TextView _TextView2=(TextView)convertView.findViewById(R.id.textView2);
             _TextView1.setText(mList.get(position));
-            // _TextView2.setText(mList.get(position).getPersonAddress());
         }
         return convertView;
     }
@@ -93,7 +91,6 @@ public class actionfragment_diary extends Fragment implements OnClickListener
         m_entry_button.setOnClickListener(this);
 
         diary_actionadapter arr_adapter = new diary_actionadapter( this.getActivity(), m_middleware.get_action_list() );
-        // arr_adapter.setDropDownViewResource( R.layout.actionfragment_overview_selectitem );
         m_action_item.setAdapter(arr_adapter);
 
         diary_actionadapter pet_adapter = new diary_actionadapter( this.getActivity(), m_middleware.get_petname_list() );
