@@ -51,9 +51,7 @@ class action_adapter extends BaseAdapter {
         if( convertView != null )
         {
             TextView _TextView1=(TextView)convertView.findViewById(R.id.action_text);
-            // TextView _TextView2=(TextView)convertView.findViewById(R.id.textView2);
             _TextView1.setText(mList.get(position));
-            // _TextView2.setText(mList.get(position).getPersonAddress());
         }
         return convertView;
     }
@@ -71,7 +69,6 @@ public class actionfragment_overview extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState){
-        // TODO Auto-generated method stub return inflater.inflate(R.layout.fragment1, container, false);
         View view = inflater.inflate(R.layout.actionfragment_overview, container, false);
         m_spinner = (Spinner) view.findViewById(R.id.spinner);
         LineGraphicView tabview = (LineGraphicView) view.findViewById(R.id.tabview_id);
@@ -98,9 +95,7 @@ public class actionfragment_overview extends Fragment
         xRawDatas.add("05-26");
         tabview.setData(m_ylist, xRawDatas, 8, 2);
 
-
         action_adapter arr_adapter = new action_adapter(this.getActivity(), m_middleware.get_action_list());
-        // arr_adapter.setDropDownViewResource( R.layout.actionfragment_overview_selectitem );
         m_spinner.setAdapter(arr_adapter);
         return view;
     }

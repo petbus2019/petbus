@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
@@ -12,14 +12,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:orientation="horizontal">
-        <View
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_marginTop="10dp"
-            android:layout_height="1dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="5dp"
-            android:background="#aa000000" /> 
+
         <TextView
             android:id="@+id/recode_times"
             android:layout_width="wrap_content"
@@ -44,14 +37,6 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:text="喂食"/>
-        <View
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_marginTop="10dp"
-            android:layout_height="1dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="50dp"
-            android:background="#aa000000" /> 
     </LinearLayout>
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
@@ -59,6 +44,7 @@
         android:layout_weight="1"
         android:background="#00000000"
         android:id="@+id/information_layout"
+
         android:orientation="horizontal">
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -66,13 +52,30 @@
             android:layout_height="fill_parent"
             android:layout_weight="1"
             android:background="#00000000"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="50dp"
             android:orientation="vertical">
-            <ImageView
-                android:id="@+id/recode_petportrait_image"
-                android:layout_width="wrap_content"
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:scaleType="center"
-                android:src="@mipmap/fade" />
+                android:orientation="horizontal">
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="#00000000" />
+                <ImageView
+                    android:id="@+id/recode_petportrait_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleType="center"
+                    android:src="@mipmap/fade" />
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="#00000000" />
+            </LinearLayout>
             <TextView
                 android:id="@+id/recode_pet_nicname"
                 android:layout_width="match_parent"
@@ -81,9 +84,8 @@
                 android:layout_marginRight="5dp"
                 android:singleLine="false"
                 android:text="这个是日志。日志上面的图片应该是照片之类的东西"
-                android:textSize="20sp" />
+                android:textSize="15sp" />
         </LinearLayout>
-
         <View
             android:layout_width="2dp"
             android:layout_height="fill_parent"
@@ -92,7 +94,10 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
+            android:layout_marginLeft="5dp"
             android:background="#00000000"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="50dp"
             android:orientation="vertical">
             <ImageView
                 android:id="@+id/recode_image"
@@ -104,7 +109,7 @@
                 android:id="@+id/recode_text"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:textSize="30sp"
+                android:textSize="20sp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="50dp"
                 android:text="宠物名字"/>
