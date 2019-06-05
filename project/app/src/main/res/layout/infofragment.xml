@@ -1,24 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
-    tools:context=".MainActivity">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/infofirstvisit"
-        android:textSize="18dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.136"
-        android:paddingBottom="50dp"/>
+    android:gravity="center">
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -43,7 +28,7 @@
             android:id="@+id/id_inputName"
             android:maxLines="1"
             android:textSize="14dp"
-            android:layout_toRightOf="@+id/id_name"/>
+            android:layout_toRightOf="@id/id_name"/>
     </RelativeLayout>
 
 
@@ -62,7 +47,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/id_inputBirth"
             android:textSize="14dp"
-            android:layout_toRightOf="@+id/id_birth"/>
+            android:layout_toRightOf="@id/id_birth"/>
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="250dp"
@@ -80,7 +65,7 @@
             android:id="@+id/id_inputWeight"
             android:hint="                                           kg"
             android:textSize="14dp"
-            android:layout_toRightOf="@+id/id_weight"/>
+            android:layout_toRightOf="@id/id_weight"/>
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="250dp"
@@ -97,7 +82,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/id_inputGender"
-            android:layout_toRightOf="@+id/id_gender"
+            android:layout_toRightOf="@id/id_gender"
             android:orientation="horizontal">
             <RadioButton
                 android:layout_width="wrap_content"
@@ -129,7 +114,7 @@
             android:id="@+id/id_inputSpecies"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/id_species"
+            android:layout_toRightOf="@id/id_species"
             android:orientation="horizontal">
 
             <RadioButton
@@ -146,12 +131,5 @@
                 android:textSize="14dp" />
         </RadioGroup>
     </RelativeLayout>
-    <Button
-        android:id="@+id/id_nextBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/infofinish"
-        android:textSize="17dp"/>
-
 
 </LinearLayout>
