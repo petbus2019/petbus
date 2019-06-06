@@ -32,7 +32,7 @@ public class petbus_welcome extends FragmentActivity implements OnClickListener 
             switch (msg.what) {      
                 case 1:      
                     Intent intent = new Intent();
-                    intent.setClass(petbus_welcome.this, petbus_action.class);
+                    intent.setClass(petbus_welcome.this, petbus_firstvisit.class);
                     startActivity(intent);
                     break;
                 }

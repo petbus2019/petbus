@@ -29,6 +29,12 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name=".petbus_firstvisit">
+            <intent-filter>
+                <action android:name="android.intent.action.petbus_firstvisit" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
