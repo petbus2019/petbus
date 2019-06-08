@@ -89,13 +89,13 @@
                 android:layout_height="wrap_content"
                 android:text="@string/infogendermale"
                 android:textSize="14dp"
-                android:layout_marginRight="20dp"/>
+                android:layout_marginLeft="10dp"/>
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/infogenderfemale"
                 android:textSize="14dp"
-                android:layout_marginLeft="10dp"/>
+                android:layout_marginLeft="50dp"/>
         </RadioGroup>
     </RelativeLayout>
     <RelativeLayout
@@ -121,14 +121,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/infospeciescat"
-                android:textSize="14dp" />
+                android:textSize="14dp"
+                android:layout_marginLeft="10dp"/>
 
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
                 android:text="@string/infospeciesdog"
-                android:textSize="14dp" />
+                android:textSize="14dp"
+                android:layout_marginLeft="36dp"/>
         </RadioGroup>
     </RelativeLayout>
 

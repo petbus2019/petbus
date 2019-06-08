@@ -12,12 +12,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/infofirstvisit"
-        android:textSize="18dp" />
+        android:textSize="18dp"
+        android:layout_marginTop="20dp"/>
 
     <fragment
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/id_firstvisit"
+        android:id="@+id/id_fragment_firstvisit"
         android:name="com.petbus.tj.petbus.ui.info_fragment.infofragment"
         android:layout_weight="1"/>
 
@@ -26,6 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/infofinish"
-        android:textSize="17dp"/>
+        android:textSize="17dp"
+        android:layout_marginBottom="20dp"/>
 
 </LinearLayout>
