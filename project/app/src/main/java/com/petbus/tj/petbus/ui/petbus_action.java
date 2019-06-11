@@ -1,5 +1,6 @@
 package com.petbus.tj.petbus.ui;
 
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,16 +12,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.view.LayoutInflater;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import android.net.Uri;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
 import android.support.annotation.NonNull;
 import android.content.pm.PackageManager;
 
@@ -35,11 +29,13 @@ public class petbus_action extends FragmentActivity implements OnClickListener,u
     private Fragment m_action_fragment_recode;
     private Fragment m_action_fragment_overview;
     private Fragment m_action_fragment_diary;
+    private Fragment m_action_fragment_profile;
 
     private ImageButton m_button_actionbutton;
     private ImageButton m_button_overviewbutton;
     private ImageButton m_button_settingbutton;
     private ImageButton m_button_addbutton;
+    private ImageButton m_button_profilebutton;
     private TextView m_title_view;
 
     private middleware m_middleware;
@@ -74,6 +70,10 @@ public class petbus_action extends FragmentActivity implements OnClickListener,u
                 active_fragment(ui_interface.SETTINGFRAMGENT_ID);
                 Log.i( "PetBusApp", "PetBus:setting_button" );
                 break;
+            case R.id.profile_buttom:
+                active_fragment(ui_interface.PROFILEFRAGMENT_ID);
+                Log.i( "PetBusApp", "PetBus:profile_button" );
+                break;
         }
     }
 
@@ -84,16 +84,19 @@ public class petbus_action extends FragmentActivity implements OnClickListener,u
         m_button_overviewbutton = (ImageButton) findViewById(R.id.overview_button);
         m_button_settingbutton = (ImageButton) findViewById(R.id.setting_button);
         m_button_addbutton = (ImageButton) findViewById(R.id.add_button);
+        m_button_profilebutton = (ImageButton) findViewById(R.id.profile_buttom);
 
         m_button_actionbutton.setOnClickListener(this);
         m_button_overviewbutton.setOnClickListener(this);
         m_button_settingbutton.setOnClickListener(this);
         m_button_addbutton.setOnClickListener(this);
+        m_button_profilebutton.setOnClickListener(this);
 
         m_button_actionbutton.setVisibility(View.INVISIBLE);
         m_button_overviewbutton.setVisibility(View.INVISIBLE);
         m_button_settingbutton.setVisibility(View.INVISIBLE);
         m_button_addbutton.setVisibility(View.INVISIBLE);
+        m_button_profilebutton.setVisibility(View.INVISIBLE);
     }
 
     private void reset_actionbutton( int id ){
@@ -101,6 +104,7 @@ public class petbus_action extends FragmentActivity implements OnClickListener,u
         m_button_overviewbutton.setVisibility(View.INVISIBLE);
         m_button_settingbutton.setVisibility(View.INVISIBLE);
         m_button_addbutton.setVisibility(View.INVISIBLE);
+        m_button_profilebutton.setVisibility(View.INVISIBLE);
 
         switch( id ) {
             case ui_interface.MAINFRAMGENT_ID:
@@ -115,6 +119,11 @@ public class petbus_action extends FragmentActivity implements OnClickListener,u
             case ui_interface.SETTINGFRAMGENT_ID:
                 m_button_actionbutton.setVisibility(View.VISIBLE);
                 m_title_view.setText( R.string.addrecode );
+                break;
+            case ui_interface.PROFILEFRAGMENT_ID:
+                m_button_actionbutton.setVisibility(View.VISIBLE);
+                m_button_addbutton.setVisibility(View.VISIBLE);
+                m_title_view.setText(R.string.petprofile);
                 break;
         }
     }
@@ -154,7 +163,17 @@ public class petbus_action extends FragmentActivity implements OnClickListener,u
                     transaction.show( m_action_fragment_diary );
                 }
                 break;
-
+            case ui_interface.PROFILEFRAGMENT_ID:
+                if ( m_action_fragment_diary == null )
+                {
+                    m_action_fragment_profile = new com.petbus.tj.petbus.ui.actionfragment_profile();
+                    transaction.add(R.id.fragment, m_action_fragment_profile);
+                }
+                else
+                {
+                    transaction.show( m_action_fragment_profile );
+                }
+                break;
         }
         transaction.commit();
         reset_actionbutton( i );
