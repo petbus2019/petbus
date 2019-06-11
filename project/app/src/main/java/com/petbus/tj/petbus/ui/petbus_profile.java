@@ -8,12 +8,12 @@ import android.app.Activity;
 import android.view.View.OnClickListener;
 import android.content.Intent;
 
-public class petbus_petmanage extends Activity  implements OnClickListener {
+public class petbus_profile extends Activity  implements OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.petbus_petmanage);
+        setContentView(R.layout.petbus_profile);
 
         TextView tv = (TextView) findViewById(R.id.sample_text);
         tv.setText("petbus_petmanage");
@@ -27,7 +27,7 @@ public class petbus_petmanage extends Activity  implements OnClickListener {
         {
             case R.id.sample_text:
                     Intent intent = new Intent("android.intent.action.petbus_action");
-                    intent.setClass(petbus_petmanage.this, petbus_action.class);
+                    intent.setClass(petbus_profile.this, petbus_action.class);
                     startActivity(intent);
                 break;
         }
