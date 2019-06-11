@@ -11,6 +11,5 @@ public interface ui_interface {
     public static final int ADDPET_ID = 5;
 
     void trigger_change( int fragment );
-
-    void trigger_camera();
+    void trigger_getpicture();
 }

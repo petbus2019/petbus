@@ -2,7 +2,9 @@ package com.petbus.tj.petbus.ui;
 
 import com.petbus.tj.petbus.ui.R;
 import android.os.Bundle;
+import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,7 +106,7 @@ public class actionfragment_diary extends Fragment implements OnClickListener
         switch( view.getId() )
         {
             case R.id.picture_button_1:
-                m_tigger.trigger_camera();
+                m_tigger.trigger_getpicture();
                 break;
             case R.id.entry_button:
                 do_recode();
