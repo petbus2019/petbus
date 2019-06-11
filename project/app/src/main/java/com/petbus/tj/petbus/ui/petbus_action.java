@@ -19,6 +19,9 @@ import android.support.v7.app.AlertDialog;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix; 
 import android.view.LayoutInflater;
 import android.net.Uri;
 import android.os.Environment;
@@ -30,6 +33,7 @@ import android.Manifest;
 import android.provider.MediaStore;
 import android.provider.DocumentsContract;
 import android.content.ContentUris;
+import android.content.ContentResolver;
 
 import java.text.SimpleDateFormat;
 import java.io.File;
@@ -37,6 +41,108 @@ import java.util.Date;
 
 import com.petbus.tj.petbus.middleware.middleware;
 import com.petbus.tj.petbus.middleware.middleware_impl;
+
+class FileUtils {
+    public static String getFilePathByUri(Context context, Uri uri) {
+        String path = null;
+        Log.i( "PetBusApp", "the uri is " + uri );
+        // 以 file:// 开头的
+        if (ContentResolver.SCHEME_FILE.equals(uri.getScheme())) {
+            path = uri.getPath();
+            Log.i( "PetBusApp", "11111111111111 null !!!!!!!!!" + path );
+            return path;
+        }
+        // 以 content:// 开头的，比如 content://media/extenral/images/media/17766
+        if (ContentResolver.SCHEME_CONTENT.equals(uri.getScheme()) && android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.KITKAT) {
+            Cursor cursor = context.getContentResolver().query(uri, new String[]{MediaStore.Images.Media.DATA}, null, null, null);
+            if (cursor != null) {
+                if (cursor.moveToFirst()) {
+                    int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                    if (columnIndex > -1) {
+                        path = cursor.getString(columnIndex);
+                    }
+                }
+                cursor.close();
+            }
+            Log.i( "PetBusApp", "22222222222222 null !!!!!!!!!" + path );
+            return path;
+        }
+        // 4.4及之后的 是以 content:// 开头的，比如 content://com.android.providers.media.documents/document/image%3A235700
+        if (ContentResolver.SCHEME_CONTENT.equals(uri.getScheme()) && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+            if (DocumentsContract.isDocumentUri(context, uri)) {
+                if (isExternalStorageDocument(uri)) {
+                    // ExternalStorageProvider
+                    final String docId = DocumentsContract.getDocumentId(uri);
+                    final String[] split = docId.split(":");
+                    final String type = split[0];
+                    if ("primary".equalsIgnoreCase(type)) {
+                        path = Environment.getExternalStorageDirectory() + "/" + split[1];
+                        Log.i( "PetBusApp", "33333333333333 null !!!!!!!!!" + path );
+                        return path;
+                    }
+                } else if (isDownloadsDocument(uri)) {
+                    // DownloadsProvider
+                    final String id = DocumentsContract.getDocumentId(uri);
+                    final Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"),
+                            Long.valueOf(id));
+                    path = getDataColumn(context, contentUri, null, null);
+                    Log.i( "PetBusApp", "44444444444444 null !!!!!!!!!" + path );
+                    return path;
+                } else if (isMediaDocument(uri)) {
+                    // MediaProvider
+                    final String docId = DocumentsContract.getDocumentId(uri);
+                    final String[] split = docId.split(":");
+                    final String type = split[0];
+                    Uri contentUri = null;
+                    if ("image".equals(type)) {
+                        contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                    } else if ("video".equals(type)) {
+                        contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                    } else if ("audio".equals(type)) {
+                        contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                    }
+                    final String selection = "_id=?";
+                    final String[] selectionArgs = new String[]{split[1]};
+                    path = getDataColumn(context, contentUri, selection, selectionArgs);
+                    Log.i( "PetBusApp", "55555555555555 null !!!!!!!!!" + path );
+                    return path;
+                }
+            }
+        }
+        Log.i( "PetBusApp", "66666666666666 null !!!!!!!!!" + path );
+        return null;
+    }
+
+    private static String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {
+        Cursor cursor = null;
+        final String column = "_data";
+        final String[] projection = {column};
+        try {
+            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                final int column_index = cursor.getColumnIndexOrThrow(column);
+                return cursor.getString(column_index);
+            }
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+        return null;
+    }
+
+    private static boolean isExternalStorageDocument(Uri uri) {
+        return "com.android.externalstorage.documents".equals(uri.getAuthority());
+    }
+
+    private static boolean isDownloadsDocument(Uri uri) {
+        return "com.android.providers.downloads.documents".equals(uri.getAuthority());
+    }
+
+    private static boolean isMediaDocument(Uri uri) {
+        return "com.android.providers.media.documents".equals(uri.getAuthority());
+    }
+
+}
 
 class ImageFilePath {
 
@@ -195,7 +301,7 @@ public class petbus_action extends FragmentActivity implements OnClickListener,u
                                                     ActivityCompat.OnRequestPermissionsResultCallback {
     private Fragment m_action_fragment_recode;
     private Fragment m_action_fragment_overview;
-    private Fragment m_action_fragment_diary;
+    private actionfragment_diary m_action_fragment_diary;
 
     private ImageButton m_button_actionbutton;
     private ImageButton m_button_overviewbutton;
@@ -204,6 +310,8 @@ public class petbus_action extends FragmentActivity implements OnClickListener,u
     private TextView m_title_view;
 
     private middleware m_middleware;
+
+    private Uri m_picture_uri;
 
     private static final int CAMERA_REQUEST = 1888;
     private static final int IMAGE_REQUEST = 1889;
@@ -343,20 +451,74 @@ public class petbus_action extends FragmentActivity implements OnClickListener,u
         }
     }
 
+    private Bitmap getBitmapFromUrl(String url, double width, double height) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true; // 设置了此属性一定要记得将值设置为false
+        Log.i( "PetBusApp", "the file name is null !!!!!!!!!" + url );
+        Bitmap bitmap = BitmapFactory.decodeFile(url);
+        // 防止OOM发生
+        options.inJustDecodeBounds = false;
+        int mWidth = bitmap.getWidth();
+        int mHeight = bitmap.getHeight();
+        Matrix matrix = new Matrix();
+        float scaleWidth = 1;
+        float scaleHeight = 1;
+//        try {
+//            ExifInterface exif = new ExifInterface(url);
+//            String model = exif.getAttribute(ExifInterface.TAG_ORIENTATION);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        // 按照固定宽高进行缩放
+        // 这里希望知道照片是横屏拍摄还是竖屏拍摄
+        // 因为两种方式宽高不同，缩放效果就会不同
+        // 这里用了比较笨的方式
+        if(mWidth <= mHeight) {
+            scaleWidth = (float) (width/mWidth);
+            scaleHeight = (float) (height/mHeight);
+        } else {
+            scaleWidth = (float) (height/mWidth);
+            scaleHeight = (float) (width/mHeight);
+        }
+        // 按照固定大小对图片进行缩放
+        matrix.postScale(scaleWidth, scaleHeight);
+        Bitmap newBitmap = Bitmap.createBitmap(bitmap, 0, 0, mWidth, mHeight, matrix, true);
+        // 用完了记得回收
+        bitmap.recycle();
+        return newBitmap;
+    }
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         String imgPath = "";
         if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
+            try
+            {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), m_picture_uri);
+                m_action_fragment_diary.picture_result( bitmap );
+            }
+            catch( Exception e )
+            {
+                e.printStackTrace();
+            }
+
+            //this work fine.
             // Bitmap photo = (Bitmap) data.getExtras().get("data");
-            // imageIV.setImageBitmap(photo);
-            Log.i( "PetBusApp", "PetBus:onActivityResult camera" );
+            // if( null != photo ){
+            //     m_action_fragment_diary.picture_result( photo );
+            // }
+            // else
+            // {
+            //     Log.i( "PetBusApp", "the file name is null !!!!!!!!!" );
+            // }
         }
         else if( requestCode == IMAGE_REQUEST && resultCode == RESULT_OK ){
             Uri uri = data.getData();
-            String selectedImagePath = null;
-            selectedImagePath = ImageFilePath.getPath( this, uri );
-            Log.i( "PetBusApp", "the file name is (" + selectedImagePath + ")" );
+            imgPath = ImageFilePath.getPath( this, uri );
+            Log.i( "PetBusApp", "the file name is (" + imgPath + ")" );
+            m_action_fragment_diary.picture_result( imgPath );
         }
+
     }
 
     @Override
@@ -406,16 +568,10 @@ public class petbus_action extends FragmentActivity implements OnClickListener,u
             ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.CAMERA},CAMERA_REQUEST);
             return;
         }
-        // https://www.cnblogs.com/dubo-/p/7927821.html
-        // https://blog.csdn.net/wufeng55/article/details/80918749
-        // https://blog.csdn.net/huangxiaoguo1/article/details/52830015
-        // https://stackoverflow.com/questions/38200282/android-os-fileuriexposedexception-file-storage-emulated-0-test-txt-exposed
-        // https://inthecheesefactory.com/blog/how-to-share-access-to-file-with-fileprovider-on-android-nougat/en
-        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE); 
-        Uri imageUri = getOutputMediaFileUri( MEDIA_TYPE_IMAGE );
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-
-        Log.i( "PetBusApp", "picture path is " + imageUri );
+        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        m_picture_uri = getOutputMediaFileUri( MEDIA_TYPE_IMAGE );
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, m_picture_uri);
+        Log.i( "PetBusApp", "picture path is " + m_picture_uri );
         startActivityForResult(cameraIntent, CAMERA_REQUEST);
     }
 
@@ -459,10 +615,9 @@ public class petbus_action extends FragmentActivity implements OnClickListener,u
         File mediaStorageDir = null;
         try
         {
-            mediaStorageDir = new File(
-                    Environment
-                            .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                    "MyCameraApp");
+            mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
+                                                              Environment.DIRECTORY_PICTURES),
+                                                              "MyCameraApp");
 
             Log.d("PetBusApp", "Successfully created mediaStorageDir: "
                     + mediaStorageDir);

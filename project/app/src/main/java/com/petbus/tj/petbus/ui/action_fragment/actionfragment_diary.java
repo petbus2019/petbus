@@ -20,11 +20,20 @@ import android.widget.TextView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Toast;
+import android.widget.ImageView;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Environment;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import com.petbus.tj.petbus.middleware.middleware;
 import com.petbus.tj.petbus.middleware.middleware_impl;
@@ -71,11 +80,50 @@ public class actionfragment_diary extends Fragment implements OnClickListener
     private ui_interface m_tigger;
     private TextView m_time_text;
     private EditText m_remark_edit;
-    private ImageButton m_imagebutton_1;
+    private ImageView m_imageview_picture;
     private Spinner m_action_item;
     private Spinner m_pet_item;
     private Button m_entry_button;
     private middleware m_middleware;
+
+    private boolean saveBitmapAsFile(String name, Bitmap bitmap) {
+        long sysTime = System.currentTimeMillis();
+        SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        String time = sDateFormat.format(new Date(sysTime));
+        File saveFile = new File( getActivity().getCacheDir(), name + time + ".jpg");
+        boolean saved = false;
+        FileOutputStream os = null;
+        try {
+            Log.d("FileCache", "Saving File To Cache " + saveFile.getPath());
+            os = new FileOutputStream(saveFile);
+            bitmap.compress( Bitmap.CompressFormat.JPEG, 100, os );
+            os.flush();
+            os.close();
+            saved = true;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return saved;
+    }
+
+    public int picture_result( String picture_path ){
+        Log.i( "PetBusApp", "actionfragment_diary:picture_result" + picture_path );
+        // m_imageview_picture.setImageResource( picture_path );
+        Bitmap bitmap = BitmapFactory.decodeFile(picture_path);
+        m_imageview_picture.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        m_imageview_picture.setImageBitmap(bitmap);
+        saveBitmapAsFile( "picture",bitmap );
+        return 0;
+    }
+
+    public int picture_result( Bitmap pic ){
+        m_imageview_picture.setImageBitmap(pic);
+        saveBitmapAsFile( "picture",pic );
+        return 0;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -84,13 +132,13 @@ public class actionfragment_diary extends Fragment implements OnClickListener
         m_middleware = middleware_impl.getInstance();
         View view = inflater.inflate(R.layout.actionfragment_diary, container, false);
         m_time_text = ( TextView )view.findViewById( R.id.recode_time_text );
-        m_imagebutton_1 = ( ImageButton )view.findViewById( R.id.picture_button_1 );
+        m_imageview_picture = ( ImageView )view.findViewById( R.id.picture_button );
         m_action_item = ( Spinner ) view.findViewById( R.id.action_spinner );
         m_pet_item = ( Spinner ) view.findViewById( R.id.pet_spinner );
         m_entry_button = ( Button ) view.findViewById( R.id.entry_button );
         m_remark_edit = ( EditText ) view.findViewById( R.id.remark_text_input );
 
-        m_imagebutton_1.setOnClickListener(this);
+        m_imageview_picture.setOnClickListener(this);
         m_entry_button.setOnClickListener(this);
 
         diary_actionadapter arr_adapter = new diary_actionadapter( this.getActivity(), m_middleware.get_action_list() );
@@ -105,7 +153,7 @@ public class actionfragment_diary extends Fragment implements OnClickListener
         Log.i( "PetBusApp", "actionfragment_diary:onClick" );
         switch( view.getId() )
         {
-            case R.id.picture_button_1:
+            case R.id.picture_button:
                 m_tigger.trigger_getpicture();
                 break;
             case R.id.entry_button:
@@ -113,6 +161,7 @@ public class actionfragment_diary extends Fragment implements OnClickListener
                 break;
         }
     }
+
     private void do_recode(){
         String text = m_time_text.getText().toString();
         String action_text = m_action_item.getSelectedItem().toString();
