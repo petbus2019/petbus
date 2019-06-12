@@ -13,7 +13,7 @@ public class dbmanager_impl extends SQLiteOpenHelper implements dbmanager
     public static final String TABLE_NAME_PICTURE = "petbus_picture";
     public static final String TABLE_USERINFO = "petbus_userinfo";
     public static final String TABLE_PETNFO = "petbus_petinfo";
-    public static final String TABLE_RECODE = "petbus_actionrecode";
+    public static final String TABLE_RECORD = "petbus_actionrecord";
     public static final String TABLE_OPERATIONNAME = "petbus_operationname";
     public static final int DB_VERSION = 1;
 
@@ -63,9 +63,9 @@ public class dbmanager_impl extends SQLiteOpenHelper implements dbmanager
         Log.i( "PetBusApp", "execSQL: " + sql );
         db.execSQL(sql);
 
-        Log.i( "PetBusApp", "PetBusDatabase:create the " + TABLE_RECODE + " table" );
+        Log.i( "PetBusApp", "PetBusDatabase:create the " + TABLE_RECORD + " table" );
         sql = "create table " +
-                TABLE_RECODE +
+                TABLE_RECORD +
                 "(id integer PRIMARY KEY autoincrement, " +
                 "pet_id" + " integer," + 
                 "picture" + " TEXT," + 

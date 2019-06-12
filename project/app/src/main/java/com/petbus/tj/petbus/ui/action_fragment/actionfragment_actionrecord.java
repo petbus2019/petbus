@@ -24,16 +24,16 @@ import java.util.List;
 import com.petbus.tj.petbus.middleware.middleware;
 import com.petbus.tj.petbus.middleware.middleware_impl;
 
-class action_recode{
-    public action_recode( int id, int type ){
+class action_record{
+    public action_record( int id, int type ){
         m_id = id;
         m_type = type;
     }
 
-    int get_recode_type(){
+    int get_record_type(){
         return m_type;
     }
-    int get_recode_id(){
+    int get_record_id(){
         return m_id;
     }
     
@@ -41,17 +41,17 @@ class action_recode{
     private int m_type;
 }
 
-class recode_daily_listview extends ArrayAdapter<action_recode> {
-    public static final int RECODE_TYPE_DATE = 0;
-    public static final int RECODE_TYPE_RECODE = 1;
+class record_daily_listview extends ArrayAdapter<action_record> {
+    public static final int RECORD_TYPE_DATE = 0;
+    public static final int RECORD_TYPE_RECORD = 1;
 
     private middleware m_middleware;
     private int resourceID;
     private Context m_Context;
     private DisplayMetrics mDisplayMetrics;
-    private List<action_recode> mList;
+    private List<action_record> mList;
 
-    public recode_daily_listview(Context context, int textViewResourceId,List<action_recode>objects){
+    public record_daily_listview(Context context, int textViewResourceId,List<action_record>objects){
         super(context,textViewResourceId,objects);
         m_Context = context;
         resourceID = textViewResourceId;
@@ -61,38 +61,37 @@ class recode_daily_listview extends ArrayAdapter<action_recode> {
     }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        action_recode recode = getItem(position);
-        Log.i( "PetBusApp", "PetBus:getView " + recode );
+        action_record record = getItem(position);
+        Log.i( "PetBusApp", "PetBus:getView " + record );
 
         view_holder_date date_view = null;
-        view_holder_recode recode_view = null;
+        view_holder_record record_view = null;
 
         if( convertView == null ){
-            switch( recode.get_recode_type() ){
-                case RECODE_TYPE_DATE:
+            switch( record.get_record_type() ){
+                case RECORD_TYPE_DATE:
                     date_view = new view_holder_date();
-                    convertView = LayoutInflater.from(getContext()).inflate(R.layout.recode_date
+                    convertView = LayoutInflater.from(getContext()).inflate(R.layout.record_date
                                                                            , parent, false);
                     TextView date = (TextView) convertView.findViewById(R.id.daily_text);
-                    convertView.setTag(R.layout.recode_date, date_view);
-                    date.setText( "2019052" + recode.get_recode_id() + " XX" );
+                    convertView.setTag(R.layout.record_date, date_view);
+                    date.setText( "2019052" + record.get_record_id() + " XX" );
                     break;
-                case RECODE_TYPE_RECODE:
-                    recode_view = new view_holder_recode();
-                    convertView = LayoutInflater.from(getContext()).inflate(R.layout.recode_recode
+                case RECORD_TYPE_RECORD:
+                    record_view = new view_holder_record();
+                    convertView = LayoutInflater.from(getContext()).inflate(R.layout.record_record
                                                                            , parent, false); 
-                    convertView.setTag(R.layout.recode_recode, recode_view); 
-                    TextView name = (TextView) convertView.findViewById(R.id.recode_times);
-                    // name.setText( "Test-" + recode.get_recode_id() );
+                    convertView.setTag(R.layout.record_record, record_view); 
+                    TextView name = (TextView) convertView.findViewById(R.id.record_times);
                     break;
             }
         } else {
-            switch( recode.get_recode_type() ){
-                case RECODE_TYPE_DATE:
-                    date_view = (view_holder_date)convertView.getTag(R.layout.recode_date);
+            switch( record.get_record_type() ){
+                case RECORD_TYPE_DATE:
+                    date_view = (view_holder_date)convertView.getTag(R.layout.record_date);
                     break;
-                case RECODE_TYPE_RECODE:
-                    recode_view = (view_holder_recode)convertView.getTag(R.layout.recode_recode);
+                case RECORD_TYPE_RECORD:
+                    record_view = (view_holder_record)convertView.getTag(R.layout.record_record);
                     break;
             }
         }
@@ -102,14 +101,14 @@ class recode_daily_listview extends ArrayAdapter<action_recode> {
 
     private class view_holder_date {
     }
-    private class view_holder_recode{
+    private class view_holder_record{
     }
 } 
 
 
-public class actionfragment_actionrecode extends Fragment implements OnClickListener
+public class actionfragment_actionrecord extends Fragment implements OnClickListener
 {
-    private List<action_recode> m_daily_recode_list = new ArrayList<>();
+    private List<action_record> m_daily_record_list = new ArrayList<>();
     private middleware m_middleware;
     private ui_interface m_tigger;
 
@@ -118,17 +117,17 @@ public class actionfragment_actionrecode extends Fragment implements OnClickList
 
         for( i = 0;i < 7;i += 3  )
         {
-            action_recode tmp = new action_recode( i, 0 );
-            m_daily_recode_list.add(tmp);
-            tmp = new action_recode( i + 1, 1 );
-            m_daily_recode_list.add(tmp);
-            tmp = new action_recode( i + 2, 1 );
-            m_daily_recode_list.add(tmp);
+            action_record tmp = new action_record( i, 0 );
+            m_daily_record_list.add(tmp);
+            tmp = new action_record( i + 1, 1 );
+            m_daily_record_list.add(tmp);
+            tmp = new action_record( i + 2, 1 );
+            m_daily_record_list.add(tmp);
         }
     }
 
     public void onClick( View view ) {
-        Log.i( "PetBusApp", "actionfragment_actionrecode:onClick" );
+        Log.i( "PetBusApp", "actionfragment_actionrecord:onClick" );
         switch( view.getId() )
         {
             case R.id.add_action_button:
@@ -143,13 +142,13 @@ public class actionfragment_actionrecode extends Fragment implements OnClickList
         m_middleware = middleware_impl.getInstance();
         init_list_data();
 
-        View view = inflater.inflate(R.layout.actionfragment_actionrecode, container, false);
-        ArrayAdapter<action_recode> adapter = new recode_daily_listview(this.getActivity(),
-                R.layout.recode_daily_recode,m_daily_recode_list);
+        View view = inflater.inflate(R.layout.actionfragment_actionrecord, container, false);
+        ArrayAdapter<action_record> adapter = new record_daily_listview(this.getActivity(),
+                R.layout.record_daily_record,m_daily_record_list);
  
         ListView listView =(ListView)view.findViewById(R.id.list_view);
         listView.setAdapter(adapter);
-        Log.i( "PetBusApp", "PetBus:getView " + m_daily_recode_list );
+        Log.i( "PetBusApp", "PetBus:getView " + m_daily_record_list );
 
         Button button = ( Button )view.findViewById( R.id.add_action_button );
         button.setOnClickListener(this);

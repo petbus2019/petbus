@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textSize="30sp"
-            android:text="recode_1!"/>
+            android:text="record_1!"/>
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:orientation="vertical"
             android:layout_marginRight="50dp"

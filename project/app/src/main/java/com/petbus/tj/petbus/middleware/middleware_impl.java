@@ -31,11 +31,12 @@ public class middleware_impl extends Application implements middleware {
     }
 
     private static final String m_get_petid_by_name = "select id from petbus_petinfo where nickname = ";
-    public int new_recode( String time, String petname, String action, String remark, ArrayList<String> recode_pic ){
+    public int new_record( String time, String petname, String action, String remark, ArrayList<String> record_pic ){
         String patten = "yyyy-MM-dd HH:mm:ss";
         SimpleDateFormat format = new SimpleDateFormat(patten);
         String dateFormatStr = format.format(new Date());
         String sql = m_get_petid_by_name + "\'" + petname + "\'" + ";";
+        String file_name = "";
         Log.i( "PetBusApp", "execSQL: " + sql );
         int pet_id = 1;
         Cursor c = m_database.get_result( sql );
@@ -45,11 +46,19 @@ public class middleware_impl extends Application implements middleware {
             } while (c.moveToNext());
         }
 
-        Log.i( "PetBusApp", "PetBusBusiness:new_recode(" + time + ")-(" + petname + ")-(" + action + ")-(" + remark + ")-(" );
-        sql = "INSERT INTO " + dbmanager_impl.TABLE_RECODE + "(pet_id,picture,operation,remark,time)"
-                   + " values( " + String.valueOf(pet_id) + "," + "\"picture_name\",\'" + action + "\',\'" + remark + "\',\'" + dateFormatStr + "\');";
+        if( record_pic.size() > 0 )
+        {
+            file_name = record_pic.get(0);
+            Log.i( "PetBusApp", "PetBusBusiness:picture:" + record_pic );
+            Log.i( "PetBusApp", "PetBusBusiness:picture:" + file_name );
+        }
+
+        Log.i( "PetBusApp", "PetBusBusiness:new_record(" + time + ")-(" + petname + ")-(" + action + ")-(" + remark + ")-(" );
+        sql = "INSERT INTO " + dbmanager_impl.TABLE_RECORD + "(pet_id,picture,operation,remark,time)"
+                   + " values( " + String.valueOf(pet_id) + "," + "\"" + file_name
+                   + "\",\'" + action + "\',\'" + remark + "\',\'" + dateFormatStr + "\');";
         m_database.execute_sql( sql );
-        return middleware_diaryrecode.MIDDLEWARE_RETURN_OK;
+        return middleware.MIDDLEWARE_RETURN_OK;
     }
     public ArrayList<String> get_action_list()
     {

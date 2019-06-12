@@ -49,7 +49,6 @@ class FileUtils {
         // 以 file:// 开头的
         if (ContentResolver.SCHEME_FILE.equals(uri.getScheme())) {
             path = uri.getPath();
-            Log.i( "PetBusApp", "11111111111111 null !!!!!!!!!" + path );
             return path;
         }
         // 以 content:// 开头的，比如 content://media/extenral/images/media/17766
@@ -64,7 +63,6 @@ class FileUtils {
                 }
                 cursor.close();
             }
-            Log.i( "PetBusApp", "22222222222222 null !!!!!!!!!" + path );
             return path;
         }
         // 4.4及之后的 是以 content:// 开头的，比如 content://com.android.providers.media.documents/document/image%3A235700
@@ -77,7 +75,6 @@ class FileUtils {
                     final String type = split[0];
                     if ("primary".equalsIgnoreCase(type)) {
                         path = Environment.getExternalStorageDirectory() + "/" + split[1];
-                        Log.i( "PetBusApp", "33333333333333 null !!!!!!!!!" + path );
                         return path;
                     }
                 } else if (isDownloadsDocument(uri)) {
@@ -86,7 +83,6 @@ class FileUtils {
                     final Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"),
                             Long.valueOf(id));
                     path = getDataColumn(context, contentUri, null, null);
-                    Log.i( "PetBusApp", "44444444444444 null !!!!!!!!!" + path );
                     return path;
                 } else if (isMediaDocument(uri)) {
                     // MediaProvider
@@ -104,12 +100,11 @@ class FileUtils {
                     final String selection = "_id=?";
                     final String[] selectionArgs = new String[]{split[1]};
                     path = getDataColumn(context, contentUri, selection, selectionArgs);
-                    Log.i( "PetBusApp", "55555555555555 null !!!!!!!!!" + path );
                     return path;
                 }
             }
         }
-        Log.i( "PetBusApp", "66666666666666 null !!!!!!!!!" + path );
+
         return null;
     }
 
@@ -299,7 +294,7 @@ class ImageFilePath {
 
 public class petbus_action extends FragmentActivity implements OnClickListener,ui_interface,
                                                     ActivityCompat.OnRequestPermissionsResultCallback {
-    private Fragment m_action_fragment_recode;
+    private Fragment m_action_fragment_record;
     private Fragment m_action_fragment_overview;
     private actionfragment_diary m_action_fragment_diary;
 
@@ -340,7 +335,7 @@ public class petbus_action extends FragmentActivity implements OnClickListener,u
         switch( view.getId() )
         {
             case R.id.leftreturn_button:
-                Log.i( "PetBusApp", "PetBus:action_recode" );
+                Log.i( "PetBusApp", "PetBus:action_record" );
                 active_fragment(ui_interface.MAINFRAMGENT_ID);
                 break;
             case R.id.overview_button:
@@ -391,7 +386,7 @@ public class petbus_action extends FragmentActivity implements OnClickListener,u
                 break;
             case ui_interface.SETTINGFRAMGENT_ID:
                 m_button_actionbutton.setVisibility(View.VISIBLE);
-                m_title_view.setText( R.string.addrecode );
+                m_title_view.setText( R.string.addrecord );
                 break;
         }
     }
@@ -402,11 +397,11 @@ public class petbus_action extends FragmentActivity implements OnClickListener,u
         hide_fragment( transaction );
         switch (i) {
             case ui_interface.MAINFRAMGENT_ID:
-                if (m_action_fragment_recode == null) {
-                    m_action_fragment_recode = new actionfragment_actionrecode();
-                    transaction.add(R.id.fragment, m_action_fragment_recode);
+                if (m_action_fragment_record == null) {
+                    m_action_fragment_record = new actionfragment_actionrecord();
+                    transaction.add(R.id.fragment, m_action_fragment_record);
                 } else {
-                    transaction.show(m_action_fragment_recode);
+                    transaction.show(m_action_fragment_record);
                 }
                 break;
             case ui_interface.OVERVIEWFRAMGENT_ID:
@@ -440,8 +435,8 @@ public class petbus_action extends FragmentActivity implements OnClickListener,u
 
 
     private void hide_fragment(FragmentTransaction transaction) {
-        if (m_action_fragment_recode != null) {
-            transaction.hide(m_action_fragment_recode);
+        if (m_action_fragment_record != null) {
+            transaction.hide(m_action_fragment_record);
         }
         if (m_action_fragment_overview != null) {
             transaction.hide(m_action_fragment_overview);

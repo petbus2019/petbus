@@ -85,13 +85,14 @@ public class actionfragment_diary extends Fragment implements OnClickListener
     private Spinner m_pet_item;
     private Button m_entry_button;
     private middleware m_middleware;
+    private String m_picture_filename;
 
-    private boolean saveBitmapAsFile(String name, Bitmap bitmap) {
+    private String saveBitmapAsFile(String name, Bitmap bitmap) {
         long sysTime = System.currentTimeMillis();
-        SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy_MM_dd_hh_mm");
         String time = sDateFormat.format(new Date(sysTime));
-        File saveFile = new File( getActivity().getCacheDir(), name + time + ".jpg");
-        boolean saved = false;
+        String file_name = getActivity().getCacheDir() + "/" + name + time + ".jpg";
+        File saveFile = new File( file_name );
         FileOutputStream os = null;
         try {
             Log.d("FileCache", "Saving File To Cache " + saveFile.getPath());
@@ -99,29 +100,28 @@ public class actionfragment_diary extends Fragment implements OnClickListener
             bitmap.compress( Bitmap.CompressFormat.JPEG, 100, os );
             os.flush();
             os.close();
-            saved = true;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return saved;
+        return file_name;
     }
 
     public int picture_result( String picture_path ){
         Log.i( "PetBusApp", "actionfragment_diary:picture_result" + picture_path );
-        // m_imageview_picture.setImageResource( picture_path );
+
         Bitmap bitmap = BitmapFactory.decodeFile(picture_path);
         m_imageview_picture.setScaleType(ImageView.ScaleType.FIT_CENTER);
         m_imageview_picture.setImageBitmap(bitmap);
-        saveBitmapAsFile( "picture",bitmap );
+        m_picture_filename = saveBitmapAsFile( "picture",bitmap );
         return 0;
     }
 
     public int picture_result( Bitmap pic ){
         m_imageview_picture.setImageBitmap(pic);
-        saveBitmapAsFile( "picture",pic );
+        m_picture_filename = saveBitmapAsFile( "picture",pic );
         return 0;
     }
 
@@ -131,12 +131,16 @@ public class actionfragment_diary extends Fragment implements OnClickListener
 
         m_middleware = middleware_impl.getInstance();
         View view = inflater.inflate(R.layout.actionfragment_diary, container, false);
-        m_time_text = ( TextView )view.findViewById( R.id.recode_time_text );
+        m_time_text = ( TextView )view.findViewById( R.id.record_time_text );
         m_imageview_picture = ( ImageView )view.findViewById( R.id.picture_button );
         m_action_item = ( Spinner ) view.findViewById( R.id.action_spinner );
         m_pet_item = ( Spinner ) view.findViewById( R.id.pet_spinner );
         m_entry_button = ( Button ) view.findViewById( R.id.entry_button );
         m_remark_edit = ( EditText ) view.findViewById( R.id.remark_text_input );
+
+        m_imageview_picture.setAdjustViewBounds(true);
+        m_imageview_picture.setMaxHeight(200);
+        m_imageview_picture.setMaxWidth(200);
 
         m_imageview_picture.setOnClickListener(this);
         m_entry_button.setOnClickListener(this);
@@ -157,18 +161,25 @@ public class actionfragment_diary extends Fragment implements OnClickListener
                 m_tigger.trigger_getpicture();
                 break;
             case R.id.entry_button:
-                do_recode();
+                do_record();
                 break;
         }
     }
 
-    private void do_recode(){
+    private void do_record(){
         String text = m_time_text.getText().toString();
         String action_text = m_action_item.getSelectedItem().toString();
         String remark_text = m_remark_edit.getText().toString();
         String petname_text = m_pet_item.getSelectedItem().toString();
+        ArrayList<String> picture_list = new ArrayList<String>();
+        picture_list.add( m_picture_filename );
 
-        m_middleware.new_recode( text, petname_text, action_text, remark_text, null );
+        int re = m_middleware.new_record( text, petname_text, action_text, remark_text, picture_list );
+        if( middleware.MIDDLEWARE_RETURN_OK == re )
+        {
+            Log.i( "PetBusApp", "PetBus:add succeeded" );
+            m_tigger.trigger_change( ui_interface.MAINFRAMGENT_ID );
+        }
     }
     
     @Override
