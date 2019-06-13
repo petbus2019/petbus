@@ -71,7 +71,8 @@ public class dbmanager_impl extends SQLiteOpenHelper implements dbmanager
                 "picture" + " TEXT," + 
                 "operation" + " TEXT," + 
                 "time" + " DATE," +
-                "remark" + " VARCHAR(256)," + 
+                "remark" + " VARCHAR(256)," +
+                "type" + " integer," +
                 "FOREIGN KEY ( pet_id ) REFERENCES " + TABLE_PETNFO + "(id));";
         Log.i( "PetBusApp", "execSQL: " + sql );
         db.execSQL(sql);
@@ -118,6 +119,7 @@ public class dbmanager_impl extends SQLiteOpenHelper implements dbmanager
 
     public Cursor get_result( String sql ){
         SQLiteDatabase db = getWritableDatabase();
+        Log.i( "PetBusApp", "get_result: " + sql );
         Cursor c = db.rawQuery( sql , null );
         return c;
     }
@@ -180,7 +182,17 @@ public class dbmanager_impl extends SQLiteOpenHelper implements dbmanager
         Log.i( "PetBusApp", "execSQL: " + sql );
         db.execSQL( sql );
 
-
         return;
     }
 }
+
+// SELECT date(time) from petbus_actionrecord   GROUP BY date(time);
+// SELECT count(*) from mytable  GROUP BY strftime('%Y',  datatime);
+// select date(time) from petbus_actionrecord;
+// select time(time) from petbus_actionrecord;
+// SELECT * FROM petbus_actionrecord ORDER BY datetime(time) DESC
+
+// SELECT petbus_actionrecord.picture,petbus_actionrecord.time,petbus_actionrecord.remark,
+// petbus_actionrecord.operation,petbus_actionrecord.type,petbus_petinfo.nickname 
+// FROM petbus_actionrecord left join petbus_petinfo on 
+// petbus_actionrecord.pet_id = petbus_petinfo.id ORDER BY datetime(time) DESC

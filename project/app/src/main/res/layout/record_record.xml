@@ -16,27 +16,27 @@
         <TextView
             android:id="@+id/record_times"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:gravity="center"
             android:textSize="20sp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:text="11:50"/>
         <ImageView
-            android:id="@+id/recode_type_image"
+            android:id="@+id/record_action_icon"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:scaleType="center"
             android:src="@mipmap/fade" />
         <TextView
-            android:id="@+id/recode_type_text"
+            android:id="@+id/recode_actioin_text"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:gravity="center"
             android:textSize="20sp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:text="喂食"/>
+            android:text="@string/fead"/>
     </LinearLayout>
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
@@ -69,6 +69,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:scaleType="center"
+                    android:adjustViewBounds="true"
+                    android:maxHeight="100dp"
+                    android:maxWidth="100dp"
                     android:src="@mipmap/fade" />
                 <View
                     android:layout_width="1dp"
@@ -77,7 +80,7 @@
                     android:background="#00000000" />
             </LinearLayout>
             <TextView
-                android:id="@+id/recode_pet_nicname"
+                android:id="@+id/recode_remark_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
@@ -106,13 +109,13 @@
                 android:scaleType="center"
                 android:src="@mipmap/fade" />
             <TextView
-                android:id="@+id/recode_text"
+                android:id="@+id/nickname_text"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:textSize="20sp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="50dp"
-                android:text="宠物名字"/>
+                android:text="@string/petname"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

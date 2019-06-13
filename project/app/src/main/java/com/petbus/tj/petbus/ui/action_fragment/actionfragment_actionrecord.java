@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.ImageView;
 import android.widget.ArrayAdapter;
 import android.content.Context;
 import android.util.DisplayMetrics;
@@ -17,9 +18,17 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
+import java.text.SimpleDateFormat;
+import java.text.DateFormat;
+import java.text.ParseException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Calendar;
+import java.util.Date;
 
 import com.petbus.tj.petbus.middleware.middleware;
 import com.petbus.tj.petbus.middleware.middleware_impl;
@@ -28,22 +37,115 @@ class action_record{
     public action_record( int id, int type ){
         m_id = id;
         m_type = type;
+        Log.i( "PetBusApp", "PetBus:new action_record id:" + id + "type:" + type );
     }
 
-    int get_record_type(){
+    public void set_record( String time, String nickname, String action, String remark, String picture_path ){
+        m_time = time;
+        m_nickname = nickname;
+        m_action = action;
+        m_remark = remark;
+        m_picture_path = picture_path;
+        // Log.i( "PetBusApp", "record:" + time + "--" + nickname + "--" + action + "--" + remark + "--" + picture_path );
+    }
+
+    public String get_date(){
+        DateFormat format = new SimpleDateFormat( middleware.DATE_FORMAT_DATE );
+        java.util.Date date = null;
+        try{
+            date = format.parse(m_time);
+        }
+        catch( ParseException e ){
+            e.printStackTrace();
+        }
+        String str = format.format(date);
+        Log.i( "PetBusApp", "get_date:" + str );
+        String weak = getWeek( str );
+
+        return str + "  " + weak;
+    }
+
+    public String get_time(){
+        DateFormat format = new SimpleDateFormat( middleware.DATE_FORMAT_FULL );
+        java.util.Date date = null;
+        try{
+            date = format.parse(m_time);
+        }
+        catch( ParseException e ){
+            e.printStackTrace();
+            return "0000";
+        }
+        DateFormat time_format = new SimpleDateFormat( middleware.DATE_FORMAT_TIME );
+        String str = time_format.format(date);
+        Log.i( "PetBusApp", "get_time:" + str );
+
+        return str;
+    }
+    public String get_nickname(){
+        return m_nickname;
+    }
+    public String get_action(){
+        return m_action;
+    }
+    public String get_remark(){
+        return m_remark;
+    }
+    public String get_remark_picture(){
+        return m_picture_path;
+    }
+
+    public int get_record_type(){
         return m_type;
     }
-    int get_record_id(){
+    public int get_record_id(){
         return m_id;
     }
     
     private int m_id;
     private int m_type;
+    private String m_time;
+    private String m_nickname;
+    private String m_action;
+    private String m_remark;
+    private String m_picture_path;
+
+    private String getWeek(String pTime) {
+        String Week = "";
+        SimpleDateFormat format = new SimpleDateFormat( middleware_impl.DATE_FORMAT_DATE );
+        Calendar c = Calendar.getInstance();
+        try {
+            c.setTime(format.parse(pTime));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        if (c.get(Calendar.DAY_OF_WEEK) == 1) {
+            Week += "星期天";
+        }
+        if (c.get(Calendar.DAY_OF_WEEK) == 2) {
+            Week += "星期一";
+        }
+        if (c.get(Calendar.DAY_OF_WEEK) == 3) {
+            Week += "星期二";
+        }
+        if (c.get(Calendar.DAY_OF_WEEK) == 4) {
+            Week += "星期三";
+        }
+        if (c.get(Calendar.DAY_OF_WEEK) == 5) {
+            Week += "星期四";
+        }
+        if (c.get(Calendar.DAY_OF_WEEK) == 6) {
+            Week += "星期五";
+        }
+        if (c.get(Calendar.DAY_OF_WEEK) == 7) {
+            Week += "星期六";
+        }
+        return Week;
+    }
 }
 
 class record_daily_listview extends ArrayAdapter<action_record> {
-    public static final int RECORD_TYPE_DATE = 0;
-    public static final int RECORD_TYPE_RECORD = 1;
+
 
     private middleware m_middleware;
     private int resourceID;
@@ -59,6 +161,7 @@ class record_daily_listview extends ArrayAdapter<action_record> {
         m_middleware = middleware_impl.getInstance();
         mList = objects;
     }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         action_record record = getItem(position);
@@ -69,28 +172,43 @@ class record_daily_listview extends ArrayAdapter<action_record> {
 
         if( convertView == null ){
             switch( record.get_record_type() ){
-                case RECORD_TYPE_DATE:
+                case middleware.RECORD_TYPE_DATE:
                     date_view = new view_holder_date();
                     convertView = LayoutInflater.from(getContext()).inflate(R.layout.record_date
                                                                            , parent, false);
                     TextView date = (TextView) convertView.findViewById(R.id.daily_text);
                     convertView.setTag(R.layout.record_date, date_view);
-                    date.setText( "2019052" + record.get_record_id() + " XX" );
+                    date.setText( record.get_date() );
                     break;
-                case RECORD_TYPE_RECORD:
+                case middleware.RECORD_TYPE_RECORD:
                     record_view = new view_holder_record();
                     convertView = LayoutInflater.from(getContext()).inflate(R.layout.record_record
                                                                            , parent, false); 
                     convertView.setTag(R.layout.record_record, record_view); 
-                    TextView name = (TextView) convertView.findViewById(R.id.record_times);
+                    TextView record_times = (TextView) convertView.findViewById(R.id.record_times);
+                    record_times.setText( record.get_time() );
+
+                    TextView record_action = (TextView) convertView.findViewById(R.id.recode_actioin_text);
+                    record_action.setText( record.get_action() );
+                    
+                    TextView nickname = (TextView) convertView.findViewById(R.id.nickname_text);
+                    nickname.setText( record.get_nickname() );
+
+                    TextView remark_text = (TextView) convertView.findViewById(R.id.recode_remark_text);
+                    remark_text.setText( record.get_remark() );
+
+                    ImageView imageview_picture = ( ImageView )convertView.findViewById( R.id.recode_petportrait_image );
+                    Bitmap bitmap = BitmapFactory.decodeFile(record.get_remark_picture());
+                    imageview_picture.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                    imageview_picture.setImageBitmap(bitmap);
                     break;
             }
         } else {
             switch( record.get_record_type() ){
-                case RECORD_TYPE_DATE:
+                case middleware.RECORD_TYPE_DATE:
                     date_view = (view_holder_date)convertView.getTag(R.layout.record_date);
                     break;
-                case RECORD_TYPE_RECORD:
+                case middleware.RECORD_TYPE_RECORD:
                     record_view = (view_holder_record)convertView.getTag(R.layout.record_record);
                     break;
             }
@@ -98,9 +216,31 @@ class record_daily_listview extends ArrayAdapter<action_record> {
 
         return convertView;
     }
+    @Override public int getCount() { 
+        return m_middleware.get_record_count();
+    }
+
+    @Override public action_record getItem(int position) { 
+        
+        StringBuffer time = new StringBuffer();
+        StringBuffer nickname = new StringBuffer();
+        StringBuffer action = new StringBuffer();
+        StringBuffer remark = new StringBuffer();
+        ArrayList<String> record_pic = new ArrayList<String>();
+        int type = m_middleware.get_record( position, time, nickname, action, remark , record_pic );
+        action_record record = new action_record( position, type );
+        // Log.i( "PetBusApp", "getItem:(" + position + ")" + time + "--" + nickname + "--" + action + "--" + remark + "--" + record_pic );
+        record.set_record( time.toString(), nickname.toString(), action.toString(), remark.toString(), record_pic.get(0) );
+
+        return record;
+    }
+    @Override public long getItemId(int position) {
+        return position;
+    }
 
     private class view_holder_date {
     }
+    
     private class view_holder_record{
     }
 } 
@@ -112,18 +252,9 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
     private middleware m_middleware;
     private ui_interface m_tigger;
 
-    private void init_list_data(){
+    private void update_listdata(){
         int i = 0;
-
-        for( i = 0;i < 7;i += 3  )
-        {
-            action_record tmp = new action_record( i, 0 );
-            m_daily_record_list.add(tmp);
-            tmp = new action_record( i + 1, 1 );
-            m_daily_record_list.add(tmp);
-            tmp = new action_record( i + 2, 1 );
-            m_daily_record_list.add(tmp);
-        }
+        Log.i( "PetBusApp", "update_listdata" );
     }
 
     public void onClick( View view ) {
@@ -140,7 +271,7 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState ){
         m_middleware = middleware_impl.getInstance();
-        init_list_data();
+        update_listdata();
 
         View view = inflater.inflate(R.layout.actionfragment_actionrecord, container, false);
         ArrayAdapter<action_record> adapter = new record_daily_listview(this.getActivity(),
@@ -155,6 +286,7 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
 
         return view;
     }
+   
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -166,4 +298,10 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
         super.onDetach();
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        update_listdata();
+        Log.i( "PetBusApp", "PetBus:onResume " );
+    }
 }

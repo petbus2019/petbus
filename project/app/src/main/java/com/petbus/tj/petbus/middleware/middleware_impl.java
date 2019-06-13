@@ -20,8 +20,7 @@ public class middleware_impl extends Application implements middleware {
     private ArrayList<String> m_petname_list = new ArrayList<String>();
     public middleware_impl(){
         Log.i( "PetBusApp", "PetBusBusiness:middleware_impl" );
-        if( null == m_instance )
-        {
+        if( null == m_instance ){
             m_instance = this;
         }
     }
@@ -30,20 +29,63 @@ public class middleware_impl extends Application implements middleware {
         return m_instance;
     }
 
+    public int get_record_count(){
+        String sql = "SELECT * FROM petbus_actionrecord;";
+        Cursor sql_result = m_database.get_result( sql );
+        return sql_result.getCount();
+    }
+
+    public int get_record( int position, StringBuffer time, StringBuffer petname, StringBuffer action, StringBuffer remark, ArrayList<String> record_pic ){
+        int re = middleware.RECORD_TYPE_RECORD;
+
+        String sql = "SELECT petbus_actionrecord.picture,petbus_actionrecord.time,petbus_actionrecord.remark," +
+                     "petbus_actionrecord.operation,petbus_actionrecord.type,petbus_petinfo.nickname " +
+                     "FROM petbus_actionrecord left join petbus_petinfo on " +
+                     "petbus_actionrecord.pet_id = petbus_petinfo.id ORDER BY datetime(time) DESC";
+        Cursor sql_result = m_database.get_result( sql );
+        sql_result.moveToPosition( position );
+        time.append(sql_result.getString(sql_result.getColumnIndex("time")));
+        petname.append(sql_result.getString(sql_result.getColumnIndex("nickname")));
+        action.append(sql_result.getString(sql_result.getColumnIndex("operation")));
+        remark.append(sql_result.getString(sql_result.getColumnIndex("remark")));
+        record_pic.add( sql_result.getString(sql_result.getColumnIndex("picture")) );
+        re = sql_result.getInt(sql_result.getColumnIndex("type"));
+
+        return re;
+    }
+
     private static final String m_get_petid_by_name = "select id from petbus_petinfo where nickname = ";
     public int new_record( String time, String petname, String action, String remark, ArrayList<String> record_pic ){
-        String patten = "yyyy-MM-dd HH:mm:ss";
-        SimpleDateFormat format = new SimpleDateFormat(patten);
-        String dateFormatStr = format.format(new Date());
+
         String sql = m_get_petid_by_name + "\'" + petname + "\'" + ";";
         String file_name = "";
         Log.i( "PetBusApp", "execSQL: " + sql );
         int pet_id = 1;
+
         Cursor c = m_database.get_result( sql );
         if (c.moveToFirst()) {
             do {
                 pet_id = c.getInt(c.getColumnIndex("id"));
             } while (c.moveToNext());
+        }
+
+        sql = "SELECT date(time) from petbus_actionrecord where date(time) = date(\"" + time + "\")";
+        Cursor sql_result = m_database.get_result( sql );
+        if( 0 == sql_result.getCount() )
+        {
+            Log.i( "PetBusApp", "middleware empty" );
+            String patten = "yyyy-MM-dd 23:59:59";
+            SimpleDateFormat format = new SimpleDateFormat(patten);
+            String dateFormatStr = format.format(new Date());
+            
+            sql = "INSERT INTO " + dbmanager_impl.TABLE_RECORD + "(pet_id,picture,operation,remark,time,type)"
+                   + " values( " + String.valueOf(pet_id) + "," + "\"" + "null"
+                   + "\",\'" + "null" + "\',\'" + "remark" + "\',\'" + dateFormatStr + "\'," + middleware.RECORD_TYPE_DATE + ");";
+            m_database.execute_sql( sql );
+        }
+        else
+        {
+            Log.i( "PetBusApp", "middleware is notTTTTTTTTTT empty" );
         }
 
         if( record_pic.size() > 0 )
@@ -54,9 +96,9 @@ public class middleware_impl extends Application implements middleware {
         }
 
         Log.i( "PetBusApp", "PetBusBusiness:new_record(" + time + ")-(" + petname + ")-(" + action + ")-(" + remark + ")-(" );
-        sql = "INSERT INTO " + dbmanager_impl.TABLE_RECORD + "(pet_id,picture,operation,remark,time)"
+        sql = "INSERT INTO " + dbmanager_impl.TABLE_RECORD + "(pet_id,picture,operation,remark,time,type)"
                    + " values( " + String.valueOf(pet_id) + "," + "\"" + file_name
-                   + "\",\'" + action + "\',\'" + remark + "\',\'" + dateFormatStr + "\');";
+                   + "\",\'" + action + "\',\'" + remark + "\',\'" + time + "\'," + middleware.RECORD_TYPE_RECORD + ");";
         m_database.execute_sql( sql );
         return middleware.MIDDLEWARE_RETURN_OK;
     }
@@ -109,7 +151,6 @@ public class middleware_impl extends Application implements middleware {
             } while (cur.moveToNext());
         }
         Log.d("PetBusApp", "PetBusBusiness:the m_action_list is " + m_action_list );
-
     }
 
     @Override  

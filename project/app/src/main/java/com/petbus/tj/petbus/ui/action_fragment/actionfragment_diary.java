@@ -198,7 +198,7 @@ public class actionfragment_diary extends Fragment implements OnClickListener
         super.onResume();
         Log.i( "PetBusApp", "PetBus:onResume " );
         long sysTime = System.currentTimeMillis();
-        SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        SimpleDateFormat sDateFormat = new SimpleDateFormat( middleware.DATE_FORMAT_FULL );
         String time = sDateFormat.format(new Date(sysTime));
 
         Log.i( "PetBusApp", "PetBus:onResume time:" + time );
