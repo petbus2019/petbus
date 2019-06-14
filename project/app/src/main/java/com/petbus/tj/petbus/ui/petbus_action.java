@@ -346,8 +346,10 @@ public class petbus_action extends FragmentActivity implements OnClickListener,u
 
     public int show_list(){
         CommomDialog.Builder builder = new CommomDialog.Builder(this);
-        builder.setMessage("请选择图片来源");
-        builder.setTitle("请选择");
+        String photo_dialog_title = getResources().getString(R.string.photo_dialog_title);
+        String photo_dialog_message = getResources().getString(R.string.photo_dialog_message);
+        builder.setMessage( photo_dialog_message );
+        builder.setTitle( photo_dialog_title );
 
         builder.setCameraButton(R.string.actionphoto, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {

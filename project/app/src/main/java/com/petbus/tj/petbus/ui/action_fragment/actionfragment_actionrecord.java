@@ -49,6 +49,10 @@ class action_record{
         // Log.i( "PetBusApp", "record:" + time + "--" + nickname + "--" + action + "--" + remark + "--" + picture_path );
     }
 
+    public String get_full_time(){
+        return m_time;
+    }
+
     public String get_date(){
         DateFormat format = new SimpleDateFormat( middleware.DATE_FORMAT_DATE );
         java.util.Date date = null;
@@ -60,9 +64,8 @@ class action_record{
         }
         String str = format.format(date);
         Log.i( "PetBusApp", "get_date:" + str );
-        String weak = getWeek( str );
 
-        return str + "  " + weak;
+        return str;
     }
 
     public String get_time(){
@@ -109,39 +112,7 @@ class action_record{
     private String m_remark;
     private String m_picture_path;
 
-    private String getWeek(String pTime) {
-        String Week = "";
-        SimpleDateFormat format = new SimpleDateFormat( middleware_impl.DATE_FORMAT_DATE );
-        Calendar c = Calendar.getInstance();
-        try {
-            c.setTime(format.parse(pTime));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        if (c.get(Calendar.DAY_OF_WEEK) == 1) {
-            Week += "星期天";
-        }
-        if (c.get(Calendar.DAY_OF_WEEK) == 2) {
-            Week += "星期一";
-        }
-        if (c.get(Calendar.DAY_OF_WEEK) == 3) {
-            Week += "星期二";
-        }
-        if (c.get(Calendar.DAY_OF_WEEK) == 4) {
-            Week += "星期三";
-        }
-        if (c.get(Calendar.DAY_OF_WEEK) == 5) {
-            Week += "星期四";
-        }
-        if (c.get(Calendar.DAY_OF_WEEK) == 6) {
-            Week += "星期五";
-        }
-        if (c.get(Calendar.DAY_OF_WEEK) == 7) {
-            Week += "星期六";
-        }
-        return Week;
-    }
+    
 }
 
 class record_daily_listview extends ArrayAdapter<action_record> {
@@ -162,6 +133,40 @@ class record_daily_listview extends ArrayAdapter<action_record> {
         mList = objects;
     }
 
+    private String getWeek(String pTime) {
+        String Week = "";
+        SimpleDateFormat format = new SimpleDateFormat( middleware_impl.DATE_FORMAT_DATE );
+        Calendar c = Calendar.getInstance();
+        try {
+            c.setTime(format.parse(pTime));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        if (c.get(Calendar.DAY_OF_WEEK) == 1) {
+            Week += m_Context.getResources().getString( R.string.sunday );
+        }
+        if (c.get(Calendar.DAY_OF_WEEK) == 2) {
+            Week += m_Context.getResources().getString( R.string.monday );
+        }
+        if (c.get(Calendar.DAY_OF_WEEK) == 3) {
+            Week += m_Context.getResources().getString( R.string.tuesday );
+        }
+        if (c.get(Calendar.DAY_OF_WEEK) == 4) {
+            Week += m_Context.getResources().getString( R.string.wednesday );
+        }
+        if (c.get(Calendar.DAY_OF_WEEK) == 5) {
+            Week += m_Context.getResources().getString( R.string.thursday );
+        }
+        if (c.get(Calendar.DAY_OF_WEEK) == 6) {
+            Week += m_Context.getResources().getString( R.string.friday );
+        }
+        if (c.get(Calendar.DAY_OF_WEEK) == 7) {
+            Week += m_Context.getResources().getString( R.string.saturday );
+        }
+        return Week;
+    } 
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         action_record record = getItem(position);
@@ -177,7 +182,8 @@ class record_daily_listview extends ArrayAdapter<action_record> {
                                                                        , parent, false);
                 TextView date = (TextView) convertView.findViewById(R.id.daily_text);
                 convertView.setTag(R.layout.record_date, date_view);
-                date.setText( record.get_date() );
+                String full_date_text = record.get_date() + "  " + getWeek( record.get_full_time() );
+                date.setText( full_date_text );
                 break;
             case middleware.RECORD_TYPE_RECORD:
                 record_view = new view_holder_record();
