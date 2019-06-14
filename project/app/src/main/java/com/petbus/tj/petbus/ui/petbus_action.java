@@ -162,7 +162,7 @@ class ImageFilePath {
 
 public class petbus_action extends FragmentActivity implements OnClickListener,ui_interface,
                                                     ActivityCompat.OnRequestPermissionsResultCallback {
-    private Fragment m_action_fragment_record;
+    private actionfragment_actionrecord m_action_fragment_record;
     private Fragment m_action_fragment_overview;
     private actionfragment_diary m_action_fragment_diary;
 
@@ -466,6 +466,10 @@ public class petbus_action extends FragmentActivity implements OnClickListener,u
     public void trigger_change( int fragment ){
         active_fragment( fragment );
         Log.i( "PetBusApp", "trigger_change  " + fragment );
+        return ;
+    }
+    public void trigger_datachange(){
+        m_action_fragment_record.update_listdata();
         return ;
     }
 }

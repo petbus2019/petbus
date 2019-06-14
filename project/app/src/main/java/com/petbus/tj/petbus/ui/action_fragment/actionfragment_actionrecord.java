@@ -170,48 +170,37 @@ class record_daily_listview extends ArrayAdapter<action_record> {
         view_holder_date date_view = null;
         view_holder_record record_view = null;
 
-        if( convertView == null ){
-            switch( record.get_record_type() ){
-                case middleware.RECORD_TYPE_DATE:
-                    date_view = new view_holder_date();
-                    convertView = LayoutInflater.from(getContext()).inflate(R.layout.record_date
-                                                                           , parent, false);
-                    TextView date = (TextView) convertView.findViewById(R.id.daily_text);
-                    convertView.setTag(R.layout.record_date, date_view);
-                    date.setText( record.get_date() );
-                    break;
-                case middleware.RECORD_TYPE_RECORD:
-                    record_view = new view_holder_record();
-                    convertView = LayoutInflater.from(getContext()).inflate(R.layout.record_record
-                                                                           , parent, false); 
-                    convertView.setTag(R.layout.record_record, record_view); 
-                    TextView record_times = (TextView) convertView.findViewById(R.id.record_times);
-                    record_times.setText( record.get_time() );
+        switch( record.get_record_type() ){
+            case middleware.RECORD_TYPE_DATE:
+                date_view = new view_holder_date();
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.record_date
+                                                                       , parent, false);
+                TextView date = (TextView) convertView.findViewById(R.id.daily_text);
+                convertView.setTag(R.layout.record_date, date_view);
+                date.setText( record.get_date() );
+                break;
+            case middleware.RECORD_TYPE_RECORD:
+                record_view = new view_holder_record();
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.record_record
+                                                                       , parent, false); 
+                convertView.setTag(R.layout.record_record, record_view); 
+                TextView record_times = (TextView) convertView.findViewById(R.id.record_times);
+                record_times.setText( record.get_time() );
 
-                    TextView record_action = (TextView) convertView.findViewById(R.id.recode_actioin_text);
-                    record_action.setText( record.get_action() );
-                    
-                    TextView nickname = (TextView) convertView.findViewById(R.id.nickname_text);
-                    nickname.setText( record.get_nickname() );
+                TextView record_action = (TextView) convertView.findViewById(R.id.recode_actioin_text);
+                record_action.setText( record.get_action() );
+                
+                TextView nickname = (TextView) convertView.findViewById(R.id.nickname_text);
+                nickname.setText( record.get_nickname() );
 
-                    TextView remark_text = (TextView) convertView.findViewById(R.id.recode_remark_text);
-                    remark_text.setText( record.get_remark() );
+                TextView remark_text = (TextView) convertView.findViewById(R.id.recode_remark_text);
+                remark_text.setText( record.get_remark() );
 
-                    ImageView imageview_picture = ( ImageView )convertView.findViewById( R.id.recode_petportrait_image );
-                    Bitmap bitmap = BitmapFactory.decodeFile(record.get_remark_picture());
-                    imageview_picture.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                    imageview_picture.setImageBitmap(bitmap);
-                    break;
-            }
-        } else {
-            switch( record.get_record_type() ){
-                case middleware.RECORD_TYPE_DATE:
-                    date_view = (view_holder_date)convertView.getTag(R.layout.record_date);
-                    break;
-                case middleware.RECORD_TYPE_RECORD:
-                    record_view = (view_holder_record)convertView.getTag(R.layout.record_record);
-                    break;
-            }
+                ImageView imageview_picture = ( ImageView )convertView.findViewById( R.id.recode_petportrait_image );
+                Bitmap bitmap = BitmapFactory.decodeFile(record.get_remark_picture());
+                imageview_picture.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                imageview_picture.setImageBitmap(bitmap);
+                break;
         }
 
         return convertView;
@@ -251,10 +240,12 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
     private List<action_record> m_daily_record_list = new ArrayList<>();
     private middleware m_middleware;
     private ui_interface m_tigger;
+    private ArrayAdapter<action_record> m_adapter;
 
-    private void update_listdata(){
+    public void update_listdata(){
         int i = 0;
         Log.i( "PetBusApp", "update_listdata" );
+        m_adapter.notifyDataSetChanged();
     }
 
     public void onClick( View view ) {
@@ -271,19 +262,19 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState ){
         m_middleware = middleware_impl.getInstance();
-        update_listdata();
 
         View view = inflater.inflate(R.layout.actionfragment_actionrecord, container, false);
-        ArrayAdapter<action_record> adapter = new record_daily_listview(this.getActivity(),
+        m_adapter = new record_daily_listview(this.getActivity(),
                 R.layout.record_daily_record,m_daily_record_list);
  
         ListView listView =(ListView)view.findViewById(R.id.list_view);
-        listView.setAdapter(adapter);
+        listView.setAdapter(m_adapter);
         Log.i( "PetBusApp", "PetBus:getView " + m_daily_record_list );
 
         Button button = ( Button )view.findViewById( R.id.add_action_button );
         button.setOnClickListener(this);
 
+        update_listdata();
         return view;
     }
    
@@ -301,7 +292,7 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
     @Override
     public void onResume(){
         super.onResume();
-        update_listdata();
+
         Log.i( "PetBusApp", "PetBus:onResume " );
     }
 }

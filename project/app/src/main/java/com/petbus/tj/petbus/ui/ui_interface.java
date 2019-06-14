@@ -12,4 +12,5 @@ public interface ui_interface {
 
     void trigger_change( int fragment );
     void trigger_getpicture();
+    void trigger_datachange();
 }

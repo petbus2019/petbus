@@ -178,6 +178,7 @@ public class actionfragment_diary extends Fragment implements OnClickListener
         if( middleware.MIDDLEWARE_RETURN_OK == re )
         {
             Log.i( "PetBusApp", "PetBus:add succeeded" );
+            m_tigger.trigger_datachange();
             m_tigger.trigger_change( ui_interface.MAINFRAMGENT_ID );
         }
     }
