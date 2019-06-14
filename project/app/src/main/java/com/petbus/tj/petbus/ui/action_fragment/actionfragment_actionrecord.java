@@ -1,12 +1,15 @@
 package com.petbus.tj.petbus.ui;
 
 import com.petbus.tj.petbus.ui.R;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ImageView;
@@ -249,6 +252,7 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
     private middleware m_middleware;
     private ui_interface m_tigger;
     private ArrayAdapter<action_record> m_adapter;
+    private ImageButton mBtn_profile;
 
     private TextView m_lastaction_1;
     private TextView m_lastaction_2;
@@ -354,6 +358,11 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
                 Log.i( "PetBusApp", "add_action_button" );
                 m_tigger.trigger_change( ui_interface.SETTINGFRAMGENT_ID );
                 break;
+            case R.id.profile_buttom:
+                Log.i( "PetBusApp", "petprofile_button" );
+                Intent intent = new Intent(getActivity().getApplicationContext(),petbus_profile.class);
+                startActivity(intent);
+                break;
         }
     }
 
@@ -375,6 +384,9 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
 
         Button button = ( Button )view.findViewById( R.id.add_action_button );
         button.setOnClickListener(this);
+        mBtn_profile = (ImageButton) view.findViewById(R.id.profile_buttom);
+        mBtn_profile.setOnClickListener(this);
+
 
         update_listdata();
         return view;
