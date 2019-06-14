@@ -32,7 +32,7 @@ public class petbus_welcome extends FragmentActivity implements OnClickListener 
             switch (msg.what) {      
                 case 1:      
                     Intent intent = new Intent();
-                    intent.setClass(petbus_welcome.this, petbus_firstvisit.class);
+                    intent.setClass(petbus_welcome.this, petbus_action.class);
                     startActivity(intent);
                     break;
                 }
@@ -77,11 +77,11 @@ public class petbus_welcome extends FragmentActivity implements OnClickListener 
         Log.i( "PetBusApp", "PetBus:onClick" );
         switch( view.getId() )
         {
-            case R.id.sample_text:
+            case R.id.btn_profileAdd:
                 // try{
                     //https://www.jianshu.com/p/19147a69e970
                     Intent intent = new Intent();
-                    intent.setClass(petbus_welcome.this, petbus_petmanage.class);
+                    intent.setClass(petbus_welcome.this, petbus_profile.class);
                     startActivity(intent);
                 // }
                 // catch(ActivityNotFoundException e){
