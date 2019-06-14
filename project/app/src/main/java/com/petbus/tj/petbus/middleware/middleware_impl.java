@@ -8,10 +8,12 @@ import android.content.Context;
 import android.app.Application;
 import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class middleware_impl extends Application implements middleware {
     private dbmanager m_database = null;
@@ -29,6 +31,21 @@ public class middleware_impl extends Application implements middleware {
         return m_instance;
     }
 
+    public int get_last_three_record( Map<String,String> record_map ){
+        String sql = "SELECT petbus_actionrecord.operation,petbus_actionrecord.time " + 
+                     "from petbus_actionrecord where petbus_actionrecord.operation " + 
+                     "!= 'null' group by petbus_actionrecord.operation order " + 
+                     "by petbus_actionrecord.time DESC limit 3;";
+        Cursor sql_result = m_database.get_result( sql );
+        if (sql_result.moveToFirst()) {
+            do {
+                String operation = sql_result.getString(sql_result.getColumnIndex("operation"));
+                String time = sql_result.getString(sql_result.getColumnIndex("time"));
+                record_map.put( operation, time );
+            } while (sql_result.moveToNext());
+        }
+        return 0;
+    }
     public int get_record_count(){
         String sql = "SELECT * FROM petbus_actionrecord;";
         Cursor sql_result = m_database.get_result( sql );

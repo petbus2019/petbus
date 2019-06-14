@@ -36,4 +36,8 @@
     <string name="friday">星期五</string>
     <string name="saturday">星期六</string>
     <string name="sunday">星期天</string>
+    <string name="day_before">天前</string>
+    <string name="hour_before">小时前</string>
+    <string name="mini_before">分前</string>
+    <string name="rightnow">刚刚</string>
 </resources>

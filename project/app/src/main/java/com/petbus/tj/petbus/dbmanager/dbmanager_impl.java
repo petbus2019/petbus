@@ -196,3 +196,7 @@ public class dbmanager_impl extends SQLiteOpenHelper implements dbmanager
 // petbus_actionrecord.operation,petbus_actionrecord.type,petbus_petinfo.nickname 
 // FROM petbus_actionrecord left join petbus_petinfo on 
 // petbus_actionrecord.pet_id = petbus_petinfo.id ORDER BY datetime(time) DESC
+
+// SELECT petbus_actionrecord.operation,petbus_actionrecord.time from petbus_actionrecord 
+// where petbus_actionrecord.operation != 'null' group by petbus_actionrecord.operation order 
+// by petbus_actionrecord.time DESC ;

@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.petbus.tj.petbus.middleware.middleware;
 import com.petbus.tj.petbus.middleware.middleware_impl;
@@ -224,7 +226,7 @@ class record_daily_listview extends ArrayAdapter<action_record> {
         ArrayList<String> record_pic = new ArrayList<String>();
         int type = m_middleware.get_record( position, time, nickname, action, remark , record_pic );
         action_record record = new action_record( position, type );
-        // Log.i( "PetBusApp", "getItem:(" + position + ")" + time + "--" + nickname + "--" + action + "--" + remark + "--" + record_pic );
+
         record.set_record( time.toString(), nickname.toString(), action.toString(), remark.toString(), record_pic.get(0) );
 
         return record;
@@ -248,10 +250,100 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
     private ui_interface m_tigger;
     private ArrayAdapter<action_record> m_adapter;
 
+    private TextView m_lastaction_1;
+    private TextView m_lastaction_2;
+    private TextView m_lastaction_3;
+
+
     public void update_listdata(){
         int i = 0;
         Log.i( "PetBusApp", "update_listdata" );
         m_adapter.notifyDataSetChanged();
+        Date now = new Date(System.currentTimeMillis());
+
+        Map<String, String> action_map =  new HashMap<>();
+        m_middleware.get_last_three_record( action_map );
+        Log.i( "PetBusApp", "actionfragment_actionrecord:update_listdata" + action_map );
+        for (Map.Entry<String, String> entry : action_map.entrySet()) {
+            Log.i("PetBusApp",entry.getKey() + ":" + entry.getValue());
+            SimpleDateFormat format = new SimpleDateFormat( middleware_impl.DATE_FORMAT_FULL );
+            Date d2 = null;
+            try{
+                d2 = format.parse(entry.getValue());
+            }
+            catch( ParseException e )
+            {
+                e.printStackTrace();
+                return;
+            }
+            long diff = now.getTime() - d2.getTime();
+            long days = diff / (1000 * 60 * 60 * 24);
+            long hours = (diff-days*(1000 * 60 * 60 * 24))/(1000* 60 * 60);
+            long minutes = (diff-days*(1000 * 60 * 60 * 24)-hours*(1000* 60 * 60))/(1000* 60);
+
+            Log.i("PetBusApp","hte i si " + i );
+            if( 0 == i )
+            {
+                Log.i("PetBusApp","actioind-1");
+                if( days > 0 ){
+                    String text = getActivity().getResources().getString( R.string.day_before );
+                    m_lastaction_1.setText( entry.getKey() + ":" + String.valueOf(days) + text );
+                }
+                else if( hours > 0 ){
+                    String text = getActivity().getResources().getString( R.string.hour_before );
+                    m_lastaction_1.setText( entry.getKey() + ":" + String.valueOf(hours) + text );
+                }
+                else if( minutes > 0 ){
+                    String text = getActivity().getResources().getString( R.string.mini_before );
+                    m_lastaction_1.setText( entry.getKey() + ":" + String.valueOf(minutes) + text );
+                }
+                else{
+                    String text = getActivity().getResources().getString( R.string.rightnow );
+                    m_lastaction_1.setText( entry.getKey() + ":" + text );
+                }
+            }
+            else if( 1 == i )
+            {
+                Log.i("PetBusApp","actioind-2");
+                if( days > 0 ){
+                    String text = getActivity().getResources().getString( R.string.day_before );
+                    m_lastaction_2.setText( entry.getKey() + ":" + String.valueOf(days) + text );
+                }
+                else if( hours > 0 ){
+                    String text = getActivity().getResources().getString( R.string.hour_before );
+                    m_lastaction_2.setText( entry.getKey() + ":" + String.valueOf(hours) + text );
+                }
+                else if( minutes > 0 ){
+                    String text = getActivity().getResources().getString( R.string.mini_before );
+                    m_lastaction_2.setText( entry.getKey() + ":" + String.valueOf(minutes) + text );
+                }
+                else{
+                    String text = getActivity().getResources().getString( R.string.rightnow );
+                    m_lastaction_2.setText( entry.getKey() + ":" + text );
+                }
+            }
+            else if( 2 == i )
+            {
+                Log.i("PetBusApp","actioind-3");
+                if( days > 0 ){
+                    String text = getActivity().getResources().getString( R.string.day_before );
+                    m_lastaction_3.setText( entry.getKey() + ":" + String.valueOf(days) + text );
+                }
+                else if( hours > 0 ){
+                    String text = getActivity().getResources().getString( R.string.hour_before );
+                    m_lastaction_3.setText( entry.getKey() + ":" + String.valueOf(hours) + text );
+                }
+                else if( minutes > 0 ){
+                    String text = getActivity().getResources().getString( R.string.mini_before );
+                    m_lastaction_3.setText( entry.getKey() + ":" + String.valueOf(minutes) + text );
+                }
+                else{
+                    String text = getActivity().getResources().getString( R.string.rightnow );
+                    m_lastaction_3.setText( entry.getKey() + ":" + text );
+                }
+            }
+            i++;
+        }
     }
 
     public void onClick( View view ) {
@@ -273,6 +365,10 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
         m_adapter = new record_daily_listview(this.getActivity(),
                 R.layout.record_daily_record,m_daily_record_list);
  
+        m_lastaction_1 = (TextView)view.findViewById(R.id.text_lastaction1);
+        m_lastaction_2 = (TextView)view.findViewById(R.id.text_lastaction2);
+        m_lastaction_3 = (TextView)view.findViewById(R.id.text_lastaction3);
+
         ListView listView =(ListView)view.findViewById(R.id.list_view);
         listView.setAdapter(m_adapter);
         Log.i( "PetBusApp", "PetBus:getView " + m_daily_record_list );
