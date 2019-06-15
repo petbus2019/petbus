@@ -268,6 +268,12 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
         Map<String, String> action_map =  new HashMap<>();
         m_middleware.get_last_three_record( action_map );
         Log.i( "PetBusApp", "actionfragment_actionrecord:update_listdata" + action_map );
+
+        String text_null = getActivity().getResources().getString( R.string.nullstring );
+        m_lastaction_1.setText( text_null );
+        m_lastaction_2.setText( text_null );
+        m_lastaction_3.setText( text_null );
+        
         for (Map.Entry<String, String> entry : action_map.entrySet()) {
             Log.i("PetBusApp",entry.getKey() + ":" + entry.getValue());
             SimpleDateFormat format = new SimpleDateFormat( middleware_impl.DATE_FORMAT_FULL );
@@ -280,6 +286,7 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
                 e.printStackTrace();
                 return;
             }
+
             long diff = now.getTime() - d2.getTime();
             long days = diff / (1000 * 60 * 60 * 24);
             long hours = (diff-days*(1000 * 60 * 60 * 24))/(1000* 60 * 60);

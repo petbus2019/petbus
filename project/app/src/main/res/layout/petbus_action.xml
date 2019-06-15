@@ -22,8 +22,7 @@
             android:clickable="true"
             android:gravity="center_horizontal"
             android:text="@string/petdiary"
-            android:textColor="#ffffff"
-            android:textStyle="bold" />
+            style="@style/titlebar_text" />
         <ImageButton
             android:id="@+id/leftreturn_button"
             android:layout_width="wrap_content"

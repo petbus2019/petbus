@@ -206,4 +206,16 @@ public class actionfragment_diary extends Fragment implements OnClickListener
         m_time_text.setText( time );
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        Log.i( "PetBusApp", "PetBus:onHiddenChanged :" + hidden );
+        if( false == hidden ){
+            long sysTime = System.currentTimeMillis();
+            SimpleDateFormat sDateFormat = new SimpleDateFormat( middleware.DATE_FORMAT_FULL );
+            String time = sDateFormat.format(new Date(sysTime));
+
+            Log.i( "PetBusApp", "PetBus:onHiddenChanged time:" + time );
+            m_time_text.setText( time );
+        }
+    }
 }
