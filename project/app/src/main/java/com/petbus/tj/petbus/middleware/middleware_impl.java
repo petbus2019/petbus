@@ -137,6 +137,35 @@ public class middleware_impl extends Application implements middleware {
         return re;
     }
 
+    public int newPet(String name, String photoPath, String birth, int weight, int gender, int species)
+    {
+        Log.i( "PetBusApp", "PetBusBusiness:add new pet." );
+        //check whether there is the same pet name in database
+        String sqlStr = "SELECT nickname from petbus_petinfo WHERE nickname = '" + name + "';";
+        Log.i( "PetBusApp", "execSQL: " + sqlStr );
+        Cursor sql_result = m_database.get_result( sqlStr );
+        if( 0 == sql_result.getCount() )
+        {
+            Log.i( "PetBusApp", "there's no same pet name." );
+            sqlStr = "INSERT INTO " + dbmanager_impl.TABLE_PETNFO + "(user_id,picture,nickname,weight,sex,birthday,pettype)"
+                    + " values(" + String.valueOf(m_database.get_userid() ) + ", \"" + photoPath
+                    + "\", \"" + name + "\", " + String.valueOf(weight) + "," +
+                    String.valueOf(gender) + ", \"" + birth + "\", " + String.valueOf(species) + ");";
+            m_database.execute_sql( sqlStr );
+        }
+        else
+        {
+            Log.i( "PetBusApp", "Same pet name, cannot insert new one" );
+        }
+
+        return middleware.MIDDLEWARE_RETURN_OK;
+    }
+    public int getPetInfo(int id, String name, String photoPath, String birth, int weight, int gender, int species)
+    {
+        Log.i( "PetBusApp", "PetBusBusiness:get pet information." );
+        return 0;
+    }
+
     private static final String m_get_nickname_sql = "select nickname from petbus_petinfo;";
     private static final String m_get_operationname_sql = "select action_name from petbus_operationname;";
     @Override

@@ -27,6 +27,21 @@ public class dbmanager_impl extends SQLiteOpenHelper implements dbmanager
         return 0;
     }
 
+    public long get_userid()
+    {
+        long user_id = 0;
+        String sql = "select id from " + TABLE_USERINFO + ";";
+        Log.i( "PetBusApp", "execSQL: " + sql );
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor c = db.rawQuery( sql , null );
+        if (c.moveToFirst()) {
+            do {
+                user_id = c.getLong(c.getColumnIndex("id"));
+            } while (c.moveToNext());
+        }
+        return user_id;
+    }
+
     public dbmanager_impl(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
@@ -55,7 +70,8 @@ public class dbmanager_impl extends SQLiteOpenHelper implements dbmanager
                 "(id integer PRIMARY KEY autoincrement, " +
                 "user_id" + " integer," + 
                 "picture" + " TEXT," + 
-                "nickname" + " TEXT," + 
+                "nickname" + " TEXT," +
+                "weight" + " integer," +
                 "sex" + " integer," + 
                 "birthday" + " DATE," + 
                 "pettype" + " integer," + 
@@ -141,23 +157,23 @@ public class dbmanager_impl extends SQLiteOpenHelper implements dbmanager
         }
 
         //Step2: add four pet to databse
-        sql = "insert into " + TABLE_PETNFO + " (user_id,picture,nickname,sex,birthday,pettype)" 
-                   + " values(" + String.valueOf(user_id) + ",\'test.jpg\'" + ",\'喵喵\'" + ",1" + ",2019-06-01" + ",1"  + ");";
+        sql = "insert into " + TABLE_PETNFO + " (user_id,picture,nickname,weight, sex,birthday,pettype)"
+                   + " values(" + String.valueOf(user_id) + ",\'test.jpg\'" + ",\'喵喵\'," + "23"+",1" + ",2019-06-01" + ",1"  + ");";
         Log.i( "PetBusApp", "execSQL: " + sql );
         db.execSQL( sql );
 
-        sql = "insert into " + TABLE_PETNFO + " (user_id,picture,nickname,sex,birthday,pettype)" 
-            + " values(" + String.valueOf(user_id) + ",\'test.jpg\'" + ",\'喵喵1\'" + ",2" + ",2019-06-01" + ",1"  + ");";
+        sql = "insert into " + TABLE_PETNFO + " (user_id,picture,nickname,weight,sex,birthday,pettype)"
+            + " values(" + String.valueOf(user_id) + ",\'test.jpg\'" + ",\'喵喵1\'," + "5"+",2" + ",2019-06-01" + ",1"  + ");";
         Log.i( "PetBusApp", "execSQL: " + sql );
         db.execSQL( sql );
 
-        sql = "insert into " + TABLE_PETNFO + " (user_id,picture,nickname,sex,birthday,pettype)" 
-            + " values(" + String.valueOf(user_id) + ",\'test.jpg\'" + ",\'喵喵2\'" + ",2" + ",2019-06-01" + ",1"  + ");";
+        sql = "insert into " + TABLE_PETNFO + " (user_id,picture,nickname,weight,sex,birthday,pettype)"
+            + " values(" + String.valueOf(user_id) + ",\'test.jpg\'" + ",\'喵喵2\'," + "13" + ",2" + ",2019-06-01" + ",1"  + ");";
         Log.i( "PetBusApp", "execSQL: " + sql );
         db.execSQL( sql );
 
-        sql = "insert into " + TABLE_PETNFO + " (user_id,picture,nickname,sex,birthday,pettype)" 
-            + " values(" + String.valueOf(user_id) + ",\'test.jpg\'" + ",\'喵喵3\'" + ",1" + ",2019-06-01" + ",1"  + ");";
+        sql = "insert into " + TABLE_PETNFO + " (user_id,picture,nickname,weight, sex,birthday,pettype)"
+            + " values(" + String.valueOf(user_id) + ",\'test.jpg\'" + ",\'喵喵3\'," + "6" + ",1" + ",2019-06-01" + ",1"  + ");";
         Log.i( "PetBusApp", "execSQL: " + sql );
         db.execSQL( sql );
 

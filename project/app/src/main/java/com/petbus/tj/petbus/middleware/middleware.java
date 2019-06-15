@@ -1,6 +1,7 @@
 package com.petbus.tj.petbus.middleware;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,4 +24,6 @@ public interface middleware{
     int get_last_three_record( Map<String,String> record_map );
     int new_record( String time, String petname, String action, String remark, ArrayList<String> record_pic );
     int get_record( int id, StringBuffer time, StringBuffer petname, StringBuffer action, StringBuffer remark, ArrayList<String> record_pic );
+    int newPet(String name, String photoPath, String birth, int weight, int gender, int species);
+    int getPetInfo(int id, String name, String photoPath, String birth, int weight, int gender, int species);
 }
