@@ -31,7 +31,7 @@ public class petbus_profileadd extends FragmentActivity implements View.OnClickL
         {
             case R.id.btn_profileaddBack:
                 Intent intent = new Intent();
-                intent.setClass(petbus_profileadd.this, petbus_action.class);
+                intent.setClass(petbus_profileadd.this, petbus_profile.class);
                 startActivity(intent);
                 break;
         }
