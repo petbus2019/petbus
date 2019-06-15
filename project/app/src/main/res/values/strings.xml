@@ -40,4 +40,5 @@
     <string name="hour_before">小时前</string>
     <string name="mini_before">分前</string>
     <string name="rightnow">刚刚</string>
+    <string name="nullstring">---</string>
 </resources>
