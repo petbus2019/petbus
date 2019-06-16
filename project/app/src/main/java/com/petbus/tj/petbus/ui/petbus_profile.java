@@ -2,6 +2,8 @@ package com.petbus.tj.petbus.ui;
 
 import android.os.Bundle;
 import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.util.Log;
 import android.view.View;
@@ -9,17 +11,39 @@ import android.app.Activity;
 import android.view.View.OnClickListener;
 import android.content.Intent;
 
+import com.petbus.tj.petbus.middleware.middleware;
+import com.petbus.tj.petbus.middleware.middleware_impl;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 public class petbus_profile extends Activity  implements OnClickListener {
+    private middleware m_middleware = middleware_impl.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.petbus_profile);
 
+        List<Map<String, Object>> listItem = new ArrayList<Map<String, Object>>();
+
         ImageButton mBtnBack = (ImageButton) findViewById(R.id.btn_profileBack);
         ImageButton mBtnAdd = (ImageButton) findViewById(R.id.btn_profileAdd);
         mBtnBack.setOnClickListener(this);
         mBtnAdd.setOnClickListener(this);
+
+        List<Integer> ids = m_middleware.getPetIds();
+        for ( int i = 0; i < ids.size(); i++)
+        {
+            Map<String, Object> item = m_middleware.getPetInfo(ids.get(i));
+            listItem.add(item);
+        }
+        SimpleAdapter adapter = new SimpleAdapter(this, listItem,
+                R.layout.list_pet, new String[]{"name","age", "weight"/*,"photo"*/},
+                new int[]{R.id.info_name, R.id.info_age, R.id.info_weight/*, R.id.info_photo*/});
+        ListView listView = findViewById(R.id.list_pet);
+        listView.setAdapter(adapter);
     }
 
 

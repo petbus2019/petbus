@@ -71,6 +71,20 @@ public class middleware_impl extends Application implements middleware {
         return re;
     }
 
+    public List<Integer> getPetIds()
+    {
+        List<Integer> ids = new ArrayList<Integer>();
+
+        String sql = "SELECT id FROM petbus_petinfo;";
+        Cursor c = m_database.get_result( sql );
+        if (c.moveToFirst()) {
+            do {
+                ids.add(c.getInt(c.getColumnIndex("id")));
+            } while (c.moveToNext());
+        }
+        return ids;
+    }
+
     private static final String m_get_petid_by_name = "select id from petbus_petinfo where nickname = ";
     public int new_record( String time, String petname, String action, String remark, ArrayList<String> record_pic ){
 
@@ -160,10 +174,34 @@ public class middleware_impl extends Application implements middleware {
 
         return middleware.MIDDLEWARE_RETURN_OK;
     }
-    public int getPetInfo(int id, String name, String photoPath, String birth, int weight, int gender, int species)
+
+    public Map<String, Object> getPetInfo(int id)
     {
         Log.i( "PetBusApp", "PetBusBusiness:get pet information." );
-        return 0;
+        Map<String, Object> petinfo = new HashMap<String, Object>();
+        String sqlStr = "SELECT nickname,picture,weight,sex,birthday,pettype" +
+                " from petbus_petinfo WHERE id = " + id + ";";
+        Cursor cur = m_database.get_result( sqlStr );
+        if( 0 == cur.getCount() )
+        {
+            Log.i( "PetBusApp", "there's no pet which's id=" + id );
+        }
+        else
+        {
+            if (cur.moveToFirst()) {
+                do {
+                    String getName = cur.getString(cur.getColumnIndex("nickname"));
+                    petinfo.put("name", getName);
+                    String picture = cur.getString(cur.getColumnIndex("picture"));
+                    petinfo.put("photo", picture);
+                    int getWeight = cur.getInt(cur.getColumnIndex("weight"));
+                    petinfo.put("weight", getWeight);
+                    String getBirth = cur.getString(cur.getColumnIndex("birthday"));
+                    petinfo.put("age", getBirth);
+                } while (cur.moveToNext());
+            }
+        }
+        return petinfo;
     }
 
     private static final String m_get_nickname_sql = "select nickname from petbus_petinfo;";
