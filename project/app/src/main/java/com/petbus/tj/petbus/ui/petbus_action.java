@@ -4,8 +4,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
@@ -18,11 +16,16 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.EditText;
 import android.widget.Toast;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix; 
+import android.graphics.Matrix;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.MotionEvent;
 import android.view.LayoutInflater;
+import android.view.inputmethod.InputMethodManager;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -235,6 +238,46 @@ public class petbus_action extends FragmentActivity implements OnClickListener,u
         m_button_addbutton.setVisibility(View.INVISIBLE);
     }
 
+    public boolean isShouldHideInput(View v, MotionEvent event) {
+        if (v != null && (v instanceof EditText)) {
+            int[] leftTop = {0, 0};
+            //获取输入框当前的location位置
+            v.getLocationInWindow(leftTop);
+            int left = leftTop[0];
+            int top = leftTop[1];
+            int bottom = top + v.getHeight();
+            int right = left + v.getWidth();
+            if (event.getX() > left && event.getX() < right
+                    && event.getY() > top && event.getY() < bottom) {
+                return false;
+            } else {
+                v.setFocusable(false);
+                v.setFocusableInTouchMode(true);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if (isShouldHideInput(v, ev)) {
+
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+            return super.dispatchTouchEvent(ev);
+        }
+
+        if (getWindow().superDispatchTouchEvent(ev)) {
+            return true;
+        }
+        return onTouchEvent(ev);
+    }
     private void reset_actionbutton( int id ){
         m_button_actionbutton.setVisibility(View.INVISIBLE);
         m_button_overviewbutton.setVisibility(View.INVISIBLE);

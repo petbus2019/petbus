@@ -8,6 +8,9 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.MotionEvent;
+import android.view.View.OnTouchListener;
+import android.view.View.OnFocusChangeListener;
 import android.widget.ImageButton;
 import android.util.Log;
 import android.view.View.OnClickListener;
@@ -24,6 +27,7 @@ import android.widget.ImageView;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
+import android.text.InputType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -125,6 +129,7 @@ public class actionfragment_diary extends Fragment implements OnClickListener
         return 0;
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState){
@@ -137,7 +142,23 @@ public class actionfragment_diary extends Fragment implements OnClickListener
         m_pet_item = ( Spinner ) view.findViewById( R.id.pet_spinner );
         m_entry_button = ( Button ) view.findViewById( R.id.entry_button );
         m_remark_edit = ( EditText ) view.findViewById( R.id.remark_text_input );
-
+        m_remark_edit.setOnTouchListener(new OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                Log.i( "PetBusApp", "actionfragment_diary:onTouch" + event );
+                if(event.getAction() == MotionEvent.ACTION_OUTSIDE){
+                    m_remark_edit.setFocusable(false);
+                    m_remark_edit.setInputType(InputType.TYPE_NULL);
+                }
+                return false;
+            }
+        });
+        m_remark_edit.setOnFocusChangeListener(new OnFocusChangeListener() {
+            public void onFocusChange(View v, boolean focused) {
+                Log.i( "PetBusApp", "m_remark_edit:onFocusChange:" + focused );
+                // m_remark_edit.setInputType(InputType.TYPE_NULL);
+                return ;
+            }
+        });
         m_imageview_picture.setAdjustViewBounds(true);
         m_imageview_picture.setMaxHeight(200);
         m_imageview_picture.setMaxWidth(200);
