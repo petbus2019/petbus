@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -18,7 +19,6 @@ import com.petbus.tj.petbus.middleware.middleware;
 import com.petbus.tj.petbus.middleware.middleware_impl;
 
 import java.util.Calendar;
-import java.util.Date;
 
 public class petbus_firstvisit extends FragmentActivity {
     private Button btnNext;
@@ -62,9 +62,16 @@ public class petbus_firstvisit extends FragmentActivity {
             public void onClick(View v) {
                 int genderVal = 0;
                 int speciesVal = 0;
+                //check whether's no input value
+                if (birth.getText().length()==0 || name.getText().length()==0 || weight.getText().length()==0)
+                {
+                    Log.i( "PetBusApp", "profileadd: your  is empty, please try again." );
+                    Toast.makeText(petbus_firstvisit.this, R.string.inputEmpty, Toast.LENGTH_LONG ).show();
+                    return;
+                }
                 String strBirth = birth.getText().toString();
                 String strName = name.getText().toString();
-                int weightVal = Integer.valueOf(weight.getText().toString()).intValue();
+                double weightVal = Double.valueOf(weight.getText().toString());
                 for (int i=0; i<gender.getChildCount();i++){
                     RadioButton r=(RadioButton)gender.getChildAt(i);
                     if(r.isChecked()){
@@ -72,7 +79,7 @@ public class petbus_firstvisit extends FragmentActivity {
                         break;
                     }
                 }
-                for (int i=0; i<gender.getChildCount();i++){
+                for (int i=0; i<species.getChildCount();i++){
                     RadioButton r=(RadioButton)species.getChildAt(i);
                     if(r.isChecked()){
                         speciesVal = i;
@@ -87,7 +94,7 @@ public class petbus_firstvisit extends FragmentActivity {
         });
     }
 
-    private void addPet(String name, String photoPath, String birth, int weight, int gender, int species)
+    private void addPet(String name, String photoPath, String birth, double weight, int gender, int species)
     {
         Toast.makeText(petbus_firstvisit.this, name+','+birth+","
                 +weight+","+gender+","+species, Toast.LENGTH_LONG ).show();

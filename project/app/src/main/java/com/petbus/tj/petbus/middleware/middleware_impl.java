@@ -137,12 +137,11 @@ public class middleware_impl extends Application implements middleware {
         return sql_result.getCount();
     }
 
-    public int newPet(String name, String photoPath, String birth, int weight, int gender, int species)
+    public int newPet(String name, String photoPath, String birth, double weight, int gender, int species)
     {
         Log.i( "PetBusApp", "PetBusBusiness:add new pet." );
         //check whether there is the same pet name in database
-        String sqlStr = "SELECT nickname from petbus_petinfo WHERE nickname = '" + name + "';";
-        Log.i( "PetBusApp", "execSQL: " + sqlStr );
+        String sqlStr = "SELECT nickname from petbus_petinfo WHERE nickname = \"" + name + "\";";
         Cursor sql_result = m_database.get_result( sqlStr );
         if( 0 == sql_result.getCount() )
         {

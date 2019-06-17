@@ -65,6 +65,7 @@
             android:id="@+id/id_inputWeight"
             android:hint="                                           kg"
             android:textSize="14dp"
+            android:inputType="number|numberDecimal"
             android:layout_toRightOf="@id/id_weight"/>
     </RelativeLayout>
     <RelativeLayout
@@ -83,16 +84,19 @@
             android:layout_height="wrap_content"
             android:id="@+id/id_inputGender"
             android:layout_toRightOf="@id/id_gender"
+            android:checkedButton="@id/info_gendermale"
             android:orientation="horizontal">
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/info_gendermale"
                 android:text="@string/infogendermale"
                 android:textSize="14dp"
                 android:layout_marginLeft="10dp"/>
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/info_genderfemale"
                 android:text="@string/infogenderfemale"
                 android:textSize="14dp"
                 android:layout_marginLeft="50dp"/>
@@ -102,24 +106,23 @@
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:paddingBottom="40dp">
-
         <TextView
             android:id="@+id/id_species"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/infospecies"
             android:textSize="14dp" />
-
         <RadioGroup
             android:id="@+id/id_inputSpecies"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/id_species"
+            android:checkedButton="@id/info_speciescat"
             android:orientation="horizontal">
-
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/info_speciescat"
                 android:text="@string/infospeciescat"
                 android:textSize="14dp"
                 android:layout_marginLeft="10dp"/>
@@ -127,6 +130,7 @@
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/info_speciesdog"
                 android:text="@string/infospeciesdog"
                 android:textSize="14dp"
                 android:layout_marginLeft="36dp"/>

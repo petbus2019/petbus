@@ -56,7 +56,7 @@ public class dbmanager_impl extends SQLiteOpenHelper implements dbmanager
                 "user_id" + " integer," + 
                 "picture" + " TEXT," + 
                 "nickname" + " TEXT," +
-                "weight" + " integer," +
+                "weight" + " Double," +
                 "sex" + " integer," + 
                 "birthday" + " DATE," + 
                 "pettype" + " integer," + 

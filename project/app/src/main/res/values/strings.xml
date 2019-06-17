@@ -42,4 +42,5 @@
     <string name="mini_before">分前</string>
     <string name="rightnow">刚刚</string>
     <string name="nullstring">---</string>
+    <string name="inputEmpty">请填写宠物信息</string>
 </resources>
