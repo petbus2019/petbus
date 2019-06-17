@@ -193,7 +193,7 @@ public class middleware_impl extends Application implements middleware {
                     petinfo.put("name", getName);
                     String picture = cur.getString(cur.getColumnIndex("picture"));
                     petinfo.put("photo", picture);
-                    int getWeight = cur.getInt(cur.getColumnIndex("weight"));
+                    double getWeight = cur.getDouble(cur.getColumnIndex("weight"));
                     petinfo.put("weight", getWeight);
                     String getBirth = cur.getString(cur.getColumnIndex("birthday"));
                     petinfo.put("age", getBirth);
