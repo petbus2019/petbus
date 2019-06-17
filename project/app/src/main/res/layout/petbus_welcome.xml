@@ -6,11 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".petbus_welcome">
 
-    <FrameLayout
-        android:id="@+id/welcome_fragment"
+    <TextView
         android:layout_width="match_parent"
-        android:layout_weight="1"
-        android:layout_height="0dp">
-    </FrameLayout>
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textSize="30sp"
+        android:text="Welcome!"/>
 
 </android.support.constraint.ConstraintLayout>
