@@ -131,10 +131,10 @@ public class middleware_impl extends Application implements middleware {
     @Override
     public int get_petnumber()
     {
-        Log.i( "PetBusApp", "PetBusBusiness:get_petnumber" );
-        int re = m_database.get_petnumber();
-        re = 10;
-        return re;
+        String sqlStr = "SELECT * from petbus_petinfo ;";
+        Log.i( "PetBusApp", "execSQL: " + sqlStr );
+        Cursor sql_result = m_database.get_result( sqlStr );
+        return sql_result.getCount();
     }
 
     public int newPet(String name, String photoPath, String birth, int weight, int gender, int species)
@@ -181,8 +181,6 @@ public class middleware_impl extends Application implements middleware {
             do {
                 String nick_name = cur.getString(cur.getColumnIndex("nickname"));
                 m_petname_list.add( nick_name );
-                // String name = cur.getString(cur.getColumnIndex("name"));
-                // String age = cur.getString(cur.getColumnIndex("age"));
             } while (cur.moveToNext());
         }
         Log.d("PetBusApp", "PetBusBusiness:the petnamelist is " + m_petname_list );
@@ -192,8 +190,6 @@ public class middleware_impl extends Application implements middleware {
             do {
                 String nick_name = cur.getString(cur.getColumnIndex("action_name"));
                 m_action_list.add( nick_name );
-                // String name = cur.getString(cur.getColumnIndex("name"));
-                // String age = cur.getString(cur.getColumnIndex("age"));
             } while (cur.moveToNext());
         }
         Log.d("PetBusApp", "PetBusBusiness:the m_action_list is " + m_action_list );

@@ -9,23 +9,8 @@ import android.database.Cursor;
 public class dbmanager_impl extends SQLiteOpenHelper implements dbmanager
 {
 
-    public static final String DB_NAME = "petbus_db.db";
-    public static final String TABLE_NAME_PICTURE = "petbus_picture";
-    public static final String TABLE_USERINFO = "petbus_userinfo";
-    public static final String TABLE_PETNFO = "petbus_petinfo";
-    public static final String TABLE_RECORD = "petbus_actionrecord";
-    public static final String TABLE_OPERATIONNAME = "petbus_operationname";
-    public static final int DB_VERSION = 1;
 
-    @Override
-    public int get_petnumber()
-    {
-        Log.i( "PetBusApp", "PetBusDatabase:get_petnumber" );
-        SQLiteDatabase db = getWritableDatabase();
-        db.execSQL( "insert into petbus_picture(picture_file_name) values(\"TeJing\")" );
-        db.close();
-        return 0;
-    }
+    public static final int DB_VERSION = 1;
 
     public long get_userid()
     {
@@ -50,23 +35,23 @@ public class dbmanager_impl extends SQLiteOpenHelper implements dbmanager
         // 建表
         Log.i( "PetBusApp", "PetBusDatabase:create the picture table" );
         String sql = "create table " +
-                TABLE_NAME_PICTURE +
+                dbmanager.TABLE_NAME_PICTURE +
                 "(id integer primary key autoincrement, " +
                 "picture_file_name" + " varchar " + ");";
         Log.i( "PetBusApp", "execSQL: " + sql );
         db.execSQL(sql);
 
-        Log.i( "PetBusApp", "PetBusDatabase:create the " + TABLE_USERINFO + " table" );
+        Log.i( "PetBusApp", "PetBusDatabase:create the " + dbmanager.TABLE_USERINFO + " table" );
         sql = "create table " +
-                TABLE_USERINFO +
+                dbmanager.TABLE_USERINFO +
                 "(id integer PRIMARY KEY, " +
                 "nickname" + " TEXT " + ");";
         Log.i( "PetBusApp", "execSQL: " + sql );
         db.execSQL(sql);
 
-        Log.i( "PetBusApp", "PetBusDatabase:create the " + TABLE_PETNFO + " table" );
+        Log.i( "PetBusApp", "PetBusDatabase:create the " + dbmanager.TABLE_PETNFO + " table" );
         sql = "create table " +
-                TABLE_PETNFO +
+                dbmanager.TABLE_PETNFO +
                 "(id integer PRIMARY KEY autoincrement, " +
                 "user_id" + " integer," + 
                 "picture" + " TEXT," + 
@@ -75,13 +60,13 @@ public class dbmanager_impl extends SQLiteOpenHelper implements dbmanager
                 "sex" + " integer," + 
                 "birthday" + " DATE," + 
                 "pettype" + " integer," + 
-                "FOREIGN KEY ( user_id ) REFERENCES " + TABLE_USERINFO + "(id));";
+                "FOREIGN KEY ( user_id ) REFERENCES " + dbmanager.TABLE_USERINFO + "(id));";
         Log.i( "PetBusApp", "execSQL: " + sql );
         db.execSQL(sql);
 
-        Log.i( "PetBusApp", "PetBusDatabase:create the " + TABLE_RECORD + " table" );
+        Log.i( "PetBusApp", "PetBusDatabase:create the " + dbmanager.TABLE_RECORD + " table" );
         sql = "create table " +
-                TABLE_RECORD +
+                dbmanager.TABLE_RECORD +
                 "(id integer PRIMARY KEY autoincrement, " +
                 "pet_id" + " integer," + 
                 "picture" + " TEXT," + 
@@ -89,13 +74,13 @@ public class dbmanager_impl extends SQLiteOpenHelper implements dbmanager
                 "time" + " DATE," +
                 "remark" + " VARCHAR(256)," +
                 "type" + " integer," +
-                "FOREIGN KEY ( pet_id ) REFERENCES " + TABLE_PETNFO + "(id));";
+                "FOREIGN KEY ( pet_id ) REFERENCES " + dbmanager.TABLE_PETNFO + "(id));";
         Log.i( "PetBusApp", "execSQL: " + sql );
         db.execSQL(sql);
 
-        Log.i( "PetBusApp", "PetBusDatabase:create the " + TABLE_OPERATIONNAME + " table" );
+        Log.i( "PetBusApp", "PetBusDatabase:create the " + dbmanager.TABLE_OPERATIONNAME + " table" );
         sql = "create table " +
-                TABLE_OPERATIONNAME +
+                dbmanager.TABLE_OPERATIONNAME +
                 "(id integer PRIMARY KEY autoincrement, " +
                 "picture" + " TEXT," + 
                 "action_name" + " TEXT" + 
@@ -105,7 +90,7 @@ public class dbmanager_impl extends SQLiteOpenHelper implements dbmanager
 
 
         String time_id = String.valueOf( System.currentTimeMillis() );
-        sql = "INSERT INTO " + TABLE_USERINFO + " values(" + time_id + ",\'TeJing\'" + ");";
+        sql = "INSERT INTO " + dbmanager.TABLE_USERINFO + " values(" + time_id + ",\'TeJing\'" + ");";
         Log.i( "PetBusApp", "execSQL: " + sql );
         db.execSQL(sql);
 
@@ -114,7 +99,7 @@ public class dbmanager_impl extends SQLiteOpenHelper implements dbmanager
     @Override  
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.i( "PetBusApp", "PetBusDatabase:onUpgrade" );
-        String sql = "DROP TABLE " + TABLE_NAME_PICTURE + ";";
+        String sql = "DROP TABLE " + dbmanager.TABLE_NAME_PICTURE + ";";
         db.execSQL(sql);
         db.close();
     }
@@ -156,26 +141,26 @@ public class dbmanager_impl extends SQLiteOpenHelper implements dbmanager
             } while (c.moveToNext());
         }
 
-        //Step2: add four pet to databse
-        sql = "insert into " + TABLE_PETNFO + " (user_id,picture,nickname,weight, sex,birthday,pettype)"
-                   + " values(" + String.valueOf(user_id) + ",\'test.jpg\'" + ",\'喵喵\'," + "23"+",1" + ",2019-06-01" + ",1"  + ");";
-        Log.i( "PetBusApp", "execSQL: " + sql );
-        db.execSQL( sql );
+        // //Step2: add four pet to databse
+        // sql = "insert into " + TABLE_PETNFO + " (user_id,picture,nickname,weight, sex,birthday,pettype)"
+        //            + " values(" + String.valueOf(user_id) + ",\'test.jpg\'" + ",\'喵喵\'," + "23"+",1" + ",2019-06-01" + ",1"  + ");";
+        // Log.i( "PetBusApp", "execSQL: " + sql );
+        // db.execSQL( sql );
 
-        sql = "insert into " + TABLE_PETNFO + " (user_id,picture,nickname,weight,sex,birthday,pettype)"
-            + " values(" + String.valueOf(user_id) + ",\'test.jpg\'" + ",\'喵喵1\'," + "5"+",2" + ",2019-06-01" + ",1"  + ");";
-        Log.i( "PetBusApp", "execSQL: " + sql );
-        db.execSQL( sql );
+        // sql = "insert into " + TABLE_PETNFO + " (user_id,picture,nickname,weight,sex,birthday,pettype)"
+        //     + " values(" + String.valueOf(user_id) + ",\'test.jpg\'" + ",\'喵喵1\'," + "5"+",2" + ",2019-06-01" + ",1"  + ");";
+        // Log.i( "PetBusApp", "execSQL: " + sql );
+        // db.execSQL( sql );
 
-        sql = "insert into " + TABLE_PETNFO + " (user_id,picture,nickname,weight,sex,birthday,pettype)"
-            + " values(" + String.valueOf(user_id) + ",\'test.jpg\'" + ",\'喵喵2\'," + "13" + ",2" + ",2019-06-01" + ",1"  + ");";
-        Log.i( "PetBusApp", "execSQL: " + sql );
-        db.execSQL( sql );
+        // sql = "insert into " + TABLE_PETNFO + " (user_id,picture,nickname,weight,sex,birthday,pettype)"
+        //     + " values(" + String.valueOf(user_id) + ",\'test.jpg\'" + ",\'喵喵2\'," + "13" + ",2" + ",2019-06-01" + ",1"  + ");";
+        // Log.i( "PetBusApp", "execSQL: " + sql );
+        // db.execSQL( sql );
 
-        sql = "insert into " + TABLE_PETNFO + " (user_id,picture,nickname,weight, sex,birthday,pettype)"
-            + " values(" + String.valueOf(user_id) + ",\'test.jpg\'" + ",\'喵喵3\'," + "6" + ",1" + ",2019-06-01" + ",1"  + ");";
-        Log.i( "PetBusApp", "execSQL: " + sql );
-        db.execSQL( sql );
+        // sql = "insert into " + TABLE_PETNFO + " (user_id,picture,nickname,weight, sex,birthday,pettype)"
+        //     + " values(" + String.valueOf(user_id) + ",\'test.jpg\'" + ",\'喵喵3\'," + "6" + ",1" + ",2019-06-01" + ",1"  + ");";
+        // Log.i( "PetBusApp", "execSQL: " + sql );
+        // db.execSQL( sql );
 
         //Step3: add base operation to databasea
         sql = "insert into " + TABLE_OPERATIONNAME + " (picture,action_name)" 
