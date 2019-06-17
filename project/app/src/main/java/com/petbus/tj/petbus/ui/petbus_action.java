@@ -241,7 +241,7 @@ public class petbus_action extends FragmentActivity implements OnClickListener,u
     public boolean isShouldHideInput(View v, MotionEvent event) {
         if (v != null && (v instanceof EditText)) {
             int[] leftTop = {0, 0};
-            //获取输入框当前的location位置
+			
             v.getLocationInWindow(leftTop);
             int left = leftTop[0];
             int top = leftTop[1];
