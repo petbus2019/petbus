@@ -15,6 +15,11 @@ public interface middleware{
     public static final String DATE_FORMAT_DATE = "yyyy-MM-dd";
     public static final String DATE_FORMAT_TIME = "HH:mm:ss";
 
+    public static final String PETINFO_TYPE_NAME = "name";
+    public static final String PETINFO_TYPE_PHOTO = "photo";
+    public static final String PETINFO_TYPE_WEIGHT = "weight";
+    public static final String PETINFO_TYPE_AGE = "age";
+
     int get_petnumber();
 
     ArrayList<String> get_action_list();
@@ -26,5 +31,6 @@ public interface middleware{
     int get_record( int id, StringBuffer time, StringBuffer petname, StringBuffer action, StringBuffer remark, ArrayList<String> record_pic );
     int newPet(String name, String photoPath, String birth, double weight, int gender, int species);
     List<Integer> getPetIds();
+    Map<String,Object> get_current_pet();
     Map<String,Object> getPetInfo(int id);
 }

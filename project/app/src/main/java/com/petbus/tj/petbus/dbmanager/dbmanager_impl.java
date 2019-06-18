@@ -36,7 +36,7 @@ public class dbmanager_impl extends SQLiteOpenHelper implements dbmanager
         Log.i( "PetBusApp", "PetBusDatabase:create the picture table" );
         String sql = "create table " +
                 dbmanager.TABLE_NAME_PICTURE +
-                "(id integer primary key autoincrement, " +
+                "(" + dbmanager.COLUMN_TEXT_ID + " integer primary key autoincrement, " +
                 "picture_file_name" + " varchar " + ");";
         Log.i( "PetBusApp", "execSQL: " + sql );
         db.execSQL(sql);
@@ -44,44 +44,45 @@ public class dbmanager_impl extends SQLiteOpenHelper implements dbmanager
         Log.i( "PetBusApp", "PetBusDatabase:create the " + dbmanager.TABLE_USERINFO + " table" );
         sql = "create table " +
                 dbmanager.TABLE_USERINFO +
-                "(id integer PRIMARY KEY, " +
-                "nickname" + " TEXT " + ");";
+                "(" + dbmanager.COLUMN_TEXT_ID +" integer PRIMARY KEY, " +
+                dbmanager.COLUMN_TEXT_NICKNAME + " TEXT " + ");";
         Log.i( "PetBusApp", "execSQL: " + sql );
         db.execSQL(sql);
 
         Log.i( "PetBusApp", "PetBusDatabase:create the " + dbmanager.TABLE_PETNFO + " table" );
         sql = "create table " +
                 dbmanager.TABLE_PETNFO +
-                "(id integer PRIMARY KEY autoincrement, " +
-                "user_id" + " integer," + 
+                "(" + dbmanager.COLUMN_TEXT_ID +" integer PRIMARY KEY autoincrement, " +
+                dbmanager.COLUMN_TEXT_USERID + " integer," + 
                 "picture" + " TEXT," + 
-                "nickname" + " TEXT," +
-                "weight" + " Double," +
+                dbmanager.COLUMN_TEXT_NICKNAME + " TEXT," +
+                dbmanager.COLUMN_TEXT_WEIGHT + " Double," +
                 "sex" + " integer," + 
-                "birthday" + " DATE," + 
+                dbmanager.COLUMN_TEXT_BIRTHDAY + " DATE," + 
                 "pettype" + " integer," + 
-                "FOREIGN KEY ( user_id ) REFERENCES " + dbmanager.TABLE_USERINFO + "(id));";
+                "FOREIGN KEY ( " + dbmanager.COLUMN_TEXT_USERID + 
+                " ) REFERENCES " + dbmanager.TABLE_USERINFO + "(" + dbmanager.COLUMN_TEXT_ID +"));";
         Log.i( "PetBusApp", "execSQL: " + sql );
         db.execSQL(sql);
 
         Log.i( "PetBusApp", "PetBusDatabase:create the " + dbmanager.TABLE_RECORD + " table" );
         sql = "create table " +
                 dbmanager.TABLE_RECORD +
-                "(id integer PRIMARY KEY autoincrement, " +
+                "(" + dbmanager.COLUMN_TEXT_ID +" integer PRIMARY KEY autoincrement, " +
                 "pet_id" + " integer," + 
                 "picture" + " TEXT," + 
                 "operation" + " TEXT," + 
                 "time" + " DATE," +
                 "remark" + " VARCHAR(256)," +
                 "type" + " integer," +
-                "FOREIGN KEY ( pet_id ) REFERENCES " + dbmanager.TABLE_PETNFO + "(id));";
+                "FOREIGN KEY ( pet_id ) REFERENCES " + dbmanager.TABLE_PETNFO + "(" + dbmanager.COLUMN_TEXT_ID +"));";
         Log.i( "PetBusApp", "execSQL: " + sql );
         db.execSQL(sql);
 
         Log.i( "PetBusApp", "PetBusDatabase:create the " + dbmanager.TABLE_OPERATIONNAME + " table" );
         sql = "create table " +
                 dbmanager.TABLE_OPERATIONNAME +
-                "(id integer PRIMARY KEY autoincrement, " +
+                "(" + dbmanager.COLUMN_TEXT_ID +" integer PRIMARY KEY autoincrement, " +
                 "picture" + " TEXT," + 
                 "action_name" + " TEXT" + 
                 ");";

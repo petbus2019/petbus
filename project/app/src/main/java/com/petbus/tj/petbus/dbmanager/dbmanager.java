@@ -9,6 +9,14 @@ public interface dbmanager {
     public static final String TABLE_PETNFO = "petbus_petinfo";
     public static final String TABLE_RECORD = "petbus_actionrecord";
     public static final String TABLE_OPERATIONNAME = "petbus_operationname";
+
+
+    public static final String COLUMN_TEXT_ID = "id";
+    public static final String COLUMN_TEXT_NICKNAME = "nickname";
+    public static final String COLUMN_TEXT_USERID = "user_id";
+    public static final String COLUMN_TEXT_PICTURE = "picture";
+    public static final String COLUMN_TEXT_WEIGHT = "weight";
+    public static final String COLUMN_TEXT_BIRTHDAY = "birthday";
     
     long get_userid();
     int execute_sql( String sql );

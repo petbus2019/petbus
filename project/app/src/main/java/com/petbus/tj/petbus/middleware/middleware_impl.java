@@ -20,6 +20,8 @@ public class middleware_impl extends Application implements middleware {
     private static middleware_impl m_instance = null;
     private ArrayList<String> m_action_list = new ArrayList<String>();
     private ArrayList<String> m_petname_list = new ArrayList<String>();
+    private int m_current_petid = 0;
+
     public middleware_impl(){
         Log.i( "PetBusApp", "PetBusBusiness:middleware_impl" );
         if( null == m_instance ){
@@ -133,12 +135,11 @@ public class middleware_impl extends Application implements middleware {
         m_database.execute_sql( sql );
         return middleware.MIDDLEWARE_RETURN_OK;
     }
-    public ArrayList<String> get_action_list()
-    {
+    public ArrayList<String> get_action_list(){
         return m_action_list;
     }
-    public ArrayList<String> get_petname_list()
-    {
+
+    public ArrayList<String> get_petname_list(){
         return m_petname_list;
     }
 
@@ -174,9 +175,14 @@ public class middleware_impl extends Application implements middleware {
         return middleware.MIDDLEWARE_RETURN_OK;
     }
 
+    public Map<String,Object> get_current_pet() {
+        Map<String, Object> result = getPetInfo( m_current_petid );
+        return result;
+    }
+
     public Map<String, Object> getPetInfo(int id)
     {
-        Log.i( "PetBusApp", "PetBusBusiness:get pet information." );
+        Log.i( "PetBusApp", "PetBusBusiness:get pet information,id:" + id );
         Map<String, Object> petinfo = new HashMap<String, Object>();
         String sqlStr = "SELECT nickname,picture,weight,sex,birthday,pettype" +
                 " from petbus_petinfo WHERE id = " + id + ";";
@@ -189,19 +195,20 @@ public class middleware_impl extends Application implements middleware {
         {
             if (cur.moveToFirst()) {
                 do {
-                    String getName = cur.getString(cur.getColumnIndex("nickname"));
-                    petinfo.put("name", getName);
-                    String picture = cur.getString(cur.getColumnIndex("picture"));
-                    petinfo.put("photo", picture);
-                    double getWeight = cur.getDouble(cur.getColumnIndex("weight"));
-                    petinfo.put("weight", getWeight);
-                    String getBirth = cur.getString(cur.getColumnIndex("birthday"));
-                    petinfo.put("age", getBirth);
+                    String getName = cur.getString(cur.getColumnIndex( dbmanager.COLUMN_TEXT_NICKNAME ));
+                    petinfo.put( middleware.PETINFO_TYPE_NAME, getName);
+                    String picture = cur.getString(cur.getColumnIndex( dbmanager.COLUMN_TEXT_PICTURE ));
+                    petinfo.put( middleware.PETINFO_TYPE_PHOTO, picture);
+                    double getWeight = cur.getDouble(cur.getColumnIndex( dbmanager.COLUMN_TEXT_WEIGHT ));
+                    petinfo.put(middleware.PETINFO_TYPE_WEIGHT, getWeight);
+                    String getBirth = cur.getString(cur.getColumnIndex( dbmanager.COLUMN_TEXT_BIRTHDAY ));
+                    petinfo.put( middleware.PETINFO_TYPE_AGE, getBirth);
                 } while (cur.moveToNext());
             }
         }
         return petinfo;
     }
+
 
     private static final String m_get_nickname_sql = "select nickname from petbus_petinfo;";
     private static final String m_get_operationname_sql = "select action_name from petbus_operationname;";
@@ -235,6 +242,6 @@ public class middleware_impl extends Application implements middleware {
     @Override  
     protected void attachBaseContext(Context base) {  
         Log.d("PetBusApp", "PetBusBusiness:attachBaseContext");
-        super.attachBaseContext(base);  
+        super.attachBaseContext(base);
     }
 }
