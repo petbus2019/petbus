@@ -92,6 +92,10 @@ class action_record{
     public String get_nickname(){
         return m_nickname;
     }
+
+    public String get_nickphoto(){
+        return m_picture_path;
+    }
     public String get_action(){
         return m_action;
     }
@@ -200,6 +204,11 @@ class record_daily_listview extends ArrayAdapter<action_record> {
 
                 TextView record_action = (TextView) convertView.findViewById(R.id.recode_actioin_text);
                 record_action.setText( record.get_action() );
+
+                ImageView pet_photo_view = (ImageView) convertView.findViewById(R.id.recode_image);
+                Bitmap bitmap = BitmapFactory.decodeFile(record.get_nickphoto());
+                pet_photo_view.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                pet_photo_view.setImageBitmap(bitmap);
                 
                 TextView nickname = (TextView) convertView.findViewById(R.id.nickname_text);
                 nickname.setText( record.get_nickname() );
@@ -208,7 +217,7 @@ class record_daily_listview extends ArrayAdapter<action_record> {
                 remark_text.setText( record.get_remark() );
 
                 ImageView imageview_picture = ( ImageView )convertView.findViewById( R.id.recode_petportrait_image );
-                Bitmap bitmap = BitmapFactory.decodeFile(record.get_remark_picture());
+                bitmap = BitmapFactory.decodeFile(record.get_remark_picture());
                 imageview_picture.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 imageview_picture.setImageBitmap(bitmap);
                 break;
@@ -258,6 +267,9 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
     private TextView m_lastaction_2;
     private TextView m_lastaction_3;
 
+    private ImageView m_pet_image;
+    private TextView  m_pet_name;
+
 
     public void update_listdata(){
         int i = 0;
@@ -274,6 +286,15 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
         m_lastaction_2.setText( text_null );
         m_lastaction_3.setText( text_null );
         
+        Map<String,Object> pet_info = m_middleware.get_current_pet();
+        Log.i( "PetBusApp","info:" + pet_info );
+
+        Bitmap bitmap = BitmapFactory.decodeFile( String.valueOf( pet_info.get( middleware.PETINFO_TYPE_PHOTO ) ) );
+        m_pet_image.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        m_pet_image.setImageBitmap(bitmap);
+
+        m_pet_name.setText(  String.valueOf( pet_info.get( middleware.PETINFO_TYPE_NAME ) ) );
+
         for (Map.Entry<String, String> entry : action_map.entrySet()) {
             Log.i("PetBusApp",entry.getKey() + ":" + entry.getValue());
             SimpleDateFormat format = new SimpleDateFormat( middleware_impl.DATE_FORMAT_FULL );
@@ -287,12 +308,12 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
                 return;
             }
 
+
             long diff = now.getTime() - d2.getTime();
             long days = diff / (1000 * 60 * 60 * 24);
             long hours = (diff-days*(1000 * 60 * 60 * 24))/(1000* 60 * 60);
             long minutes = (diff-days*(1000 * 60 * 60 * 24)-hours*(1000* 60 * 60))/(1000* 60);
 
-            Log.i("PetBusApp","hte i si " + i );
             if( 0 == i )
             {
                 Log.i("PetBusApp","actioind-1");
@@ -380,6 +401,9 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
         View view = inflater.inflate(R.layout.actionfragment_actionrecord, container, false);
         m_adapter = new record_daily_listview(this.getActivity(),
                 R.layout.record_daily_record,m_daily_record_list);
+
+        m_pet_image = (ImageView)view.findViewById(R.id.pet_photo);
+        m_pet_name = (TextView)view.findViewById(R.id.pet_nickname_text);
  
         m_lastaction_1 = (TextView)view.findViewById(R.id.text_lastaction1);
         m_lastaction_2 = (TextView)view.findViewById(R.id.text_lastaction2);
@@ -394,6 +418,9 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
         mBtn_profile = (ImageButton) view.findViewById(R.id.profile_buttom);
         mBtn_profile.setOnClickListener(this);
 
+        m_pet_image.setAdjustViewBounds(true);
+        m_pet_image.setMaxHeight(200);
+        m_pet_image.setMaxWidth(200);
 
         update_listdata();
         return view;

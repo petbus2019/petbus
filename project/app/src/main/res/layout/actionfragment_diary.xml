@@ -11,7 +11,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:textSize="30sp"
+            style="@style/diary_addfragment_text"
             android:gravity="left"
             android:text="@string/time"/>
         <LinearLayout
@@ -24,13 +24,13 @@
                 android:layout_width="1dp"
                 android:layout_weight="1"
                 android:layout_height="fill_parent"
-                android:textSize="30sp"
+                style="@style/diary_addfragment_text"
                 android:gravity="right"
                 android:text="@string/time"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:textSize="30sp"
+                style="@style/diary_addfragment_text"
                 android:gravity="right"
                 android:text=">"/>
         </LinearLayout>
@@ -47,7 +47,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:textSize="30sp"
+            style="@style/diary_addfragment_text"
             android:gravity="left"
             android:text="@string/lovepet"/>
         <LinearLayout
@@ -75,7 +75,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:textSize="30sp"
+            style="@style/diary_addfragment_text"
             android:gravity="left"
             android:text="@string/actiontype"/>
         <LinearLayout
@@ -147,7 +147,7 @@
             android:id="@+id/entry_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="30sp"
+            style="@style/diary_addfragment_text"
             android:gravity="left"
             android:text="@string/save"/>
     </LinearLayout>

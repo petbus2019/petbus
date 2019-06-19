@@ -12,7 +12,11 @@
     </style>
     <!-- https://www.cnblogs.com/tommylemon/p/5700531.html -->
 
-
+    <style name="headportrait">
+        <item name="android:adjustViewBounds">true</item>
+        <item name="android:maxWidth">100dp</item>
+        <item name="android:maxHeight">100dp</item>
+    </style>
 
     <style name="titlebar_text">
         <item name="android:textSize">23dp</item>
@@ -28,6 +32,10 @@
         <item name="android:textColor">#000000</item>
     </style>
     <style name="diary_remark_text">
+        <item name="android:textSize">15dp</item>
+        <item name="android:textColor">#000000</item>
+    </style>
+    <style name="diary_addfragment_text">
         <item name="android:textSize">15dp</item>
         <item name="android:textColor">#000000</item>
     </style>

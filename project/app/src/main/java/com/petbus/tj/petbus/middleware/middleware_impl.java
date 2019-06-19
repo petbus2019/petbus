@@ -20,7 +20,7 @@ public class middleware_impl extends Application implements middleware {
     private static middleware_impl m_instance = null;
     private ArrayList<String> m_action_list = new ArrayList<String>();
     private ArrayList<String> m_petname_list = new ArrayList<String>();
-    private int m_current_petid = 0;
+    private int m_current_petid = 1;
 
     public middleware_impl(){
         Log.i( "PetBusApp", "PetBusBusiness:middleware_impl" );
