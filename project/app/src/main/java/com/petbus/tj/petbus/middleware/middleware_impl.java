@@ -34,10 +34,10 @@ public class middleware_impl extends Application implements middleware {
     }
 
     public int get_last_three_record( Map<String,String> record_map ){
-        String sql = "SELECT petbus_actionrecord.operation,petbus_actionrecord.time " + 
-                     "from petbus_actionrecord where petbus_actionrecord.operation " + 
-                     "!= 'null' group by petbus_actionrecord.operation order " + 
-                     "by petbus_actionrecord.time DESC limit 3;";
+        String sql = "SELECT " + dbmanager.TABLE_RECORD + ".operation," + dbmanager.TABLE_RECORD + ".time " + 
+                     "from " + dbmanager.TABLE_RECORD + " where " + dbmanager.TABLE_RECORD + ".operation " + 
+                     "!= 'null' group by " + dbmanager.TABLE_RECORD + ".operation order " + 
+                     "by " + dbmanager.TABLE_RECORD + ".time DESC limit 3;";
         Cursor sql_result = m_database.get_result( sql );
         if (sql_result.moveToFirst()) {
             do {
@@ -49,7 +49,7 @@ public class middleware_impl extends Application implements middleware {
         return 0;
     }
     public int get_record_count(){
-        String sql = "SELECT * FROM petbus_actionrecord;";
+        String sql = "SELECT * FROM " + dbmanager.TABLE_RECORD + ";";
         Cursor sql_result = m_database.get_result( sql );
         return sql_result.getCount();
     }
@@ -57,10 +57,10 @@ public class middleware_impl extends Application implements middleware {
     public int get_record( int position, StringBuffer time, StringBuffer petname, StringBuffer action, StringBuffer remark, ArrayList<String> record_pic ){
         int re = middleware.RECORD_TYPE_RECORD;
 
-        String sql = "SELECT petbus_actionrecord.picture,petbus_actionrecord.time,petbus_actionrecord.remark," +
-                     "petbus_actionrecord.operation,petbus_actionrecord.type,petbus_petinfo.nickname " +
-                     "FROM petbus_actionrecord left join petbus_petinfo on " +
-                     "petbus_actionrecord.pet_id = petbus_petinfo.id ORDER BY datetime(time) DESC";
+        String sql = "SELECT " + dbmanager.TABLE_RECORD + ".picture," + dbmanager.TABLE_RECORD + ".time," + dbmanager.TABLE_RECORD + ".remark," +
+                     "" + dbmanager.TABLE_RECORD + ".operation," + dbmanager.TABLE_RECORD + ".type,petbus_petinfo.nickname " +
+                     "FROM " + dbmanager.TABLE_RECORD + " left join petbus_petinfo on " +
+                     "" + dbmanager.TABLE_RECORD + ".pet_id = petbus_petinfo.id ORDER BY datetime(time) DESC";
         Cursor sql_result = m_database.get_result( sql );
         sql_result.moveToPosition( position );
         time.append(sql_result.getString(sql_result.getColumnIndex("time")));
@@ -102,7 +102,7 @@ public class middleware_impl extends Application implements middleware {
             } while (c.moveToNext());
         }
 
-        sql = "SELECT date(time) from petbus_actionrecord where date(time) = date(\"" + time + "\")";
+        sql = "SELECT date(time) from " + dbmanager.TABLE_RECORD + " where date(time) = date(\"" + time + "\")";
         Cursor sql_result = m_database.get_result( sql );
         if( 0 == sql_result.getCount() )
         {

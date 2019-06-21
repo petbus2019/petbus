@@ -7,7 +7,8 @@ public interface dbmanager {
     public static final String TABLE_NAME_PICTURE = "petbus_picture";
     public static final String TABLE_USERINFO = "petbus_userinfo";
     public static final String TABLE_PETNFO = "petbus_petinfo";
-    public static final String TABLE_RECORD = "petbus_actionrecord";
+    public static final String TABLE_RECORD = "petbus_record";
+    public static final String TABLE_RECORD_PETINFO = "petbus_record_petinfo";
     public static final String TABLE_OPERATIONNAME = "petbus_operationname";
 
 

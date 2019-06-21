@@ -69,15 +69,26 @@ public class dbmanager_impl extends SQLiteOpenHelper implements dbmanager
         sql = "create table " +
                 dbmanager.TABLE_RECORD +
                 "(" + dbmanager.COLUMN_TEXT_ID +" integer PRIMARY KEY autoincrement, " +
-                "pet_id" + " integer," + 
                 "picture" + " TEXT," + 
                 "operation" + " TEXT," + 
                 "time" + " DATE," +
                 "remark" + " VARCHAR(256)," +
-                "type" + " integer," +
-                "FOREIGN KEY ( pet_id ) REFERENCES " + dbmanager.TABLE_PETNFO + "(" + dbmanager.COLUMN_TEXT_ID +"));";
+                "type" + " integer )";
+                // "FOREIGN KEY ( pet_id ) REFERENCES " + dbmanager.TABLE_PETNFO + "(" + dbmanager.COLUMN_TEXT_ID +"));";
         Log.i( "PetBusApp", "execSQL: " + sql );
         db.execSQL(sql);
+
+        Log.i( "PetBusApp", "PetBusDatabase:create the " + dbmanager.TABLE_RECORD_PETINFO + " table" );
+        sql = "create table " +
+                dbmanager.TABLE_RECORD_PETINFO +
+                "(" + dbmanager.COLUMN_TEXT_ID +" integer PRIMARY KEY autoincrement, " +
+                "pet_id" + " integer," + 
+                "record_id" + " integer," + 
+                "FOREIGN KEY ( pet_id ) REFERENCES " + dbmanager.TABLE_PETNFO + "(" + dbmanager.COLUMN_TEXT_ID +")," +
+                "FOREIGN KEY ( record_id ) REFERENCES " + dbmanager.TABLE_RECORD + "(" + dbmanager.COLUMN_TEXT_ID +"));";
+        Log.i( "PetBusApp", "execSQL: " + sql );
+        db.execSQL(sql);
+
 
         Log.i( "PetBusApp", "PetBusDatabase:create the " + dbmanager.TABLE_OPERATIONNAME + " table" );
         sql = "create table " +

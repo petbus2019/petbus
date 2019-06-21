@@ -43,4 +43,7 @@
     <string name="rightnow">刚刚</string>
     <string name="nullstring">---</string>
     <string name="inputEmpty">请填写宠物信息</string>
+    <string name="selected">选择</string>
+    <string name="unselected">取消选择</string>
+    <string name="title">标题</string>
 </resources>

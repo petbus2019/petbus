@@ -16,6 +16,8 @@
         <item name="android:adjustViewBounds">true</item>
         <item name="android:maxWidth">100dp</item>
         <item name="android:maxHeight">100dp</item>
+        <item name="android:minHeight">100dp</item>
+        <item name="android:minWidth">100dp</item>
     </style>
 
     <style name="titlebar_text">

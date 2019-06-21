@@ -20,6 +20,7 @@ import android.widget.Spinner;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.LinearLayout;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Toast;
@@ -29,18 +30,126 @@ import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.text.InputType;
 
+import android.app.Dialog;
+import android.content.Context;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 import com.petbus.tj.petbus.middleware.middleware;
 import com.petbus.tj.petbus.middleware.middleware_impl;
+
+//https://blog.csdn.net/shaoyezhangliwei/article/details/79441799
+// https://blog.csdn.net/yanzi1225627/article/details/21294553
+class HorizontalListViewAdapter extends BaseAdapter{
+    private middleware m_middleware;
+    private Context mContext;
+    private LayoutInflater mInflater;
+    private int selectIndex = -1;
+ 
+    public HorizontalListViewAdapter( Context context ){
+        this.mContext = context;
+        mInflater=(LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        m_middleware = middleware_impl.getInstance();
+    }
+    @Override
+    public int getCount() {
+        return m_middleware.get_petnumber();
+    }
+    @Override
+    public Object getItem(int position) {
+        return position;
+    }
+ 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+ 
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        int position_to_id = position + 1;
+        LayoutInflater _LayoutInflater = LayoutInflater.from(mContext);
+        convertView = _LayoutInflater.inflate(R.layout.petview_select_item, null);
+        if( convertView != null )
+        {
+            ImageView pet_image = (ImageView)convertView.findViewById(R.id.pet_photo);
+            TextView pet_name = (TextView)convertView.findViewById(R.id.pet_nickname_text);
+            Map<String,Object> pet_map = m_middleware.getPetInfo( position_to_id ); 
+            Log.d("FileCache", "Select pet item:" + pet_map + " position_to_id:" + position_to_id );
+
+            // pet_image.setMaxHeight(200);
+            // pet_image.setMaxWidth(200);
+
+            Bitmap bitmap = BitmapFactory.decodeFile(String.valueOf( pet_map.get( middleware.PETINFO_TYPE_PHOTO ) ));
+            pet_image.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            pet_image.setImageBitmap(bitmap);
+                
+            pet_name.setText( String.valueOf( pet_map.get( middleware.PETINFO_TYPE_NAME ) ) );
+        }
+
+        return convertView;
+    }
+ 
+    private static class ViewHolder {
+        private TextView mTitle ;
+        private ImageView mImage;
+    }
+    private Bitmap getPropThumnail(int id){
+        // Drawable d = mContext.getResources().getDrawable(id);
+        // Bitmap b = BitmapUtil.drawableToBitmap(d);
+        // int w = mContext.getResources().getDimensionPixelOffset(R.dimen.thumnail_default_width);
+        // int h = mContext.getResources().getDimensionPixelSize(R.dimen.thumnail_default_height);
+        
+        // Bitmap thumBitmap = ThumbnailUtils.extractThumbnail(b, w, h);
+        
+        return null;
+    }
+    public void setSelectIndex(int i){
+        selectIndex = i;
+    }
+}
+
+class diary_petselect_dialog extends Dialog {
+    private Context m_context;
+    HorizontalListViewAdapter hListViewAdapter;
+
+    public diary_petselect_dialog(Context context) {
+        super(context);
+        m_petid_list = new ArrayList<Integer>();
+        m_context = context;
+    }
+
+    public diary_petselect_dialog(Context context, int theme) {
+        super(context, theme);
+        m_context = context;
+        m_petid_list = new ArrayList<Integer>();
+        m_context = context;
+    }
+
+    public List<Integer> get_petid_list(){
+        return m_petid_list;
+    }
+
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView( R.layout.petview_select );
+
+        HorizontalListView  hListView = (HorizontalListView)findViewById(R.id.horizon_listview);
+        hListViewAdapter = new HorizontalListViewAdapter( m_context );
+        hListView.setAdapter(hListViewAdapter);
+    }
+
+    private List<Integer> m_petid_list;
+}
 
 class diary_actionadapter extends BaseAdapter {
     private List<String> mList;
@@ -86,10 +195,10 @@ public class actionfragment_diary extends Fragment implements OnClickListener
     private EditText m_remark_edit;
     private ImageView m_imageview_picture;
     private Spinner m_action_item;
-    private Spinner m_pet_item;
     private Button m_entry_button;
     private middleware m_middleware;
     private String m_picture_filename;
+    private List<Integer> m_petid_list;
 
     private String saveBitmapAsFile(String name, Bitmap bitmap) {
         long sysTime = System.currentTimeMillis();
@@ -139,7 +248,9 @@ public class actionfragment_diary extends Fragment implements OnClickListener
         m_time_text = ( TextView )view.findViewById( R.id.record_time_text );
         m_imageview_picture = ( ImageView )view.findViewById( R.id.picture_button );
         m_action_item = ( Spinner ) view.findViewById( R.id.action_spinner );
-        m_pet_item = ( Spinner ) view.findViewById( R.id.pet_spinner );
+        LinearLayout ll = (LinearLayout)view.findViewById(R.id.pet_select);
+        ll.setOnClickListener(this);
+
         m_entry_button = ( Button ) view.findViewById( R.id.entry_button );
         m_remark_edit = ( EditText ) view.findViewById( R.id.remark_text_input );
         m_remark_edit.setOnTouchListener(new OnTouchListener() {
@@ -169,8 +280,6 @@ public class actionfragment_diary extends Fragment implements OnClickListener
         diary_actionadapter arr_adapter = new diary_actionadapter( this.getActivity(), m_middleware.get_action_list() );
         m_action_item.setAdapter(arr_adapter);
 
-        diary_actionadapter pet_adapter = new diary_actionadapter( this.getActivity(), m_middleware.get_petname_list() );
-        m_pet_item.setAdapter(pet_adapter);
         return view;
     }
 
@@ -184,6 +293,14 @@ public class actionfragment_diary extends Fragment implements OnClickListener
             case R.id.entry_button:
                 do_record();
                 break;
+            case R.id.pet_select:
+                diary_petselect_dialog myDialog = new diary_petselect_dialog( getActivity(),R.style.dialog );
+                myDialog.show();
+                m_petid_list = myDialog.get_petid_list();
+
+
+                Log.i( "PetBusApp", "pet_select:onClick" + m_petid_list );
+                break;
         }
     }
 
@@ -191,7 +308,7 @@ public class actionfragment_diary extends Fragment implements OnClickListener
         String text = m_time_text.getText().toString();
         String action_text = m_action_item.getSelectedItem().toString();
         String remark_text = m_remark_edit.getText().toString();
-        String petname_text = m_pet_item.getSelectedItem().toString();
+        String petname_text = "";//m_pet_item.getSelectedItem().toString();
         ArrayList<String> picture_list = new ArrayList<String>();
         picture_list.add( m_picture_filename );
 
