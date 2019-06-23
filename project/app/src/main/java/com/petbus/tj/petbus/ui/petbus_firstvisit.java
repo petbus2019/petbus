@@ -2,9 +2,16 @@ package com.petbus.tj.petbus.ui;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PaintFlagsDrawFilter;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -30,6 +37,9 @@ import com.petbus.tj.petbus.middleware.middleware;
 import com.petbus.tj.petbus.middleware.middleware_impl;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -50,6 +60,7 @@ public class petbus_firstvisit extends FragmentActivity implements ActivityCompa
     private Button btnNext;
     private TextView name, birth, weight;
     private RadioGroup gender, species;
+    private String photoPath = "";
     private middleware m_middleware = middleware_impl.getInstance();
 
     @Override
@@ -120,7 +131,7 @@ public class petbus_firstvisit extends FragmentActivity implements ActivityCompa
                         break;
                     }
                 }
-                addPet(strName,"NULL", strBirth,weightVal,genderVal,speciesVal );
+                addPet(strName,photoPath,strBirth,weightVal,genderVal,speciesVal );
                 Intent intent = new Intent();
                 intent.setClass(petbus_firstvisit.this,petbus_action.class);
                 startActivity(intent);
@@ -239,5 +250,82 @@ public class petbus_firstvisit extends FragmentActivity implements ActivityCompa
 
         return image;
     }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        String imgPath = "";
+        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
+            try
+            {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), m_picture_uri);
+                imgPath = saveBitmapAsFile( "PHOTO_",bitmap );
+                btnImg.setAdjustViewBounds(true);
+                btnImg.setMaxHeight(200);
+                btnImg.setMaxWidth(200);
+                btnImg.setImageBitmap(bitmap);
+            }
+            catch( Exception e )
+            {
+                e.printStackTrace();
+            }
+        }
+        else
+        if (requestCode == IMAGE_REQUEST && resultCode == RESULT_OK) {
+            Uri uri = data.getData();
+            imgPath = ImageFilePath.getPath(this, uri);
+            try {
+                Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
+                btnImg.setAdjustViewBounds(true);
+                btnImg.setMaxHeight(200);
+                btnImg.setMaxWidth(200);
+                btnImg.setImageBitmap(bitmap);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        photoPath = imgPath;
+        Log.i("PetBusApp", "the pet photo path is" + imgPath);
+    }
+
+	/*
+    private Bitmap scaleCanvas(Bitmap bitmap, Rect rect)
+    {
+        Bitmap newBitmap = Bitmap.createBitmap(rect.width(), rect.height(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(newBitmap);
+        Paint paint = new Paint();
+        Bitmap temp = bitmap;
+
+        //针对绘制bitmap添加抗锯齿
+        PaintFlagsDrawFilter pfd = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
+        paint.setFilterBitmap(true); //对Bitmap进行滤波处理
+        paint.setAntiAlias(true);//设置抗锯齿
+        canvas.setDrawFilter(pfd);
+        canvas.drawBitmap(temp, null, rect, paint);
+
+        return newBitmap;
+    }*/
+
+    private String saveBitmapAsFile(String name, Bitmap bitmap) {
+        long sysTime = System.currentTimeMillis();
+        SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy_MM_dd_hh_mm");
+        String time = sDateFormat.format(new Date(sysTime));
+        String file_name = Environment.getExternalStorageDirectory() + "/DCIM/Camera/" + name + time + ".jpg";
+        File saveFile = new File( file_name );
+
+        FileOutputStream os = null;
+        try {
+            Log.d("FileCache", "Saving File To Cache " + saveFile.getPath());
+            os = new FileOutputStream(saveFile);
+            bitmap.compress( Bitmap.CompressFormat.JPEG, 100, os );
+            os.flush();
+            os.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return file_name;
+    }
+
 }
 

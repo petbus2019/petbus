@@ -203,12 +203,18 @@ public class middleware_impl extends Application implements middleware {
                     petinfo.put(middleware.PETINFO_TYPE_WEIGHT, getWeight);
                     String getBirth = cur.getString(cur.getColumnIndex( dbmanager.COLUMN_TEXT_BIRTHDAY ));
                     petinfo.put( middleware.PETINFO_TYPE_AGE, getBirth);
+                    petinfo.put( middleware.PETINFO_TYPE_ID, id);
                 } while (cur.moveToNext());
             }
         }
         return petinfo;
     }
 
+    public boolean setCurrentPet(int id)
+    {
+        m_current_petid = id;
+        return true;
+    }
 
     private static final String m_get_nickname_sql = "select nickname from petbus_petinfo;";
     private static final String m_get_operationname_sql = "select action_name from petbus_operationname;";

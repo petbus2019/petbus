@@ -106,7 +106,7 @@ public class dbmanager_impl extends SQLiteOpenHelper implements dbmanager
         Log.i( "PetBusApp", "execSQL: " + sql );
         db.execSQL(sql);
 
-        add_test_data( db );
+        //add_test_data( db );
     }
     @Override  
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

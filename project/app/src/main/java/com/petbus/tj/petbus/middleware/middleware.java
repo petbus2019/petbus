@@ -19,6 +19,7 @@ public interface middleware{
     public static final String PETINFO_TYPE_PHOTO = "photo";
     public static final String PETINFO_TYPE_WEIGHT = "weight";
     public static final String PETINFO_TYPE_AGE = "age";
+    public static final String PETINFO_TYPE_ID = "id";
 
     int get_petnumber();
 
@@ -33,4 +34,5 @@ public interface middleware{
     List<Integer> getPetIds();
     Map<String,Object> get_current_pet();
     Map<String,Object> getPetInfo(int id);
+    boolean setCurrentPet(int id);
 }
