@@ -45,9 +45,9 @@ class action_record{
         Log.i( "PetBusApp", "PetBus:new action_record id:" + id + "type:" + type );
     }
 
-    public void set_record( String time, String nickname, String action, String remark, String picture_path ){
+    public void set_record( String time, List<Integer> list, String action, String remark, String picture_path ){
         m_time = time;
-        m_nickname = nickname;
+        m_petlist = list;
         m_action = action;
         m_remark = remark;
         m_picture_path = picture_path;
@@ -89,8 +89,8 @@ class action_record{
 
         return str;
     }
-    public String get_nickname(){
-        return m_nickname;
+    public List<Integer> get_petlist(){
+        return m_petlist;
     }
 
     public String get_nickphoto(){
@@ -116,7 +116,7 @@ class action_record{
     private int m_id;
     private int m_type;
     private String m_time;
-    private String m_nickname;
+    private List<Integer> m_petlist;
     private String m_action;
     private String m_remark;
     private String m_picture_path;
@@ -204,14 +204,16 @@ class record_daily_listview extends ArrayAdapter<action_record> {
 
                 TextView record_action = (TextView) convertView.findViewById(R.id.recode_actioin_text);
                 record_action.setText( record.get_action() );
-
-                ImageView pet_photo_view = (ImageView) convertView.findViewById(R.id.recode_image);
-                Bitmap bitmap = BitmapFactory.decodeFile(record.get_nickphoto());
-                pet_photo_view.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                pet_photo_view.setImageBitmap(bitmap);
                 
                 TextView nickname = (TextView) convertView.findViewById(R.id.nickname_text);
-                nickname.setText( record.get_nickname() );
+                List<Integer> pet_list = record.get_petlist();
+                Map<String,Object> pet_info = m_middleware.getPetInfo( pet_list.get(0) );
+                nickname.setText( String.valueOf( pet_info.get( middleware.PETINFO_TYPE_NAME ) ) );
+
+                ImageView pet_photo_view = (ImageView) convertView.findViewById(R.id.recode_image);
+                Bitmap bitmap = BitmapFactory.decodeFile( String.valueOf( pet_info.get( middleware.PETINFO_TYPE_PHOTO ) ) );
+                pet_photo_view.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                pet_photo_view.setImageBitmap(bitmap);
 
                 TextView remark_text = (TextView) convertView.findViewById(R.id.recode_remark_text);
                 remark_text.setText( record.get_remark() );
@@ -232,14 +234,16 @@ class record_daily_listview extends ArrayAdapter<action_record> {
     @Override public action_record getItem(int position) { 
         
         StringBuffer time = new StringBuffer();
-        StringBuffer nickname = new StringBuffer();
         StringBuffer action = new StringBuffer();
         StringBuffer remark = new StringBuffer();
+        List<Integer> list = new ArrayList<Integer>();
         ArrayList<String> record_pic = new ArrayList<String>();
-        int type = m_middleware.get_record( position, time, nickname, action, remark , record_pic );
+        int type = m_middleware.get_record( position, time, list, action, remark,record_pic );
         action_record record = new action_record( position, type );
 
-        record.set_record( time.toString(), nickname.toString(), action.toString(), remark.toString(), record_pic.get(0) );
+        Log.i( "PetBusApp", "pet_list:" + list );
+
+        record.set_record( time.toString(), list, action.toString(), remark.toString(), record_pic.get(0) );
 
         return record;
     }

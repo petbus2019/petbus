@@ -106,7 +106,7 @@ public class dbmanager_impl extends SQLiteOpenHelper implements dbmanager
         Log.i( "PetBusApp", "execSQL: " + sql );
         db.execSQL(sql);
 
-        //add_test_data( db );
+        add_test_data( db );
     }
     @Override  
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -154,29 +154,29 @@ public class dbmanager_impl extends SQLiteOpenHelper implements dbmanager
         }
 
         //Step2: add four pet to databse
-        sql = "insert into " + TABLE_PETNFO + " (user_id,picture,nickname,weight, sex,birthday,pettype)"
-                   + " values(" + String.valueOf(user_id) + ",\'/data/user/0/com.petbus.tj.petbus/cache/pet_1.jpg\'" 
-                   + ",\'喵喵\'," + "23"+",1" + ",2019-06-01" + ",1"  + ");";
-        Log.i( "PetBusApp", "execSQL: " + sql );
-        db.execSQL( sql );
+        // sql = "insert into " + TABLE_PETNFO + " (user_id,picture,nickname,weight, sex,birthday,pettype)"
+        //            + " values(" + String.valueOf(user_id) + ",\'/data/user/0/com.petbus.tj.petbus/cache/pet_1.jpg\'" 
+        //            + ",\'喵喵\'," + "23"+",1" + ",2019-06-01" + ",1"  + ");";
+        // Log.i( "PetBusApp", "execSQL: " + sql );
+        // db.execSQL( sql );
 
-        sql = "insert into " + TABLE_PETNFO + " (user_id,picture,nickname,weight,sex,birthday,pettype)"
-            + " values(" + String.valueOf(user_id) + ",\'/data/user/0/com.petbus.tj.petbus/cache/pet_2.jpg\'" 
-            + ",\'喵喵1\'," + "5"+",2" + ",2019-06-01" + ",1"  + ");";
-        Log.i( "PetBusApp", "execSQL: " + sql );
-        db.execSQL( sql );
+        // sql = "insert into " + TABLE_PETNFO + " (user_id,picture,nickname,weight,sex,birthday,pettype)"
+        //     + " values(" + String.valueOf(user_id) + ",\'/data/user/0/com.petbus.tj.petbus/cache/pet_2.jpg\'" 
+        //     + ",\'喵喵1\'," + "5"+",2" + ",2019-06-01" + ",1"  + ");";
+        // Log.i( "PetBusApp", "execSQL: " + sql );
+        // db.execSQL( sql );
 
-        sql = "insert into " + TABLE_PETNFO + " (user_id,picture,nickname,weight,sex,birthday,pettype)"
-            + " values(" + String.valueOf(user_id) + ",\'/data/user/0/com.petbus.tj.petbus/cache/pet_3.jpg\'" 
-            + ",\'喵喵2\'," + "13" + ",2" + ",2019-06-01" + ",1"  + ");";
-        Log.i( "PetBusApp", "execSQL: " + sql );
-        db.execSQL( sql );
+        // sql = "insert into " + TABLE_PETNFO + " (user_id,picture,nickname,weight,sex,birthday,pettype)"
+        //     + " values(" + String.valueOf(user_id) + ",\'/data/user/0/com.petbus.tj.petbus/cache/pet_3.jpg\'" 
+        //     + ",\'喵喵2\'," + "13" + ",2" + ",2019-06-01" + ",1"  + ");";
+        // Log.i( "PetBusApp", "execSQL: " + sql );
+        // db.execSQL( sql );
 
-        sql = "insert into " + TABLE_PETNFO + " (user_id,picture,nickname,weight, sex,birthday,pettype)"
-            + " values(" + String.valueOf(user_id) + ",\'/data/user/0/com.petbus.tj.petbus/cache/pet_4.jpg\'" 
-            + ",\'喵喵3\'," + "6" + ",1" + ",2019-06-01" + ",1"  + ");";
-        Log.i( "PetBusApp", "execSQL: " + sql );
-        db.execSQL( sql );
+        // sql = "insert into " + TABLE_PETNFO + " (user_id,picture,nickname,weight, sex,birthday,pettype)"
+        //     + " values(" + String.valueOf(user_id) + ",\'/data/user/0/com.petbus.tj.petbus/cache/pet_4.jpg\'" 
+        //     + ",\'喵喵3\'," + "6" + ",1" + ",2019-06-01" + ",1"  + ");";
+        // Log.i( "PetBusApp", "execSQL: " + sql );
+        // db.execSQL( sql );
 
         //Step3: add base operation to databasea
         sql = "insert into " + TABLE_OPERATIONNAME + " (picture,action_name)" 

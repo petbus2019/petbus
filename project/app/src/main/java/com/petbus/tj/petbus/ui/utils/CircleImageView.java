@@ -15,6 +15,7 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
+import android.util.Log;
 /**
  * 自定义的圆形ImageView，可以直接当组件在布局中使用。
  * @author caizhiming
@@ -47,9 +48,10 @@ public class CircleImageView extends ImageView{
   
         Drawable drawable = getDrawable();  
         if (null != drawable) {  
-            Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();  
+            Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+            Log.d("PetBusApp", "CircleImageView width:" + bitmap.getWidth()+ "--" + getWidth() + "::Height:" + bitmap.getHeight() + "--" + getHeight() );
             Bitmap b = getCircleBitmap(bitmap, 14);  
-            final Rect rectSrc = new Rect(0, 0, b.getWidth(), b.getHeight());  
+            final Rect rectSrc = new Rect(0, 0, b.getWidth(), b.getHeight());
             final Rect rectDest = new Rect(0,0,getWidth(),getHeight());
             paint.reset();  
             canvas.drawBitmap(b, rectSrc, rectDest, paint);  
@@ -76,7 +78,7 @@ public class CircleImageView extends ImageView{
         final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());  
         paint.setAntiAlias(true);  
         canvas.drawARGB(0, 0, 0, 0);  
-        paint.setColor(color);  
+        paint.setColor(color);
         int x = bitmap.getWidth();
         int y = bitmap.getHeight();
 
@@ -86,7 +88,5 @@ public class CircleImageView extends ImageView{
         paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));  
         canvas.drawBitmap(bitmap, rect, rect, paint);  
         return output;  
-        
-        
     }  
 }  

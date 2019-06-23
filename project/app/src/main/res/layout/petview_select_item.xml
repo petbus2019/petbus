@@ -4,33 +4,31 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <com.petbus.tj.petbus.ui.CircleImageView
+        android:gravity="center"
         android:id="@+id/pet_photo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:background="#00000000"
         android:clickable="false"
         android:adjustViewBounds="true"
-        android:maxHeight="100dp"
-        android:maxWidth="100dp"
-        android:minHeight="100dp"
-        android:minWidth="100dp"
+        android:maxHeight="80dp"
+        android:maxWidth="80dp"
+        android:minHeight="80dp"
+        android:minWidth="80dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:src="@mipmap/photo_normal" />
     <TextView
         android:id="@+id/pet_nickname_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
-        android:gravity="center_vertical"
+        android:gravity="center"
         android:text="@string/petname"
         android:textColor="#000000"
         android:textStyle="bold" />
-    <Button
+    <TextView
+        android:gravity="center"
         android:id="@+id/select_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="30dp"
-        android:text="@string/selected"
-        android:layout_marginRight="20dp" />
+        android:text="@string/selected" />
 </LinearLayout>

@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Iterator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,22 +55,35 @@ public class middleware_impl extends Application implements middleware {
         return sql_result.getCount();
     }
 
-    public int get_record( int position, StringBuffer time, StringBuffer petname, StringBuffer action, StringBuffer remark, ArrayList<String> record_pic ){
+    public int get_record( int position, StringBuffer time, List<Integer> list, StringBuffer action, StringBuffer remark, ArrayList<String> record_pic ){
         int re = middleware.RECORD_TYPE_RECORD;
 
-        String sql = "SELECT " + dbmanager.TABLE_RECORD + ".picture," + dbmanager.TABLE_RECORD + ".time," + dbmanager.TABLE_RECORD + ".remark," +
-                     "" + dbmanager.TABLE_RECORD + ".operation," + dbmanager.TABLE_RECORD + ".type,petbus_petinfo.nickname " +
-                     "FROM " + dbmanager.TABLE_RECORD + " left join petbus_petinfo on " +
-                     "" + dbmanager.TABLE_RECORD + ".pet_id = petbus_petinfo.id ORDER BY datetime(time) DESC";
+        String sql = "SELECT " + dbmanager.TABLE_RECORD + ".picture," + dbmanager.TABLE_RECORD
+                   + ".time," + dbmanager.TABLE_RECORD + ".remark,"+ dbmanager.TABLE_RECORD + ".id,"
+                   + "" + dbmanager.TABLE_RECORD + ".operation," + dbmanager.TABLE_RECORD
+                   + ".type " + "FROM " + dbmanager.TABLE_RECORD + " ORDER BY datetime(time) DESC";
         Cursor sql_result = m_database.get_result( sql );
         sql_result.moveToPosition( position );
         time.append(sql_result.getString(sql_result.getColumnIndex("time")));
-        petname.append(sql_result.getString(sql_result.getColumnIndex("nickname")));
+        // petname.append(sql_result.getString(sql_result.getColumnIndex("nickname")));
         action.append(sql_result.getString(sql_result.getColumnIndex("operation")));
         remark.append(sql_result.getString(sql_result.getColumnIndex("remark")));
         record_pic.add( sql_result.getString(sql_result.getColumnIndex("picture")) );
         re = sql_result.getInt(sql_result.getColumnIndex("type"));
-
+        if( middleware.RECORD_TYPE_RECORD == re )
+        {
+            sql = "SELECT " + dbmanager.TABLE_RECORD_PETINFO + ".pet_id" + " FROM "
+                + dbmanager.TABLE_RECORD_PETINFO + " WHERE " + dbmanager.TABLE_RECORD_PETINFO
+                + ".record_id = " + sql_result.getString(sql_result.getColumnIndex("id")) + ";";
+            Cursor query_result = m_database.get_result( sql );
+            Log.i( "PetBusApp", "middleware is result" + query_result );
+            if (query_result.moveToFirst()) {
+                do {
+                    int id = query_result.getInt( 0 );
+                    list.add( id );
+                } while (query_result.moveToNext());
+            }
+        }
         return re;
     }
 
@@ -87,22 +101,13 @@ public class middleware_impl extends Application implements middleware {
         return ids;
     }
 
-    private static final String m_get_petid_by_name = "select id from petbus_petinfo where nickname = ";
-    public int new_record( String time, String petname, String action, String remark, ArrayList<String> record_pic ){
+    public int new_record( String time, List<Integer> pet_list, String action
+                         , String remark, ArrayList<String> record_pic ){
 
-        String sql = m_get_petid_by_name + "\'" + petname + "\'" + ";";
         String file_name = "";
-        Log.i( "PetBusApp", "execSQL: " + sql );
-        int pet_id = 1;
 
-        Cursor c = m_database.get_result( sql );
-        if (c.moveToFirst()) {
-            do {
-                pet_id = c.getInt(c.getColumnIndex("id"));
-            } while (c.moveToNext());
-        }
-
-        sql = "SELECT date(time) from " + dbmanager.TABLE_RECORD + " where date(time) = date(\"" + time + "\")";
+        String sql = "SELECT date(time) from " + dbmanager.TABLE_RECORD + 
+                     " where date(time) = date(\"" + time + "\")";
         Cursor sql_result = m_database.get_result( sql );
         if( 0 == sql_result.getCount() )
         {
@@ -111,9 +116,11 @@ public class middleware_impl extends Application implements middleware {
             SimpleDateFormat format = new SimpleDateFormat(patten);
             String dateFormatStr = format.format(new Date());
             
-            sql = "INSERT INTO " + dbmanager_impl.TABLE_RECORD + "(pet_id,picture,operation,remark,time,type)"
-                   + " values( " + String.valueOf(pet_id) + "," + "\"" + "null"
-                   + "\",\'" + "null" + "\',\'" + "remark" + "\',\'" + dateFormatStr + "\'," + middleware.RECORD_TYPE_DATE + ");";
+            sql = "INSERT INTO " + dbmanager_impl.TABLE_RECORD
+                   + "(picture,operation,remark,time,type)"
+                   + " values( " + "\"" + "null"
+                   + "\",\'" + "null" + "\',\'" + "remark" + "\',\'" + dateFormatStr
+                   + "\'," + middleware.RECORD_TYPE_DATE + ");";
             m_database.execute_sql( sql );
         }
         else
@@ -128,11 +135,27 @@ public class middleware_impl extends Application implements middleware {
             Log.i( "PetBusApp", "PetBusBusiness:picture:" + file_name );
         }
 
-        Log.i( "PetBusApp", "PetBusBusiness:new_record(" + time + ")-(" + petname + ")-(" + action + ")-(" + remark + ")-(" );
-        sql = "INSERT INTO " + dbmanager_impl.TABLE_RECORD + "(pet_id,picture,operation,remark,time,type)"
-                   + " values( " + String.valueOf(pet_id) + "," + "\"" + file_name
+        Log.i( "PetBusApp", "PetBusBusiness:new_record(" + time + ")-(" + action + ")-(" + remark + ")-(" );
+        sql = "INSERT INTO " + dbmanager_impl.TABLE_RECORD + "(picture,operation,remark,time,type)"
+                   + " values( "  + "\"" + file_name
                    + "\",\'" + action + "\',\'" + remark + "\',\'" + time + "\'," + middleware.RECORD_TYPE_RECORD + ");";
         m_database.execute_sql( sql );
+
+        sql = "select MAX(id) from " + dbmanager.TABLE_RECORD + ";";
+        Cursor cur = m_database.get_result( sql );
+        int strid = 0;
+        if (cur.moveToFirst()) {
+            strid = cur.getInt(cur.getColumnIndex("MAX(id)"));
+        }
+
+        for (int i = 0; i < pet_list.size(); i++){
+            int index = pet_list.get(i);
+            Log.i( "PetBusApp", "PetBusBusiness: index is " + index + " record_id " + strid );
+            sql = "INSERT INTO " + dbmanager.TABLE_RECORD_PETINFO + "(pet_id,record_id)"
+                   + " values( "  + "\"" + index
+                   + "\",\'" + strid + "\'" + ");";
+            m_database.execute_sql( sql );
+        }
         return middleware.MIDDLEWARE_RETURN_OK;
     }
     public ArrayList<String> get_action_list(){
@@ -203,7 +226,6 @@ public class middleware_impl extends Application implements middleware {
                     petinfo.put(middleware.PETINFO_TYPE_WEIGHT, getWeight);
                     String getBirth = cur.getString(cur.getColumnIndex( dbmanager.COLUMN_TEXT_BIRTHDAY ));
                     petinfo.put( middleware.PETINFO_TYPE_AGE, getBirth);
-                    petinfo.put( middleware.PETINFO_TYPE_ID, id);
                 } while (cur.moveToNext());
             }
         }

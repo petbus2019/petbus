@@ -12,14 +12,16 @@ import android.view.MotionEvent;
 import android.view.View.OnTouchListener;
 import android.view.View.OnFocusChangeListener;
 import android.widget.ImageButton;
-import android.util.Log;
 import android.view.View.OnClickListener;
 import android.content.Intent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.widget.Spinner;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
@@ -27,13 +29,18 @@ import android.widget.Toast;
 import android.widget.ImageView;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Environment;
 import android.text.InputType;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.RelativeLayout.LayoutParams;
+import android.util.Log;
 
 import android.app.Dialog;
 import android.content.Context;
 
+import android.os.Environment;
 import java.util.ArrayList;
+import java.util.ListIterator;
 import java.util.List;
 import java.util.Date;
 import java.util.Map;
@@ -84,16 +91,14 @@ class HorizontalListViewAdapter extends BaseAdapter{
             ImageView pet_image = (ImageView)convertView.findViewById(R.id.pet_photo);
             TextView pet_name = (TextView)convertView.findViewById(R.id.pet_nickname_text);
             Map<String,Object> pet_map = m_middleware.getPetInfo( position_to_id ); 
-            Log.d("FileCache", "Select pet item:" + pet_map + " position_to_id:" + position_to_id );
-
-            // pet_image.setMaxHeight(200);
-            // pet_image.setMaxWidth(200);
+            Log.d("PetBusApp", "Select pet item:" + pet_map + " position_to_id:" + position_to_id );
 
             Bitmap bitmap = BitmapFactory.decodeFile(String.valueOf( pet_map.get( middleware.PETINFO_TYPE_PHOTO ) ));
             pet_image.setScaleType(ImageView.ScaleType.FIT_CENTER);
             pet_image.setImageBitmap(bitmap);
                 
             pet_name.setText( String.valueOf( pet_map.get( middleware.PETINFO_TYPE_NAME ) ) );
+            Log.d("PetBusApp", "pet:" + pet_map + " width:" + bitmap.getWidth() + "Height:" + bitmap.getHeight() );
         }
 
         return convertView;
@@ -103,22 +108,13 @@ class HorizontalListViewAdapter extends BaseAdapter{
         private TextView mTitle ;
         private ImageView mImage;
     }
-    private Bitmap getPropThumnail(int id){
-        // Drawable d = mContext.getResources().getDrawable(id);
-        // Bitmap b = BitmapUtil.drawableToBitmap(d);
-        // int w = mContext.getResources().getDimensionPixelOffset(R.dimen.thumnail_default_width);
-        // int h = mContext.getResources().getDimensionPixelSize(R.dimen.thumnail_default_height);
-        
-        // Bitmap thumBitmap = ThumbnailUtils.extractThumbnail(b, w, h);
-        
-        return null;
-    }
+
     public void setSelectIndex(int i){
         selectIndex = i;
     }
 }
 
-class diary_petselect_dialog extends Dialog {
+class diary_petselect_dialog extends Dialog implements OnItemClickListener,OnClickListener{
     private Context m_context;
     HorizontalListViewAdapter hListViewAdapter;
 
@@ -126,6 +122,31 @@ class diary_petselect_dialog extends Dialog {
         super(context);
         m_petid_list = new ArrayList<Integer>();
         m_context = context;
+    }
+
+    public void onClick( View view ) {
+        Log.i( "PetBusApp", "PetBus:onClick" + view.getId() );
+        switch( view.getId() )
+        {
+            case R.id.confirm_button:
+                Log.i( "PetBusApp", "PetBus:confirm_button" );
+                dismiss();
+                break;
+        }
+    }
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Log.d("PetBusApp", "diary_actionadapter onItemClick£º" + position + "List:" + m_petid_list );
+        if( m_petid_list.contains( (Integer)position ) )
+        {
+            m_petid_list.remove( (Integer)position );
+            Log.d("PetBusApp", "diary_actionadapter contains" + position );
+        }
+        else
+        {
+            m_petid_list.add( (Integer)position );
+            Log.d("PetBusApp", "diary_actionadapter not contains" + position );
+        }
     }
 
     public diary_petselect_dialog(Context context, int theme) {
@@ -143,9 +164,13 @@ class diary_petselect_dialog extends Dialog {
         super.onCreate(savedInstanceState);
         setContentView( R.layout.petview_select );
 
-        HorizontalListView  hListView = (HorizontalListView)findViewById(R.id.horizon_listview);
+        GridView hListView = (GridView )findViewById(R.id.horizon_listview);
         hListViewAdapter = new HorizontalListViewAdapter( m_context );
         hListView.setAdapter(hListViewAdapter);
+        hListView.setOnItemClickListener( this );
+
+        Button confirm_button = ( Button )findViewById( R.id.confirm_button );
+        confirm_button.setOnClickListener( this );
     }
 
     private List<Integer> m_petid_list;
@@ -190,6 +215,8 @@ class diary_actionadapter extends BaseAdapter {
 
 public class actionfragment_diary extends Fragment implements OnClickListener
 {
+    LayoutInflater m_inflater;
+    ViewGroup m_viewgroup;
     private ui_interface m_tigger;
     private TextView m_time_text;
     private EditText m_remark_edit;
@@ -199,6 +226,11 @@ public class actionfragment_diary extends Fragment implements OnClickListener
     private middleware m_middleware;
     private String m_picture_filename;
     private List<Integer> m_petid_list;
+    private ImageView m_image_1;
+    private ImageView m_image_2;
+    private ImageView m_image_3;
+    private ImageView m_image_4;
+    private List<ImageView> m_image_list;
 
     private String saveBitmapAsFile(String name, Bitmap bitmap) {
         long sysTime = System.currentTimeMillis();
@@ -208,7 +240,7 @@ public class actionfragment_diary extends Fragment implements OnClickListener
         File saveFile = new File( file_name );
         FileOutputStream os = null;
         try {
-            Log.d("FileCache", "Saving File To Cache " + saveFile.getPath());
+            Log.d("PetBusApp", "Saving File To Cache " + saveFile.getPath());
             os = new FileOutputStream(saveFile);
             bitmap.compress( Bitmap.CompressFormat.JPEG, 100, os );
             os.flush();
@@ -242,6 +274,9 @@ public class actionfragment_diary extends Fragment implements OnClickListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState){
+        m_inflater = inflater;
+        m_viewgroup = container;
+        m_image_list = new ArrayList<ImageView>();
 
         m_middleware = middleware_impl.getInstance();
         View view = inflater.inflate(R.layout.actionfragment_diary, container, false);
@@ -250,6 +285,19 @@ public class actionfragment_diary extends Fragment implements OnClickListener
         m_action_item = ( Spinner ) view.findViewById( R.id.action_spinner );
         LinearLayout ll = (LinearLayout)view.findViewById(R.id.pet_select);
         ll.setOnClickListener(this);
+        m_image_1 = ( ImageView )view.findViewById( R.id.pet_photo_1 );
+        m_image_2 = ( ImageView )view.findViewById( R.id.pet_photo_2 );
+        m_image_3 = ( ImageView )view.findViewById( R.id.pet_photo_3 );
+        m_image_4 = ( ImageView )view.findViewById( R.id.pet_photo_4 );
+
+        m_image_list.add( m_image_1 );
+        m_image_list.add( m_image_2 );
+        m_image_list.add( m_image_3 );
+        m_image_list.add( m_image_4 );
+        m_image_1.setVisibility( View.INVISIBLE );
+        m_image_2.setVisibility( View.INVISIBLE );
+        m_image_3.setVisibility( View.INVISIBLE );
+        m_image_4.setVisibility( View.INVISIBLE );
 
         m_entry_button = ( Button ) view.findViewById( R.id.entry_button );
         m_remark_edit = ( EditText ) view.findViewById( R.id.remark_text_input );
@@ -271,8 +319,8 @@ public class actionfragment_diary extends Fragment implements OnClickListener
             }
         });
         m_imageview_picture.setAdjustViewBounds(true);
-        m_imageview_picture.setMaxHeight(200);
-        m_imageview_picture.setMaxWidth(200);
+        m_imageview_picture.setMaxHeight(100);
+        m_imageview_picture.setMaxWidth(100);
 
         m_imageview_picture.setOnClickListener(this);
         m_entry_button.setOnClickListener(this);
@@ -296,23 +344,52 @@ public class actionfragment_diary extends Fragment implements OnClickListener
             case R.id.pet_select:
                 diary_petselect_dialog myDialog = new diary_petselect_dialog( getActivity(),R.style.dialog );
                 myDialog.show();
-                m_petid_list = myDialog.get_petid_list();
-
-
-                Log.i( "PetBusApp", "pet_select:onClick" + m_petid_list );
+                myDialog.setOnDismissListener( new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        diary_petselect_dialog myDialog = (diary_petselect_dialog) dialog;
+                        m_petid_list = myDialog.get_petid_list();
+                        update_pet_list();
+                        Log.i("PetBusApp", "11111 dismiss" + m_petid_list );
+                    }
+                });
                 break;
         }
+    }
+    private void update_pet_list()
+    {
+        int position_to_id = 1;
+        // int position_to_id = m_petid_list.get(0) + 1;
+        Log.i( "PetBusApp", "pet_select:update_pet_list" + m_petid_list );
+        m_image_1.setVisibility( View.INVISIBLE );
+        m_image_2.setVisibility( View.INVISIBLE );
+        m_image_3.setVisibility( View.INVISIBLE );
+        m_image_4.setVisibility( View.INVISIBLE );
+
+        for(int i = 0;i < m_petid_list.size(); i ++){
+            position_to_id = m_petid_list.get(i) + 1;
+            ImageView image = m_image_list.get(i);
+
+            Map<String,Object> pet_map = m_middleware.getPetInfo( position_to_id );
+            Bitmap bitmap = BitmapFactory.decodeFile(String.valueOf( pet_map.get( middleware.PETINFO_TYPE_PHOTO ) ));
+            image.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            image.setImageBitmap(bitmap);
+            image.setAdjustViewBounds(true);
+            image.setMaxHeight(200);
+            image.setMaxWidth(200);
+            image.setVisibility( View.VISIBLE );
+        }
+        
     }
 
     private void do_record(){
         String text = m_time_text.getText().toString();
         String action_text = m_action_item.getSelectedItem().toString();
         String remark_text = m_remark_edit.getText().toString();
-        String petname_text = "";//m_pet_item.getSelectedItem().toString();
         ArrayList<String> picture_list = new ArrayList<String>();
         picture_list.add( m_picture_filename );
 
-        int re = m_middleware.new_record( text, petname_text, action_text, remark_text, picture_list );
+        int re = m_middleware.new_record( text, m_petid_list, action_text, remark_text, picture_list );
         if( middleware.MIDDLEWARE_RETURN_OK == re )
         {
             Log.i( "PetBusApp", "PetBus:add succeeded" );
