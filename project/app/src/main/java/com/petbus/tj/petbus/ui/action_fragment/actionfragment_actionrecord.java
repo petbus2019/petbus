@@ -205,21 +205,62 @@ class record_daily_listview extends ArrayAdapter<action_record> {
                 TextView record_action = (TextView) convertView.findViewById(R.id.recode_actioin_text);
                 record_action.setText( record.get_action() );
                 
-                TextView nickname = (TextView) convertView.findViewById(R.id.nickname_text);
                 List<Integer> pet_list = record.get_petlist();
-                Map<String,Object> pet_info = m_middleware.getPetInfo( pet_list.get(0) );
-                nickname.setText( String.valueOf( pet_info.get( middleware.PETINFO_TYPE_NAME ) ) );
+                List<TextView> textview_list = new ArrayList<TextView>();
+                List<ImageView> image_list = new ArrayList<ImageView>();
 
-                ImageView pet_photo_view = (ImageView) convertView.findViewById(R.id.recode_image);
-                Bitmap bitmap = BitmapFactory.decodeFile( String.valueOf( pet_info.get( middleware.PETINFO_TYPE_PHOTO ) ) );
-                pet_photo_view.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                pet_photo_view.setImageBitmap(bitmap);
+
+                Log.i( "PetBusApp", "PetBus:pet_list " + pet_list );
+
+                TextView nickname_text_1 = (TextView) convertView.findViewById(R.id.nickname_text_1);
+                textview_list.add( nickname_text_1 );
+                ImageView nickname_image_1 = (ImageView) convertView.findViewById(R.id.recode_image_1);
+                image_list.add( nickname_image_1 );
+                nickname_image_1.setVisibility( View.INVISIBLE );
+                nickname_text_1.setVisibility( View.INVISIBLE );
+                
+                TextView nickname_text_2 = (TextView) convertView.findViewById(R.id.nickname_text_2);
+                textview_list.add( nickname_text_2 );
+                ImageView nickname_image_2 = (ImageView) convertView.findViewById(R.id.recode_image_2);
+                image_list.add( nickname_image_2 );
+                nickname_image_2.setVisibility( View.INVISIBLE );
+                nickname_text_2.setVisibility( View.INVISIBLE );
+
+                TextView nickname_text_3 = (TextView) convertView.findViewById(R.id.nickname_text_3);
+                textview_list.add( nickname_text_3 );
+                ImageView nickname_image_3 = (ImageView) convertView.findViewById(R.id.recode_image_3);
+                image_list.add( nickname_image_3 );
+                nickname_image_3.setVisibility( View.INVISIBLE );
+                nickname_text_3.setVisibility( View.INVISIBLE );
+
+                TextView nickname_text_4 = (TextView) convertView.findViewById(R.id.nickname_text_4);
+                textview_list.add( nickname_text_4 );
+                ImageView nickname_image_4 = (ImageView) convertView.findViewById(R.id.recode_image_4);
+                image_list.add( nickname_image_4 );
+                nickname_image_4.setVisibility( View.INVISIBLE );
+                nickname_text_4.setVisibility( View.INVISIBLE );
+
+
+                for( int i = 0;i < pet_list.size();i ++ )
+                {
+                   Log.i( "PetBusApp", "PetBus:pet_list )))) " + i );
+                    Map<String,Object> pet_info = m_middleware.getPetInfo( pet_list.get(i) + 1 );
+                    TextView nickname = textview_list.get(i);
+                    nickname.setText( String.valueOf( pet_info.get( middleware.PETINFO_TYPE_NAME ) ) );
+
+                    ImageView pet_photo_view = image_list.get(i);
+                    Bitmap bitmap = BitmapFactory.decodeFile( String.valueOf( pet_info.get( middleware.PETINFO_TYPE_PHOTO ) ) );
+                    pet_photo_view.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                    pet_photo_view.setImageBitmap(bitmap);
+                    pet_photo_view.setVisibility( View.VISIBLE );
+                    nickname.setVisibility( View.VISIBLE );
+                }
 
                 TextView remark_text = (TextView) convertView.findViewById(R.id.recode_remark_text);
                 remark_text.setText( record.get_remark() );
 
                 ImageView imageview_picture = ( ImageView )convertView.findViewById( R.id.recode_petportrait_image );
-                bitmap = BitmapFactory.decodeFile(record.get_remark_picture());
+                Bitmap bitmap = BitmapFactory.decodeFile(record.get_remark_picture());
                 imageview_picture.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 imageview_picture.setImageBitmap(bitmap);
                 break;
