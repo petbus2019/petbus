@@ -43,7 +43,8 @@ public class petbus_profile extends Activity implements OnClickListener {
             listItem.add(item);
         }
         SimpleAdapter adapter = new SimpleAdapter(this, listItem,
-                R.layout.list_pet, new String[]{"name","age", "weight","photo"},
+                R.layout.list_pet, new String[]{m_middleware.PETINFO_TYPE_NAME,m_middleware.PETINFO_TYPE_AGE,
+                m_middleware.PETINFO_TYPE_WEIGHT, m_middleware.PETINFO_TYPE_PHOTO},
                 new int[]{R.id.info_name, R.id.info_age, R.id.info_weight, R.id.info_photo});
         ListView listView = findViewById(R.id.list_pet);
         listView.setAdapter(adapter);

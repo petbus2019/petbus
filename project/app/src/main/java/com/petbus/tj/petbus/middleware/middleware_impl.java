@@ -225,11 +225,29 @@ public class middleware_impl extends Application implements middleware {
                     double getWeight = cur.getDouble(cur.getColumnIndex( dbmanager.COLUMN_TEXT_WEIGHT ));
                     petinfo.put(middleware.PETINFO_TYPE_WEIGHT, getWeight);
                     String getBirth = cur.getString(cur.getColumnIndex( dbmanager.COLUMN_TEXT_BIRTHDAY ));
-                    petinfo.put( middleware.PETINFO_TYPE_AGE, getBirth);
+                    petinfo.put( middleware.PETINFO_TYPE_AGE, getAge(getBirth));
+                    petinfo.put( middleware.PETINFO_TYPE_ID, id);
                 } while (cur.moveToNext());
             }
         }
         return petinfo;
+    }
+
+    private int getAge(String strDate){
+        //convert to date
+        SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORMAT_DATE);
+        Date birthDate = null;
+        try{
+            birthDate = formatter.parse(strDate);
+        }
+        catch (Exception e) {
+            return -1;
+        }
+        //get current date
+        Date curDate = new Date(System.currentTimeMillis());
+        int days = (int) ((curDate.getTime() - birthDate.getTime()) / (1000*3600*24));
+        int age = (int) days/365;
+        return age;
     }
 
     public boolean setCurrentPet(int id)
