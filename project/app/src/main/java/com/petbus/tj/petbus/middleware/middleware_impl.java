@@ -17,6 +17,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class middleware_impl extends Application implements middleware {
+    static final String m_age_year = "岁";
+    static final String m_age_month = "个月";
+    static final String m_age_day = "天";
     private dbmanager m_database = null;
     private static middleware_impl m_instance = null;
     private ArrayList<String> m_action_list = new ArrayList<String>();
@@ -233,7 +236,7 @@ public class middleware_impl extends Application implements middleware {
         return petinfo;
     }
 
-    private int getAge(String strDate){
+    private String getAge(String strDate){
         //convert to date
         SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORMAT_DATE);
         Date birthDate = null;
@@ -241,13 +244,30 @@ public class middleware_impl extends Application implements middleware {
             birthDate = formatter.parse(strDate);
         }
         catch (Exception e) {
-            return -1;
+            return "";
         }
         //get current date
         Date curDate = new Date(System.currentTimeMillis());
         int days = (int) ((curDate.getTime() - birthDate.getTime()) / (1000*3600*24));
-        int age = (int) days/365;
-        return age;
+        int year = (int)days/365;
+        String retAge = "";
+        if (year != 0)
+        {
+            retAge = retAge + String.valueOf(year) + m_age_year;
+        }
+        int days2 = days%365;
+        int month = (int)(days2/30);
+        if (month != 0)
+        {
+            retAge = retAge + String.valueOf(month) + m_age_month;
+        }
+        if (year == 0  && month == 0)
+        {
+            retAge = String.valueOf(days) + m_age_day;
+        }
+        Log.i( "PetBusApp", "age=" + retAge + ",year="+year+",month="+month+",days2="+days2
+        +",curDate="+curDate+",birthdate="+birthDate);
+        return retAge;
     }
 
     public boolean setCurrentPet(int id)
