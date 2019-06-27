@@ -120,12 +120,10 @@ class action_record{
     private String m_action;
     private String m_remark;
     private String m_picture_path;
-
     
 }
 
 class record_daily_listview extends ArrayAdapter<action_record> {
-
 
     private middleware m_middleware;
     private int resourceID;

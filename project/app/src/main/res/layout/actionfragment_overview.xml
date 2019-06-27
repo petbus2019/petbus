@@ -24,12 +24,16 @@
             android:layout_height="1dp"
             android:background="#aa000000" />
     </LinearLayout>
-    <com.petbus.tj.petbus.ui.LineGraphicView
-        android:id="@+id/tabview_id"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="100dp"
-        android:textSize="30sp" />
+        android:layout_height="match_parent">
+        <com.petbus.tj.petbus.ui.LineGraphicView
+            android:id="@+id/tabview_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="100dp"
+            android:textSize="12dp" />
+    </ScrollView>
 </LinearLayout>

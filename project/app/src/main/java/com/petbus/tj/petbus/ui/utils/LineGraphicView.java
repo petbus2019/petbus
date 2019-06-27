@@ -13,17 +13,29 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.MotionEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import android.util.Log;
 
 //https://www.jianshu.com/p/51b0ab35d9f8
 //https://www.jianshu.com/p/4a5949d92821
 //https://www.cnblogs.com/justboy/articles/5647253.html
 //http://www.luyixian.cn/news_show_9846.aspx
+// https://www.bbsmax.com/A/ke5jQ1r7Jr/
 
+// https://blog.csdn.net/w855227/article/details/80499408
 class LineGraphicView extends View
 {
+    private static final int NONE = 0;
+    private static final int DRAG = 1;
+    private static final int ZOOM = 2;
+    private int mode = NONE;
+    private int m_current_xpos = 0;
+    private int m_last_xpos = 0;
+    private int m_last_ypos = 0;
     /**
      * 公共部分
      */
@@ -95,19 +107,94 @@ class LineGraphicView extends View
         WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         wm.getDefaultDisplay().getMetrics(dm);
     }
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
+        setMeasuredDimension(widthMeasureSpec * 2, heightMeasureSpec);
+    }
+    /**
+     * 计算两个手指间的距离
+     *
+     * @param event 触摸事件
+     * @return 放回两个手指之间的距离
+     */
+    private float distance(MotionEvent event) {
+        float x = event.getX(0) - event.getX(1);
+        float y = event.getY(0) - event.getY(1);
+        return (float) Math.sqrt(x * x + y * y);//两点间距离公式
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event){
+        // Log.d( "PetBusApp", "PetBusBusiness:onTouchEvent + " + event );
+        int x = (int) event.getX();
+        int y = (int) event.getY();
+        
+        // DisplayMetrics metrics = new DisplayMetrics();
+        // getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        // int widthPixels = metrics.widthPixels;
+        // int heightPixels = metrics.heightPixels;
+
+        switch (event.getAction() & MotionEvent.ACTION_MASK){
+            case MotionEvent.ACTION_DOWN:
+                //单点触控
+                mode = DRAG;
+                break;
+            case MotionEvent.ACTION_POINTER_DOWN:
+                //多点触控
+                float oriDis = distance(event);
+                if (oriDis > 10f) {
+                    mode = ZOOM;
+                }
+                break;
+            case MotionEvent.ACTION_MOVE:
+                // 手指滑动事件
+                int deltaX = x - m_last_xpos;
+                if (mode == DRAG) {
+                    // 是一个手指拖动
+                    m_current_xpos += deltaX;
+                    if( m_current_xpos <= 0 )
+                    {
+                        m_current_xpos = 0;
+                    }
+                    else if( m_current_xpos >= canvasWidth - getWidth() / 2 )
+                    {
+
+                        m_current_xpos = canvasWidth - getWidth() / 2;
+                    }
+                    setScrollX( m_current_xpos );
+                } else if (mode == ZOOM) {
+                    // 两个手指滑动
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_POINTER_UP:
+                // 手指放开事件
+                mode = NONE;
+                break;
+        }
+        m_last_xpos = x;
+        m_last_ypos = y;
+        Log.d( "PetBusApp", "PetBusBusiness:onTouchEvent + " + mode );
+        return true;
+    }
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh)
     {
         if (isMeasure)
         {
-            this.canvasHeight = getHeight();
-            this.canvasWidth = getWidth();
-            if (bheight == 0)
+            this.canvasHeight = getHeight() - 20;
+            this.canvasWidth = getWidth() * 2;
+            if (bheight == 0){
                 bheight = (int) (canvasHeight - marginBottom);
+            }
+
             blwidh = dip2px(30);
             isMeasure = false;
         }
+
+        Log.d( "PetBusApp", "PetBusBusiness:onSizeChanged + " + canvasWidth + "--" + getWidth() + "--" + getRight() );
     }
 
     @Override
@@ -115,28 +202,28 @@ class LineGraphicView extends View
     {
         mPaint.setColor(res.getColor(R.color.color_f2f2f2));
 
+        Log.d( "PetBusApp", "PetBusBusiness:onDraw + " + canvasWidth );
         drawAllXLine(canvas);
-        // 画直线（纵向）
         drawAllYLine(canvas);
-        // 点的操作设置
         mPoints = getPoints();
 
         mPaint.setColor(res.getColor(R.color.color_ff4631));
         mPaint.setStrokeWidth(dip2px(2.5f));
         mPaint.setStyle(Style.STROKE);
-        if (mStyle == Linestyle.Curve)
-        {
-            drawScrollLine(canvas);
-        }
-        else
-        {
-            drawLine(canvas);
-        }
+        // if (mStyle == Linestyle.Curve)
+        // {
+        //     drawScrollLine(canvas);
+        // }
+        // else
+        // {
+        //     drawLine(canvas);
+        // }
 
         mPaint.setStyle(Style.FILL);
         for (int i = 0; i < mPoints.length; i++)
         {
-            canvas.drawCircle(mPoints[i].x, mPoints[i].y, CIRCLE_SIZE / 2, mPaint);
+            canvas.drawRect( mPoints[i].x + 20, mPoints[i].y, mPoints[i].x + 100, canvasHeight - marginTop, mPaint);
+            // canvas.drawCircle(mPoints[i].x, mPoints[i].y, CIRCLE_SIZE / 2, mPaint);
         }
     }
 
@@ -145,10 +232,11 @@ class LineGraphicView extends View
      */
     private void drawAllXLine(Canvas canvas)
     {
+        canvas.drawLine(blwidh, bheight + marginTop, (canvasWidth - blwidh)
+                       ,bheight + marginTop, mPaint);
         for (int i = 0; i < spacingHeight + 1; i++)
         {
-            canvas.drawLine(blwidh, bheight - (bheight / spacingHeight) * i + marginTop, (canvasWidth - blwidh),
-                    bheight - (bheight / spacingHeight) * i + marginTop, mPaint);// Y坐标
+            Log.d("PetBusApp", "PetBusBusiness:drawAllXLine");
             drawText(String.valueOf(averageValue * i), blwidh / 2, bheight - (bheight / spacingHeight) * i + marginTop,
                     canvas);
         }
@@ -159,13 +247,13 @@ class LineGraphicView extends View
      */
     private void drawAllYLine(Canvas canvas)
     {
+        canvas.drawLine(blwidh, marginTop, blwidh, bheight + marginTop, mPaint);
         for (int i = 0; i < yRawData.size(); i++)
         {
+            Log.d( "PetBusApp", "PetBusBusiness:drawAllYLine + " + xRawDatas.get(i) );
             xList.add(blwidh + (canvasWidth - blwidh) / yRawData.size() * i);
-            canvas.drawLine(blwidh + (canvasWidth - blwidh) / yRawData.size() * i, marginTop, blwidh
-                    + (canvasWidth - blwidh) / yRawData.size() * i, bheight + marginTop, mPaint);
-            drawText(xRawDatas.get(i), blwidh + (canvasWidth - blwidh) / yRawData.size() * i, bheight + dip2px(26),
-                    canvas);// X坐标
+            drawText(xRawDatas.get(i), blwidh + (canvasWidth - blwidh) / yRawData.size() * i
+                     , bheight + dip2px(18), canvas);// X坐标
         }
     }
 
@@ -210,7 +298,7 @@ class LineGraphicView extends View
         p.setTextSize(dip2px(12));
         p.setColor(res.getColor(R.color.color_999999));
         p.setTextAlign(Paint.Align.LEFT);
-        canvas.drawText(text, x, y, p);
+        canvas.drawText(text, x, y , p);
     }
 
     private Point[] getPoints()

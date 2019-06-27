@@ -35,4 +35,5 @@ public interface middleware{
     Map<String,Object> get_current_pet();
     Map<String,Object> getPetInfo(int id);
     boolean setCurrentPet(int id);
+    Map<String,Integer> get_statistics( String condition,String operation );
 }

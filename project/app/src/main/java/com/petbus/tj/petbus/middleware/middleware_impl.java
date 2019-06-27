@@ -310,4 +310,24 @@ public class middleware_impl extends Application implements middleware {
         Log.d("PetBusApp", "PetBusBusiness:attachBaseContext");
         super.attachBaseContext(base);
     }
+
+    public Map<String,Integer> get_statistics( String condition,String operation ){
+        Map<String,Integer> result = new HashMap<String,Integer>();
+
+        String current_condition = "2019-06";
+        String sql = "SELECT count(petbus_record.operation) as count, petbus_record.operation "
+                   + "FROM  petbus_record WHERE  strftime('%Y-%m', petbus_record.time) = '"
+                   + current_condition + "' AND  petbus_record.operation = '" + operation 
+                   + "' GROUP BY petbus_record.operation ;";
+        Cursor cur = m_database.get_result( sql );
+        if (cur.moveToFirst()) {
+            do {
+                int nick_name = cur.getInt(cur.getColumnIndex("count"));
+                result.put( cur.getString(cur.getColumnIndex("operation")), nick_name );
+            } while (cur.moveToNext());
+        }
+        Log.d("PetBusApp", "PetBusBusiness:the action " + operation + " statistics for " + condition + " is " + result );
+
+        return result;
+    }
 }
