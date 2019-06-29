@@ -21,6 +21,11 @@ public interface middleware{
     public static final String PETINFO_TYPE_AGE = "age";
     public static final String PETINFO_TYPE_ID = "id";
 
+    public static final int OVERVIEW_DATATYPE_YEAR = 0;
+    public static final int OVERVIEW_DATATYPE_MONTH = 1;
+    public static final int OVERVIEW_DATATYPE_DAY = 2;
+
+
     int get_petnumber();
 
     ArrayList<String> get_action_list();

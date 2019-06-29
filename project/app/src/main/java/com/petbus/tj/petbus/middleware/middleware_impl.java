@@ -314,7 +314,7 @@ public class middleware_impl extends Application implements middleware {
     public Map<String,Integer> get_statistics( String condition,String operation ){
         Map<String,Integer> result = new HashMap<String,Integer>();
 
-        String current_condition = "2019-06";
+        String current_condition = condition;
         String sql = "SELECT count(petbus_record.operation) as count, petbus_record.operation "
                    + "FROM  petbus_record WHERE  strftime('%Y-%m', petbus_record.time) = '"
                    + current_condition + "' AND  petbus_record.operation = '" + operation 
