@@ -139,15 +139,14 @@ public class actionfragment_overview extends Fragment implements OnItemSelectedL
 
     @Override
     public void onItemSelected(AdapterView<?> adapter,View view,int position,long id){
-        //»ñÈ¡Ñ¡ÔñµÄÏîµÄÖµ 
-        Toast.makeText( getActivity(), "Äãµã»÷µÄÊÇ:" + position, 2000).show();
+        // Toast.makeText( getActivity(), "ä½ ç‚¹å‡»çš„æ˜¯:" + position, 2000).show();
         update_overview_data();
         m_graphic_view.invalidate();
     }
     @Override
     public void onNothingSelected(AdapterView<?> arg0) {
-        String sInfo="Ê²Ã´Ò²Ã»Ñ¡£¡";
-        Toast.makeText(getActivity(),sInfo, Toast.LENGTH_LONG).show();
+        // String sInfo="ä»€ä¹ˆä¹Ÿæ²¡é€‰ï¼";
+        // Toast.makeText(getActivity(),sInfo, Toast.LENGTH_LONG).show();
     }
 
     @Override
