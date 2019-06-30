@@ -136,7 +136,7 @@ class diary_petselect_dialog extends Dialog implements OnItemClickListener,OnCli
     }
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Log.d("PetBusApp", "diary_actionadapter onItemClick£º" + position + "List:" + m_petid_list );
+        Log.d("PetBusApp", "diary_actionadapter onItemClick:" + position + "List:" + m_petid_list );
         if( m_petid_list.contains( (Integer)position ) )
         {
             m_petid_list.remove( (Integer)position );
