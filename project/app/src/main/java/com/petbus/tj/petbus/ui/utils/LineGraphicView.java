@@ -185,7 +185,7 @@ class LineGraphicView extends View
         if (isMeasure)
         {
             this.canvasHeight = getHeight() - 20;
-            this.canvasWidth = getWidth() * 2;
+            this.canvasWidth = getWidth() ;
             if (bheight == 0){
                 bheight = (int) (canvasHeight - marginBottom);
             }
@@ -236,7 +236,7 @@ class LineGraphicView extends View
                        ,bheight + marginTop, mPaint);
         for (int i = 0; i < spacingHeight + 1; i++)
         {
-            Log.d("PetBusApp", "PetBusBusiness:drawAllXLine");
+            // Log.d("PetBusApp", "PetBusBusiness:drawAllXLine");
             drawText(String.valueOf(averageValue * i), blwidh / 2, bheight - (bheight / spacingHeight) * i + marginTop,
                     canvas);
         }
@@ -250,7 +250,7 @@ class LineGraphicView extends View
         canvas.drawLine(blwidh, marginTop, blwidh, bheight + marginTop, mPaint);
         for (int i = 0; i < yRawData.size(); i++)
         {
-            Log.d( "PetBusApp", "PetBusBusiness:drawAllYLine + " + xRawDatas.get(i) );
+            // Log.d( "PetBusApp", "PetBusBusiness:drawAllYLine + " + xRawDatas.get(i) );
             xList.add(blwidh + (canvasWidth - blwidh) / yRawData.size() * i);
             drawText(xRawDatas.get(i), blwidh + (canvasWidth - blwidh) / yRawData.size() * i
                      , bheight + dip2px(18), canvas);// X坐标

@@ -4,6 +4,7 @@ import com.petbus.tj.petbus.ui.R;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.ArrayMap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +16,13 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Toast;
+
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
@@ -75,56 +80,42 @@ public class actionfragment_overview extends Fragment implements OnItemSelectedL
     private int m_data_type = middleware.OVERVIEW_DATATYPE_YEAR;
 
     private Map<String,Double> get_overview_data_year(){
-        Map<String,Double> result = new HashMap<String, Double>();
+        Map<String,Double> result = new ArrayMap<String, Double>();
         String operation = m_spinner.getSelectedItem().toString();
         for( int i = 0;i < 12;i ++ ){
-            String month = "2019-06";
-            Map<String,Integer> re_ = m_middleware.get_statistics( month, operation);
+            long sysTime = System.currentTimeMillis();
+            SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-" + String.format( "%02d", i + 1 ) );
+            String time = sDateFormat.format(new Date(sysTime));
+            Map<String,Integer> re_ = m_middleware.get_statistics( time, operation);
             Integer value = re_.get( operation );
             // Log.i( "PetBusApp", "PetBus:get_overview_data_year  :" + re_ );
             if( null == value )
             {
-                result.put( month, 0.0 );
+                result.put( time, 0.0 );
             }
             else
             {
-                result.put( month, Double.valueOf( value ) );
+                result.put( time, Double.valueOf( value ) );
             }
         }
+        Log.i( "PetBusApp", "PetBus:get_overview_data_year :" + result );
         return result;
     }
 
     private void update_overview_data(){
         Map<String, Double> data = get_overview_data_year();
-        ArrayList<Double> ylist = new ArrayList<Double>( data.values() );
-        ArrayList<String> xRawDatas = new ArrayList<String>( data.keySet() );
+        // ArrayList<Double> ylist = new ArrayList<Double>( data.values() );
+        // ArrayList<String> xRawDatas = new ArrayList<String>( data.keySet() );
+        ArrayList<String> xRawDatas = new ArrayList<String>();
+        ArrayList<Double> ylist = new ArrayList<Double>();
+        for (Map.Entry<String, Double> entry : data.entrySet()) {
+            ylist.add( entry.getValue() );
+            xRawDatas.add( entry.getKey() );
+            // Log.i( "PetBusApp", "PetBus:update_overview_data  :" + ylist + "111: " + xRawDatas );
+        }
 
         Log.i( "PetBusApp", "PetBus:update_overview_data  :" + ylist + "111: " + xRawDatas );
-        // ylist.add(2.0);
-        // ylist.add(4.0);
-        // ylist.add(6.0);
-        // ylist.add(3.0);
-        // ylist.add(4.0);
-        // ylist.add(2.0);
-        // ylist.add(5.0);
-        // ylist.add(3.0);
-        // ylist.add(4.0);
-        // ylist.add(2.0);
-        // ylist.add(5.0);
-        // ylist.add(5.0);
-
-        // xRawDatas.add("2019-01");
-        // xRawDatas.add("2019-02");
-        // xRawDatas.add("2019-03");
-        // xRawDatas.add("2019-04");
-        // xRawDatas.add("2019-05");
-        // xRawDatas.add("2019-06");
-        // xRawDatas.add("2019-07");
-        // xRawDatas.add("2019-08");
-        // xRawDatas.add("2019-09");
-        // xRawDatas.add("2019-10");
-        // xRawDatas.add("2019-11");
-        // xRawDatas.add("2019-12");
+        
         m_graphic_view.setData(ylist, xRawDatas, 8, 2);
         return ;
     }
