@@ -68,25 +68,33 @@ public class CircleImageView extends ImageView{
      * @return Bitmap
      * @author caizhiming
      */
-    private Bitmap getCircleBitmap(Bitmap bitmap, int pixels) {  
-        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),  
-                bitmap.getHeight(), Config.ARGB_8888);  
+    public Bitmap getCircleBitmap(Bitmap bitmap, int pixels) {
+        int x = bitmap.getWidth();
+        int y = bitmap.getHeight();
+        int left = 0;
+        int top = 0;
+
+        int point = x < y ? x : y;
+        if (x < y){
+            top = -(y - x) / 2;
+        }
+        else{
+            left = -(x - y) / 2;
+        }
+        Bitmap output = Bitmap.createBitmap(point,
+                point, Config.ARGB_8888);
         Canvas canvas = new Canvas(output);  
           
         final int color = 0xff424242;
        
-        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());  
+        final Rect rect = new Rect(left, top, point, point);
         paint.setAntiAlias(true);  
-        canvas.drawARGB(0, 0, 0, 0);  
+        canvas.drawARGB(0, 0, 0, 0);
         paint.setColor(color);
-        int x = bitmap.getWidth();
-        int y = bitmap.getHeight();
 
-        int point = x < y ? x : y;
-        
-        canvas.drawCircle( x / 2, y / 2, point / 2, paint);  
+        canvas.drawCircle( point / 2, point / 2, point / 2, paint);
         paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));  
-        canvas.drawBitmap(bitmap, rect, rect, paint);  
+        canvas.drawBitmap(bitmap, rect, rect, paint);
         return output;  
     }  
 }  
