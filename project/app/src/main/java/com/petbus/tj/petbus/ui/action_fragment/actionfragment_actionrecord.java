@@ -258,9 +258,12 @@ class record_daily_listview extends ArrayAdapter<action_record> {
                 remark_text.setText( record.get_remark() );
 
                 ImageView imageview_picture = ( ImageView )convertView.findViewById( R.id.recode_petportrait_image );
-                Bitmap bitmap = BitmapFactory.decodeFile(record.get_remark_picture());
-                imageview_picture.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                imageview_picture.setImageBitmap(bitmap);
+                if( null != record.get_remark_picture() )
+                {
+                    Bitmap bitmap = BitmapFactory.decodeFile(record.get_remark_picture());
+                    imageview_picture.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                    imageview_picture.setImageBitmap(bitmap);
+                }
                 break;
         }
 

@@ -49,13 +49,19 @@ public class CircleImageView extends ImageView{
         Drawable drawable = getDrawable();  
         if (null != drawable) {  
             Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-            Log.d("PetBusApp", "CircleImageView width:" + bitmap.getWidth()+ "--" + getWidth() + "::Height:" + bitmap.getHeight() + "--" + getHeight() );
-            Bitmap b = getCircleBitmap(bitmap, 14);  
-            final Rect rectSrc = new Rect(0, 0, b.getWidth(), b.getHeight());
-            final Rect rectDest = new Rect(0,0,getWidth(),getHeight());
-            paint.reset();  
-            canvas.drawBitmap(b, rectSrc, rectDest, paint);  
-  
+            if( null != bitmap )
+            {
+                Log.d("PetBusApp", "CircleImageView width:" + bitmap.getWidth()+ "--" + getWidth() + "::Height:" + bitmap.getHeight() + "--" + getHeight() );
+                Bitmap b = getCircleBitmap(bitmap, 14);  
+                final Rect rectSrc = new Rect(0, 0, b.getWidth(), b.getHeight());
+                final Rect rectDest = new Rect(0,0,getWidth(),getHeight());
+                paint.reset();  
+                canvas.drawBitmap(b, rectSrc, rectDest, paint);  
+            }
+            else
+            {
+                super.onDraw( canvas );
+            }
         } else {  
             super.onDraw(canvas);  
         }  

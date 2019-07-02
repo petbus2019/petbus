@@ -23,6 +23,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.LayoutInflater;
 import android.view.inputmethod.InputMethodManager;
@@ -382,9 +383,17 @@ public class petbus_action extends FragmentActivity implements OnClickListener,u
     public void onRequestPermissionsResult(final int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         Log.i( "PetBusApp", "onRequestPermissionsResult" );
-        ActivityCompat.requestPermissions(this, new String[]{
-            Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE
-        },1);
+        if( CAMERA_REQUEST == requestCode ){
+            ActivityCompat.requestPermissions(this, new String[]{
+                Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE
+            },1);
+        }
+        else if( IMAGE_REQUEST == requestCode ){
+            Log.d("LOG_TAG", "Write Permission Failed");
+            ActivityCompat.requestPermissions(this, new String[]{
+                Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE
+            },1);
+        }
     }
 
     public int show_list(){
@@ -416,7 +425,15 @@ public class petbus_action extends FragmentActivity implements OnClickListener,u
         int id = show_list();
     }
 
+    private void check_permission(){
+        return ;
+    }
+
     public void trigger_photo(){
+        int storage_permission = ContextCompat.checkSelfPermission( this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if(storage_permission !=PackageManager.PERMISSION_GRANTED ){
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},IMAGE_REQUEST);
+        }
         Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, IMAGE_REQUEST);
     }
@@ -516,5 +533,25 @@ public class petbus_action extends FragmentActivity implements OnClickListener,u
     public void trigger_datachange(){
         m_action_fragment_record.update_listdata();
         return ;
+    }
+
+    private long m_firstkeytime = 0;
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if( keyCode == KeyEvent.KEYCODE_BACK ){
+            if( System.currentTimeMillis() - m_firstkeytime > 3000 ){
+                Toast.makeText(petbus_action.this, R.string.doubletoexit, Toast.LENGTH_LONG ).show();
+                m_firstkeytime = System.currentTimeMillis();
+            }
+            else {
+                m_firstkeytime = 0;
+                finish();
+                System.exit(0);
+            }
+            Log.i( "PetBusApp", "back key" );
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
     }
 }

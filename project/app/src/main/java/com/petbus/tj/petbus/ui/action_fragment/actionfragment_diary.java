@@ -94,11 +94,15 @@ class HorizontalListViewAdapter extends BaseAdapter{
             Log.d("PetBusApp", "Select pet item:" + pet_map + " position_to_id:" + position_to_id );
 
             Bitmap bitmap = BitmapFactory.decodeFile(String.valueOf( pet_map.get( middleware.PETINFO_TYPE_PHOTO ) ));
+            if( null == bitmap )
+            {
+                return convertView;
+            }
             pet_image.setScaleType(ImageView.ScaleType.FIT_CENTER);
             pet_image.setImageBitmap(bitmap);
                 
             pet_name.setText( String.valueOf( pet_map.get( middleware.PETINFO_TYPE_NAME ) ) );
-            Log.d("PetBusApp", "pet:" + pet_map + " width:" + bitmap.getWidth() + "Height:" + bitmap.getHeight() );
+            // Log.d("PetBusApp", "pet:" + pet_map + " width:" + bitmap.getWidth() + "Height:" + bitmap.getHeight() );
         }
 
         return convertView;
@@ -239,9 +243,13 @@ public class actionfragment_diary extends Fragment implements OnClickListener
         String file_name = getActivity().getCacheDir() + "/" + name + time + ".jpg";
         File saveFile = new File( file_name );
         FileOutputStream os = null;
+        if( null == bitmap ){
+            Log.d("PetBusApp", "bitmap is NULLLLLLLLL" + bitmap);
+        }
         try {
             Log.d("PetBusApp", "Saving File To Cache " + saveFile.getPath());
             os = new FileOutputStream(saveFile);
+            Log.d("PetBusApp", "Saving File To file " + os);
             bitmap.compress( Bitmap.CompressFormat.JPEG, 100, os );
             os.flush();
             os.close();

@@ -47,4 +47,5 @@
     <string name="unselected">取消选择</string>
     <string name="title">标题</string>
     <string name="confirm">确定</string>
+    <string name="doubletoexit">双击返回退出</string>
 </resources>
