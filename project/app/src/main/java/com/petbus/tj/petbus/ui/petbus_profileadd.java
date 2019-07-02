@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import com.petbus.tj.petbus.middleware.middleware;
 import com.petbus.tj.petbus.middleware.middleware_impl;
+import com.petbus.tj.petbus.ui.CircleImageView;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -46,7 +47,7 @@ public class petbus_profileadd extends FragmentActivity implements View.OnClickL
     private Button btnSave;
     private TextView name, birth, weight;
     private RadioGroup gender, species;
-	private String photoPath = "";
+	private Bitmap mCirclebitmap;
     private middleware m_middleware = middleware_impl.getInstance();
 
     private Uri m_picture_uri;
@@ -138,17 +139,19 @@ public class petbus_profileadd extends FragmentActivity implements View.OnClickL
                         break;
                     }
                 }
-                addPet(strName,photoPath,strBirth,weightVal,genderVal,speciesVal );
+                addPet(strName,mCirclebitmap,strBirth,weightVal,genderVal,speciesVal );
                 Intent intent2 = new Intent();
                 intent2.setClass(petbus_profileadd.this,petbus_profile.class);
                 startActivity(intent2);
         }
     }
 
-    private void addPet(String name, String photoPath, String birth, double weight, int gender, int species)
+    private void addPet(String name, Bitmap circlebitmap, String birth, double weight, int gender, int species)
     {
         Toast.makeText(petbus_profileadd.this, name+','+birth+","
                 +weight+","+gender+","+species, Toast.LENGTH_LONG ).show();
+        //save photo now
+        String photoPath = saveBitmapAsFile( "PHOTO_",circlebitmap );
         m_middleware.newPet(name, photoPath, birth, weight, gender, species);
     }
 
@@ -263,11 +266,8 @@ public class petbus_profileadd extends FragmentActivity implements View.OnClickL
             try
             {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), m_picture_uri);
-                imgPath = saveBitmapAsFile( "PHOTO_",bitmap );
-                btnImg.setAdjustViewBounds(true);
-                btnImg.setMaxHeight(200);
-                btnImg.setMaxWidth(200);
-                btnImg.setImageBitmap(bitmap);
+                CircleImageView circleImg = new CircleImageView(getApplicationContext());
+                mCirclebitmap = circleImg.getCircleBitmap(bitmap, 0);
             }
             catch( Exception e )
             {
@@ -280,16 +280,17 @@ public class petbus_profileadd extends FragmentActivity implements View.OnClickL
             imgPath = ImageFilePath.getPath(this, uri);
             try {
                 Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
-                btnImg.setAdjustViewBounds(true);
-                btnImg.setMaxHeight(200);
-                btnImg.setMaxWidth(200);
-                btnImg.setImageBitmap(bitmap);
+                CircleImageView circleImg = new CircleImageView(getApplicationContext());
+                mCirclebitmap = circleImg.getCircleBitmap(bitmap, 0);
             } catch (FileNotFoundException e) {
+
                 e.printStackTrace();
             }
         }
-        photoPath = imgPath;
-        Log.i("PetBusApp", "the pet photo path is" + imgPath);
+        btnImg.setAdjustViewBounds(true);
+        btnImg.setMaxHeight(200);
+        btnImg.setMaxWidth(200);
+        btnImg.setImageBitmap(mCirclebitmap);
     }
 
     /*
@@ -314,14 +315,14 @@ public class petbus_profileadd extends FragmentActivity implements View.OnClickL
         long sysTime = System.currentTimeMillis();
         SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy_MM_dd_hh_mm");
         String time = sDateFormat.format(new Date(sysTime));
-        String file_name = Environment.getExternalStorageDirectory() + "/DCIM/Camera/" + name + time + ".jpg";
+        String file_name = getCacheDir() + "/" + name + time + ".png";
         File saveFile = new File( file_name );
 
         FileOutputStream os = null;
         try {
             Log.d("FileCache", "Saving File To Cache " + saveFile.getPath());
             os = new FileOutputStream(saveFile);
-            bitmap.compress( Bitmap.CompressFormat.JPEG, 100, os );
+            bitmap.compress( Bitmap.CompressFormat.PNG, 100, os );
             os.flush();
             os.close();
         } catch (FileNotFoundException e) {

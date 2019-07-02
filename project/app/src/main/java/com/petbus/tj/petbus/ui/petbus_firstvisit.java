@@ -2,16 +2,11 @@ package com.petbus.tj.petbus.ui;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.PaintFlagsDrawFilter;
-import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -35,6 +30,7 @@ import android.widget.Toast;
 
 import com.petbus.tj.petbus.middleware.middleware;
 import com.petbus.tj.petbus.middleware.middleware_impl;
+import com.petbus.tj.petbus.ui.CircleImageView;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -60,7 +56,7 @@ public class petbus_firstvisit extends FragmentActivity implements ActivityCompa
     private Button btnNext;
     private TextView name, birth, weight;
     private RadioGroup gender, species;
-    private String photoPath = "";
+    private Bitmap mCirclebitmap;
     private middleware m_middleware = middleware_impl.getInstance();
 
     @Override
@@ -131,7 +127,7 @@ public class petbus_firstvisit extends FragmentActivity implements ActivityCompa
                         break;
                     }
                 }
-                addPet(strName,photoPath,strBirth,weightVal,genderVal,speciesVal );
+                addPet(strName,mCirclebitmap,strBirth,weightVal,genderVal,speciesVal );
                 Intent intent = new Intent();
                 intent.setClass(petbus_firstvisit.this,petbus_action.class);
                 startActivity(intent);
@@ -139,10 +135,12 @@ public class petbus_firstvisit extends FragmentActivity implements ActivityCompa
         });
     }
 
-    private void addPet(String name, String photoPath, String birth, double weight, int gender, int species)
+    private void addPet(String name, Bitmap circlebitmap, String birth, double weight, int gender, int species)
     {
         Toast.makeText(petbus_firstvisit.this, name+','+birth+","
                 +weight+","+gender+","+species, Toast.LENGTH_LONG ).show();
+        //save photo now
+        String photoPath = saveBitmapAsFile( "PHOTO_",circlebitmap );
         m_middleware.newPet(name, photoPath, birth, weight, gender, species);
     }
 
@@ -257,11 +255,8 @@ public class petbus_firstvisit extends FragmentActivity implements ActivityCompa
             try
             {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), m_picture_uri);
-                imgPath = saveBitmapAsFile( "PHOTO_",bitmap );
-                btnImg.setAdjustViewBounds(true);
-                btnImg.setMaxHeight(200);
-                btnImg.setMaxWidth(200);
-                btnImg.setImageBitmap(bitmap);
+                CircleImageView circleImg = new CircleImageView(getApplicationContext());
+                mCirclebitmap = circleImg.getCircleBitmap(bitmap, 0);
             }
             catch( Exception e )
             {
@@ -274,16 +269,16 @@ public class petbus_firstvisit extends FragmentActivity implements ActivityCompa
             imgPath = ImageFilePath.getPath(this, uri);
             try {
                 Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
-                btnImg.setAdjustViewBounds(true);
-                btnImg.setMaxHeight(200);
-                btnImg.setMaxWidth(200);
-                btnImg.setImageBitmap(bitmap);
-            } catch (FileNotFoundException e) {
+                CircleImageView circleImg = new CircleImageView(getApplicationContext());
+                mCirclebitmap = circleImg.getCircleBitmap(bitmap, 0);
+			} catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
         }
-        photoPath = imgPath;
-        Log.i("PetBusApp", "the pet photo path is" + imgPath);
+        btnImg.setAdjustViewBounds(true);
+        btnImg.setMaxHeight(200);
+        btnImg.setMaxWidth(200);
+        btnImg.setImageBitmap(mCirclebitmap);
     }
 
 	/*
@@ -308,14 +303,14 @@ public class petbus_firstvisit extends FragmentActivity implements ActivityCompa
         long sysTime = System.currentTimeMillis();
         SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy_MM_dd_hh_mm");
         String time = sDateFormat.format(new Date(sysTime));
-        String file_name = Environment.getExternalStorageDirectory() + "/DCIM/Camera/" + name + time + ".jpg";
+        String file_name = getCacheDir() + "/" + name + time + ".png";
         File saveFile = new File( file_name );
 
         FileOutputStream os = null;
         try {
             Log.d("FileCache", "Saving File To Cache " + saveFile.getPath());
             os = new FileOutputStream(saveFile);
-            bitmap.compress( Bitmap.CompressFormat.JPEG, 100, os );
+            bitmap.compress( Bitmap.CompressFormat.PNG, 100, os );
             os.flush();
             os.close();
         } catch (FileNotFoundException e) {
