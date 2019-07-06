@@ -195,7 +195,6 @@ class record_daily_listview extends ArrayAdapter<action_record> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         action_record record = getItem(position);
-        Log.i( "PetBusApp", "PetBus:getView " + record );
 
         view_holder_date date_view = null;
         view_holder_record record_view = null;
@@ -211,6 +210,11 @@ class record_daily_listview extends ArrayAdapter<action_record> {
                     convertView.setTag(R.layout.record_date, date_view);
                     String full_date_text = record.get_date() + "  " + getWeek( record.get_full_time() );
                     date.setText( full_date_text );
+                } else {
+                    Object test = convertView.getTag( R.layout.record_date );
+                    if( null == test ) {
+
+                    }
                 }
                 break;
             case middleware.RECORD_TYPE_RECORD:
@@ -230,7 +234,7 @@ class record_daily_listview extends ArrayAdapter<action_record> {
                     List<TextView> textview_list = new ArrayList<TextView>();
                     List<ImageView> image_list = new ArrayList<ImageView>();
 
-                    Log.i( "PetBusApp", "PetBus:pet_list " + pet_list );
+                    // Log.i( "PetBusApp", "PetBus:pet_list " + pet_list );
 
                     TextView nickname_text_1 = (TextView) convertView.findViewById(R.id.nickname_text_1);
                     textview_list.add( nickname_text_1 );
@@ -263,7 +267,7 @@ class record_daily_listview extends ArrayAdapter<action_record> {
 
                     for( int i = 0;i < pet_list.size();i ++ )
                     {
-                       Log.i( "PetBusApp", "PetBus:pet_list )))) " + i );
+                       // Log.i( "PetBusApp", "PetBus:pet_list )))) " + i );
                         Map<String,Object> pet_info = m_middleware.getPetInfo( pet_list.get(i) + 1 );
                         TextView nickname = textview_list.get(i);
                         nickname.setText( String.valueOf( pet_info.get( middleware.PETINFO_TYPE_NAME ) ) );
@@ -286,6 +290,11 @@ class record_daily_listview extends ArrayAdapter<action_record> {
                         imageview_picture.setScaleType(ImageView.ScaleType.FIT_CENTER);
                         imageview_picture.setImageBitmap(bitmap);
                     }
+                } else {
+                    Object test = convertView.getTag( R.layout.record_record );
+                    if( null == test ) {
+
+                    }
                 }
                 break;
         }
@@ -306,10 +315,7 @@ class record_daily_listview extends ArrayAdapter<action_record> {
         int type = m_middleware.get_record( position, time, list, action, remark,record_pic );
         action_record record = new action_record( position, type );
 
-        Log.i( "PetBusApp", "pet_list:" + list );
-
         record.set_record( time.toString(), list, action.toString(), remark.toString(), record_pic.get(0) );
-
         return record;
     }
     @Override public long getItemId(int position) {

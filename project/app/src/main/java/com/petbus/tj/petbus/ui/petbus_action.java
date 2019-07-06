@@ -194,6 +194,7 @@ public class petbus_action extends FragmentActivity implements OnClickListener,u
     protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.petbus_action);
+        check_permission();
 
         m_middleware = middleware_impl.getInstance();
 
@@ -426,6 +427,15 @@ public class petbus_action extends FragmentActivity implements OnClickListener,u
     }
 
     private void check_permission(){
+        int storage_permission = ContextCompat.checkSelfPermission( this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if(storage_permission !=PackageManager.PERMISSION_GRANTED ){
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},IMAGE_REQUEST);
+        }
+
+        int checkCallPhonePermission = ContextCompat.checkSelfPermission( this, Manifest.permission.CAMERA);
+        if(checkCallPhonePermission != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.CAMERA},CAMERA_REQUEST);
+        }
         return ;
     }
 
