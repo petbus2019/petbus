@@ -29,6 +29,7 @@ import android.widget.Toast;
 import android.widget.ImageView;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.text.InputType;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -56,6 +57,8 @@ import com.petbus.tj.petbus.middleware.middleware_impl;
 
 //https://blog.csdn.net/shaoyezhangliwei/article/details/79441799
 // https://blog.csdn.net/yanzi1225627/article/details/21294553
+
+// https://www.jianshu.com/p/281fd392870b
 class HorizontalListViewAdapter extends BaseAdapter{
     private middleware m_middleware;
     private Context mContext;
@@ -245,6 +248,7 @@ public class actionfragment_diary extends Fragment implements OnClickListener
         FileOutputStream os = null;
         if( null == bitmap ){
             Log.d("PetBusApp", "bitmap is NULLLLLLLLL" + bitmap);
+            return null;
         }
         try {
             Log.d("PetBusApp", "Saving File To Cache " + saveFile.getPath());
@@ -262,6 +266,40 @@ public class actionfragment_diary extends Fragment implements OnClickListener
         return file_name;
     }
 
+    private Bitmap compressPixel( Bitmap src_map, String file_name ){
+        Matrix matrix = new Matrix();
+        matrix.setScale(0.25f, 0.25f);
+        Bitmap bm = Bitmap.createBitmap(src_map, 0, 0, 
+                                        src_map.getWidth(),
+                                        src_map.getHeight(),
+                                        matrix, true);
+        int dot = file_name.lastIndexOf('.');
+        String prefix = file_name.substring( 0,dot );
+        Log.i( "PetBusApp", "actionfragment_diary:compressPixel" + prefix );
+        String thumbnail_file_name = prefix + "_thumbnail.jpg";
+        File saveFile = new File( thumbnail_file_name );
+        FileOutputStream os = null;
+        if( null == bm ){
+            Log.d("PetBusApp", "bm is NULLLLLLLLL" + bm);
+            return null;
+        }
+        try {
+            Log.d("PetBusApp", "Saving File To Cache " + saveFile.getPath());
+            os = new FileOutputStream(saveFile);
+            Log.d("PetBusApp", "Saving File To file " + os);
+            bm.compress( Bitmap.CompressFormat.JPEG, 50, os );
+            os.flush();
+            os.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        return bm;
+    }
+
     public int picture_result( String picture_path ){
         Log.i( "PetBusApp", "actionfragment_diary:picture_result" + picture_path );
 
@@ -269,12 +307,22 @@ public class actionfragment_diary extends Fragment implements OnClickListener
         m_imageview_picture.setScaleType(ImageView.ScaleType.FIT_CENTER);
         m_imageview_picture.setImageBitmap(bitmap);
         m_picture_filename = saveBitmapAsFile( "picture",bitmap );
+        if( null == m_picture_filename )
+        {
+            return 0;
+        }
+        compressPixel( bitmap, m_picture_filename );
         return 0;
     }
 
     public int picture_result( Bitmap pic ){
         m_imageview_picture.setImageBitmap(pic);
         m_picture_filename = saveBitmapAsFile( "picture",pic );
+        if( null == m_picture_filename )
+        {
+            return 0;
+        }
+        compressPixel( pic, m_picture_filename );
         return 0;
     }
 

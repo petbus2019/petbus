@@ -10,6 +10,7 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
@@ -24,6 +25,7 @@ import android.util.Log;
 public class CircleImageView extends ImageView{
 
     private Paint paint ;
+    private Bitmap m_circel_bitmap;
     
     public CircleImageView(Context context) {  
         this(context,null);  
@@ -52,7 +54,7 @@ public class CircleImageView extends ImageView{
             if( null != bitmap )
             {
                 Log.d("PetBusApp", "CircleImageView width:" + bitmap.getWidth()+ "--" + getWidth() + "::Height:" + bitmap.getHeight() + "--" + getHeight() );
-                Bitmap b = getCircleBitmap(bitmap, 14);  
+                Bitmap b = m_circel_bitmap;  
                 final Rect rectSrc = new Rect(0, 0, b.getWidth(), b.getHeight());
                 final Rect rectDest = new Rect(0,0,getWidth(),getHeight());
                 paint.reset();  
@@ -65,7 +67,21 @@ public class CircleImageView extends ImageView{
         } else {  
             super.onDraw(canvas);  
         }  
-    }  
+    }
+
+    @Override
+    public void setImageBitmap(Bitmap bm_src) {
+        Matrix matrix = new Matrix();
+        matrix.setScale(0.25f, 0.25f);
+        Bitmap bm = Bitmap.createBitmap(bm_src, 0, 0, 
+                                        bm_src.getWidth(),
+                                        bm_src.getHeight(),
+                                        matrix, true);
+
+        Log.d("PetBusApp", "CircleImageView setImageBitmap" );
+        m_circel_bitmap = getCircleBitmap( bm_src, 14);
+        super.setImageBitmap( m_circel_bitmap );
+    }
   
     /**
      * 获取圆形图片方法

@@ -14,10 +14,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ImageView;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 import android.content.Context;
 import android.util.DisplayMetrics;
 import android.widget.LinearLayout;
 import android.util.AttributeSet;
+import android.widget.AdapterView; 
+import android.widget.AdapterView.OnItemClickListener;
 import android.view.MotionEvent;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -27,6 +30,7 @@ import android.graphics.BitmapFactory;
 import java.text.SimpleDateFormat;
 import java.text.DateFormat;
 import java.text.ParseException;
+import android.text.TextUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,6 +109,17 @@ class action_record{
     public String get_remark_picture(){
         return m_picture_path;
     }
+    public String get_remark_thumbnail_picture(){
+        Log.i( "PetBusApp", "actionfragment_diary:m_picture_path::" + m_picture_path + "----" + String.valueOf(m_picture_path == null) + "---" + String.valueOf( m_picture_path.isEmpty() ) );
+        if( !m_picture_path.isEmpty() || m_picture_path == null ){
+            return m_picture_path;
+        }
+        int dot = m_picture_path.lastIndexOf('.');
+        String prefix = m_picture_path.substring( 0,dot );
+        Log.i( "PetBusApp", "actionfragment_diary:compressPixel" + prefix );
+        String thumbnail_file_name = prefix + "_thumbnail.jpg";
+        return thumbnail_file_name;
+    }
 
     public int get_record_type(){
         return m_type;
@@ -172,8 +187,11 @@ class record_daily_listview extends ArrayAdapter<action_record> {
             Week += m_Context.getResources().getString( R.string.saturday );
         }
         return Week;
-    } 
-
+    }
+    
+    // http://www.360doc.com/content/14/0917/15/15077656_410189820.shtml
+    // https://cloud.tencent.com/developer/article/1331002
+    // https://www.cnblogs.com/snake-hand/p/3206655.html
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         action_record record = getItem(position);
@@ -184,85 +202,90 @@ class record_daily_listview extends ArrayAdapter<action_record> {
 
         switch( record.get_record_type() ){
             case middleware.RECORD_TYPE_DATE:
-                date_view = new view_holder_date();
-                convertView = LayoutInflater.from(getContext()).inflate(R.layout.record_date
-                                                                       , parent, false);
-                TextView date = (TextView) convertView.findViewById(R.id.daily_text);
-                convertView.setTag(R.layout.record_date, date_view);
-                String full_date_text = record.get_date() + "  " + getWeek( record.get_full_time() );
-                date.setText( full_date_text );
+                if( null == convertView )
+                {
+                    date_view = new view_holder_date();
+                    convertView = LayoutInflater.from(getContext()).inflate(R.layout.record_date
+                                                                           , parent, false);
+                    TextView date = (TextView) convertView.findViewById(R.id.daily_text);
+                    convertView.setTag(R.layout.record_date, date_view);
+                    String full_date_text = record.get_date() + "  " + getWeek( record.get_full_time() );
+                    date.setText( full_date_text );
+                }
                 break;
             case middleware.RECORD_TYPE_RECORD:
-                record_view = new view_holder_record();
-                convertView = LayoutInflater.from(getContext()).inflate(R.layout.record_record
-                                                                       , parent, false); 
-                convertView.setTag(R.layout.record_record, record_view); 
-                TextView record_times = (TextView) convertView.findViewById(R.id.record_times);
-                record_times.setText( record.get_time() );
-
-                TextView record_action = (TextView) convertView.findViewById(R.id.recode_actioin_text);
-                record_action.setText( record.get_action() );
-                
-                List<Integer> pet_list = record.get_petlist();
-                List<TextView> textview_list = new ArrayList<TextView>();
-                List<ImageView> image_list = new ArrayList<ImageView>();
-
-
-                Log.i( "PetBusApp", "PetBus:pet_list " + pet_list );
-
-                TextView nickname_text_1 = (TextView) convertView.findViewById(R.id.nickname_text_1);
-                textview_list.add( nickname_text_1 );
-                ImageView nickname_image_1 = (ImageView) convertView.findViewById(R.id.recode_image_1);
-                image_list.add( nickname_image_1 );
-                nickname_image_1.setVisibility( View.INVISIBLE );
-                nickname_text_1.setVisibility( View.INVISIBLE );
-                
-                TextView nickname_text_2 = (TextView) convertView.findViewById(R.id.nickname_text_2);
-                textview_list.add( nickname_text_2 );
-                ImageView nickname_image_2 = (ImageView) convertView.findViewById(R.id.recode_image_2);
-                image_list.add( nickname_image_2 );
-                nickname_image_2.setVisibility( View.INVISIBLE );
-                nickname_text_2.setVisibility( View.INVISIBLE );
-
-                TextView nickname_text_3 = (TextView) convertView.findViewById(R.id.nickname_text_3);
-                textview_list.add( nickname_text_3 );
-                ImageView nickname_image_3 = (ImageView) convertView.findViewById(R.id.recode_image_3);
-                image_list.add( nickname_image_3 );
-                nickname_image_3.setVisibility( View.INVISIBLE );
-                nickname_text_3.setVisibility( View.INVISIBLE );
-
-                TextView nickname_text_4 = (TextView) convertView.findViewById(R.id.nickname_text_4);
-                textview_list.add( nickname_text_4 );
-                ImageView nickname_image_4 = (ImageView) convertView.findViewById(R.id.recode_image_4);
-                image_list.add( nickname_image_4 );
-                nickname_image_4.setVisibility( View.INVISIBLE );
-                nickname_text_4.setVisibility( View.INVISIBLE );
-
-
-                for( int i = 0;i < pet_list.size();i ++ )
+                if( null == convertView )
                 {
-                   Log.i( "PetBusApp", "PetBus:pet_list )))) " + i );
-                    Map<String,Object> pet_info = m_middleware.getPetInfo( pet_list.get(i) + 1 );
-                    TextView nickname = textview_list.get(i);
-                    nickname.setText( String.valueOf( pet_info.get( middleware.PETINFO_TYPE_NAME ) ) );
+                    record_view = new view_holder_record();
+                    convertView = LayoutInflater.from(getContext()).inflate(R.layout.record_record
+                                                                           , parent, false); 
+                    convertView.setTag(R.layout.record_record, record_view); 
+                    TextView record_times = (TextView) convertView.findViewById(R.id.record_times);
+                    record_times.setText( record.get_time() );
 
-                    ImageView pet_photo_view = image_list.get(i);
-                    Bitmap bitmap = BitmapFactory.decodeFile( String.valueOf( pet_info.get( middleware.PETINFO_TYPE_PHOTO ) ) );
-                    pet_photo_view.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                    pet_photo_view.setImageBitmap(bitmap);
-                    pet_photo_view.setVisibility( View.VISIBLE );
-                    nickname.setVisibility( View.VISIBLE );
-                }
+                    TextView record_action = (TextView) convertView.findViewById(R.id.recode_actioin_text);
+                    record_action.setText( record.get_action() );
+                    
+                    List<Integer> pet_list = record.get_petlist();
+                    List<TextView> textview_list = new ArrayList<TextView>();
+                    List<ImageView> image_list = new ArrayList<ImageView>();
 
-                TextView remark_text = (TextView) convertView.findViewById(R.id.recode_remark_text);
-                remark_text.setText( record.get_remark() );
+                    Log.i( "PetBusApp", "PetBus:pet_list " + pet_list );
 
-                ImageView imageview_picture = ( ImageView )convertView.findViewById( R.id.recode_petportrait_image );
-                if( null != record.get_remark_picture() )
-                {
-                    Bitmap bitmap = BitmapFactory.decodeFile(record.get_remark_picture());
-                    imageview_picture.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                    imageview_picture.setImageBitmap(bitmap);
+                    TextView nickname_text_1 = (TextView) convertView.findViewById(R.id.nickname_text_1);
+                    textview_list.add( nickname_text_1 );
+                    ImageView nickname_image_1 = (ImageView) convertView.findViewById(R.id.recode_image_1);
+                    image_list.add( nickname_image_1 );
+                    nickname_image_1.setVisibility( View.INVISIBLE );
+                    nickname_text_1.setVisibility( View.INVISIBLE );
+                    
+                    TextView nickname_text_2 = (TextView) convertView.findViewById(R.id.nickname_text_2);
+                    textview_list.add( nickname_text_2 );
+                    ImageView nickname_image_2 = (ImageView) convertView.findViewById(R.id.recode_image_2);
+                    image_list.add( nickname_image_2 );
+                    nickname_image_2.setVisibility( View.INVISIBLE );
+                    nickname_text_2.setVisibility( View.INVISIBLE );
+
+                    TextView nickname_text_3 = (TextView) convertView.findViewById(R.id.nickname_text_3);
+                    textview_list.add( nickname_text_3 );
+                    ImageView nickname_image_3 = (ImageView) convertView.findViewById(R.id.recode_image_3);
+                    image_list.add( nickname_image_3 );
+                    nickname_image_3.setVisibility( View.INVISIBLE );
+                    nickname_text_3.setVisibility( View.INVISIBLE );
+
+                    TextView nickname_text_4 = (TextView) convertView.findViewById(R.id.nickname_text_4);
+                    textview_list.add( nickname_text_4 );
+                    ImageView nickname_image_4 = (ImageView) convertView.findViewById(R.id.recode_image_4);
+                    image_list.add( nickname_image_4 );
+                    nickname_image_4.setVisibility( View.INVISIBLE );
+                    nickname_text_4.setVisibility( View.INVISIBLE );
+
+
+                    for( int i = 0;i < pet_list.size();i ++ )
+                    {
+                       Log.i( "PetBusApp", "PetBus:pet_list )))) " + i );
+                        Map<String,Object> pet_info = m_middleware.getPetInfo( pet_list.get(i) + 1 );
+                        TextView nickname = textview_list.get(i);
+                        nickname.setText( String.valueOf( pet_info.get( middleware.PETINFO_TYPE_NAME ) ) );
+
+                        ImageView pet_photo_view = image_list.get(i);
+                        Bitmap bitmap = BitmapFactory.decodeFile( String.valueOf( pet_info.get( middleware.PETINFO_TYPE_PHOTO ) ) );
+                        pet_photo_view.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                        pet_photo_view.setImageBitmap(bitmap);
+                        pet_photo_view.setVisibility( View.VISIBLE );
+                        nickname.setVisibility( View.VISIBLE );
+                    }
+
+                    TextView remark_text = (TextView) convertView.findViewById(R.id.recode_remark_text);
+                    remark_text.setText( record.get_remark() );
+
+                    ImageView imageview_picture = ( ImageView )convertView.findViewById( R.id.recode_petportrait_image );
+                    if( null != record.get_remark_thumbnail_picture() )
+                    {
+                        Bitmap bitmap = BitmapFactory.decodeFile(record.get_remark_thumbnail_picture());
+                        imageview_picture.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                        imageview_picture.setImageBitmap(bitmap);
+                    }
                 }
                 break;
         }
@@ -302,6 +325,7 @@ class record_daily_listview extends ArrayAdapter<action_record> {
 
 
 public class actionfragment_actionrecord extends Fragment implements OnClickListener
+                                                                    ,OnItemClickListener
 {
     private List<action_record> m_daily_record_list = new ArrayList<>();
     private middleware m_middleware;
@@ -471,7 +495,10 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
         update_listdata();
         return view;
     }
-   
+    public void onItemClick(AdapterView<?> var1, View var2, int position, long var4){
+        Log.i( "PetBusApp", "PetBus:onItemClick :" + position );
+        return ;
+    }
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
