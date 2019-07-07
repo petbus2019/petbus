@@ -135,9 +135,9 @@ class diary_petselect_dialog extends Dialog implements OnItemClickListener,OnCli
     private Context m_context;
     HorizontalListViewAdapter hListViewAdapter;
 
-    public diary_petselect_dialog(Context context) {
+    public diary_petselect_dialog(Context context, List<Integer> pet_list) {
         super(context);
-        m_petid_list = new ArrayList<Integer>();
+        m_petid_list = pet_list;
         m_context = context;
     }
 
@@ -167,11 +167,15 @@ class diary_petselect_dialog extends Dialog implements OnItemClickListener,OnCli
         hListViewAdapter.notifyDataSetChanged();
     }
 
-    public diary_petselect_dialog(Context context, int theme) {
+    public diary_petselect_dialog(Context context, int theme, List<Integer> pet_list) {
         super(context, theme);
         m_context = context;
-        m_petid_list = new ArrayList<Integer>();
+        m_petid_list = pet_list;
         m_context = context;
+    }
+
+    public void set_petlist( List<Integer> list ) {
+        m_petid_list = list;
     }
 
     public List<Integer> get_petid_list(){
@@ -344,6 +348,7 @@ public class actionfragment_diary extends Fragment implements OnClickListener
         m_inflater = inflater;
         m_viewgroup = container;
         m_image_list = new ArrayList<ImageView>();
+        m_petid_list = new ArrayList<Integer>();
 
         m_middleware = middleware_impl.getInstance();
         View view = inflater.inflate(R.layout.actionfragment_diary, container, false);
@@ -409,13 +414,14 @@ public class actionfragment_diary extends Fragment implements OnClickListener
                 do_record();
                 break;
             case R.id.pet_select:
-                diary_petselect_dialog myDialog = new diary_petselect_dialog( getActivity(),R.style.dialog );
+                diary_petselect_dialog myDialog = new diary_petselect_dialog( getActivity(),R.style.dialog,m_petid_list );
+                myDialog.set_petlist( m_petid_list );
                 myDialog.show();
                 myDialog.setOnDismissListener( new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
                         diary_petselect_dialog myDialog = (diary_petselect_dialog) dialog;
-                        m_petid_list = myDialog.get_petid_list();
+                        // m_petid_list = myDialog.get_petid_list();
                         update_pet_list();
                         Log.i("PetBusApp", "11111 dismiss" + m_petid_list );
                     }
