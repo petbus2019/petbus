@@ -16,6 +16,7 @@ import android.view.View.OnClickListener;
 import android.content.Intent;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.widget.Spinner;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -30,6 +31,7 @@ import android.widget.ImageView;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.Color;
 import android.text.InputType;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -64,11 +66,15 @@ class HorizontalListViewAdapter extends BaseAdapter{
     private Context mContext;
     private LayoutInflater mInflater;
     private int selectIndex = -1;
+    private List<Integer> m_selected_index;
  
     public HorizontalListViewAdapter( Context context ){
         this.mContext = context;
         mInflater=(LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         m_middleware = middleware_impl.getInstance();
+    }
+    public void set_petlist( List<Integer> pet_list ) {
+        m_selected_index = pet_list;
     }
     @Override
     public int getCount() {
@@ -107,6 +113,9 @@ class HorizontalListViewAdapter extends BaseAdapter{
             pet_name.setText( String.valueOf( pet_map.get( middleware.PETINFO_TYPE_NAME ) ) );
             // Log.d("PetBusApp", "pet:" + pet_map + " width:" + bitmap.getWidth() + "Height:" + bitmap.getHeight() );
         }
+        if( m_selected_index.contains(position) ) {
+            convertView.setBackgroundColor(Color.GRAY);
+        }
 
         return convertView;
     }
@@ -122,6 +131,7 @@ class HorizontalListViewAdapter extends BaseAdapter{
 }
 
 class diary_petselect_dialog extends Dialog implements OnItemClickListener,OnClickListener{
+    private List<Integer> m_petid_list;
     private Context m_context;
     HorizontalListViewAdapter hListViewAdapter;
 
@@ -154,6 +164,7 @@ class diary_petselect_dialog extends Dialog implements OnItemClickListener,OnCli
             m_petid_list.add( (Integer)position );
             Log.d("PetBusApp", "diary_actionadapter not contains" + position );
         }
+        hListViewAdapter.notifyDataSetChanged();
     }
 
     public diary_petselect_dialog(Context context, int theme) {
@@ -175,12 +186,12 @@ class diary_petselect_dialog extends Dialog implements OnItemClickListener,OnCli
         hListViewAdapter = new HorizontalListViewAdapter( m_context );
         hListView.setAdapter(hListViewAdapter);
         hListView.setOnItemClickListener( this );
+        hListViewAdapter.set_petlist( m_petid_list );
 
         Button confirm_button = ( Button )findViewById( R.id.confirm_button );
         confirm_button.setOnClickListener( this );
     }
 
-    private List<Integer> m_petid_list;
 }
 
 class diary_actionadapter extends BaseAdapter {
