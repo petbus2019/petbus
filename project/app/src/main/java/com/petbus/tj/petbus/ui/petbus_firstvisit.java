@@ -251,10 +251,12 @@ public class petbus_firstvisit extends FragmentActivity implements ActivityCompa
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         String imgPath = "";
+        mCirclebitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.imgbtn);
         if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
             try
             {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), m_picture_uri);
+                Bitmap bm = MediaStore.Images.Media.getBitmap(this.getContentResolver(), m_picture_uri);
+                Bitmap bitmap = Bitmap.createScaledBitmap(bm, 200, 200, true);
                 CircleImageView circleImg = new CircleImageView(getApplicationContext());
                 mCirclebitmap = circleImg.getCircleBitmap(bitmap, 0);
             }
@@ -268,7 +270,8 @@ public class petbus_firstvisit extends FragmentActivity implements ActivityCompa
             Uri uri = data.getData();
             imgPath = ImageFilePath.getPath(this, uri);
             try {
-                Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
+                Bitmap bm = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
+                Bitmap bitmap = Bitmap.createScaledBitmap(bm, 200, 200, true);
                 CircleImageView circleImg = new CircleImageView(getApplicationContext());
                 mCirclebitmap = circleImg.getCircleBitmap(bitmap, 0);
 			} catch (FileNotFoundException e) {
@@ -276,8 +279,8 @@ public class petbus_firstvisit extends FragmentActivity implements ActivityCompa
             }
         }
         btnImg.setAdjustViewBounds(true);
-        btnImg.setMaxHeight(200);
-        btnImg.setMaxWidth(200);
+        //btnImg.setMaxHeight(200);
+        //btnImg.setMaxWidth(200);
         btnImg.setImageBitmap(mCirclebitmap);
     }
 
