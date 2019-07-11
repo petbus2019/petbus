@@ -153,7 +153,7 @@ class LineGraphicView extends View
                 int deltaX = x - m_last_xpos;
                 if (mode == DRAG) {
                     // 是一个手指拖动
-                    m_current_xpos += deltaX;
+                    m_current_xpos -= deltaX;
                     if( m_current_xpos <= 0 )
                     {
                         m_current_xpos = 0;
