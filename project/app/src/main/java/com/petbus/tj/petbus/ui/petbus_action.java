@@ -555,8 +555,10 @@ public class petbus_action extends FragmentActivity implements OnClickListener,u
             }
             else {
                 m_firstkeytime = 0;
-                finish();
-                System.exit(0);
+                Intent home = new Intent(Intent.ACTION_MAIN);
+                home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                home.addCategory(Intent.CATEGORY_HOME);
+                startActivity(home);
             }
             Log.i( "PetBusApp", "back key" );
             return true;

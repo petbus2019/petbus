@@ -487,6 +487,7 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
 
         ListView listView =(ListView)view.findViewById(R.id.list_view);
         listView.setAdapter(m_adapter);
+        listView.setOnItemClickListener(this);
         Log.i( "PetBusApp", "PetBus:getView " + m_daily_record_list );
 
         Button button = ( Button )view.findViewById( R.id.add_action_button );
@@ -502,7 +503,7 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
         return view;
     }
     public void onItemClick(AdapterView<?> var1, View var2, int position, long var4){
-        Log.i( "PetBusApp", "PetBus:onItemClick :" + position );
+        Log.i( "PetBusApp", "PetBus:onItemClick :" + position + "view:" + var2 );
         return ;
     }
     @Override
@@ -519,7 +520,6 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
     @Override
     public void onResume(){
         super.onResume();
-
         Log.i( "PetBusApp", "PetBus:onResume " );
     }
 }
