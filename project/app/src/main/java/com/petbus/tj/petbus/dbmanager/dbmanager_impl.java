@@ -84,6 +84,7 @@ public class dbmanager_impl extends SQLiteOpenHelper implements dbmanager
                 "(" + dbmanager.COLUMN_TEXT_ID +" integer PRIMARY KEY autoincrement, " +
                 "pet_id" + " integer," + 
                 "record_id" + " integer," + 
+                "time" + " DATE," +
                 "FOREIGN KEY ( pet_id ) REFERENCES " + dbmanager.TABLE_PETNFO + "(" + dbmanager.COLUMN_TEXT_ID +")," +
                 "FOREIGN KEY ( record_id ) REFERENCES " + dbmanager.TABLE_RECORD + "(" + dbmanager.COLUMN_TEXT_ID +"));";
         Log.i( "PetBusApp", "execSQL: " + sql );

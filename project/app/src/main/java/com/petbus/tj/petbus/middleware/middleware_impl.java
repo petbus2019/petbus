@@ -154,9 +154,9 @@ public class middleware_impl extends Application implements middleware {
         for (int i = 0; i < pet_list.size(); i++){
             int index = pet_list.get(i);
             Log.i( "PetBusApp", "PetBusBusiness: index is " + index + " record_id " + strid );
-            sql = "INSERT INTO " + dbmanager.TABLE_RECORD_PETINFO + "(pet_id,record_id)"
+            sql = "INSERT INTO " + dbmanager.TABLE_RECORD_PETINFO + "(pet_id,record_id,time)"
                    + " values( "  + "\"" + index
-                   + "\",\'" + strid + "\'" + ");";
+                   + "\",\'" + strid + "\'" + ",\'" + time +  "\');";
             m_database.execute_sql( sql );
         }
         return middleware.MIDDLEWARE_RETURN_OK;

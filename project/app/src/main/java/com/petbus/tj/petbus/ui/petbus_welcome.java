@@ -69,6 +69,13 @@ public class petbus_welcome extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.petbus_welcome);
         m_middleware = middleware_impl.getInstance();
+        // m_timer.schedule(m_timertask,3000);
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
         m_timer.schedule(m_timertask,3000);
     }
+
 }
