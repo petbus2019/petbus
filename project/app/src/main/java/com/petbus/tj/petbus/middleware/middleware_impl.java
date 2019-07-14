@@ -38,10 +38,16 @@ public class middleware_impl extends Application implements middleware {
     }
 
     public int get_last_three_record( Map<String,String> record_map ){
-        String sql = "SELECT " + dbmanager.TABLE_RECORD + ".operation," + dbmanager.TABLE_RECORD + ".time " + 
-                     "from " + dbmanager.TABLE_RECORD + " where " + dbmanager.TABLE_RECORD + ".operation " + 
-                     "!= 'null' group by " + dbmanager.TABLE_RECORD + ".operation order " + 
-                     "by " + dbmanager.TABLE_RECORD + ".time DESC limit 3;";
+        int pet_index = m_current_petid - 1;
+        // String sql = "SELECT " + dbmanager.TABLE_RECORD + ".operation," + dbmanager.TABLE_RECORD + ".time " + 
+        //              "from " + dbmanager.TABLE_RECORD + " where " + dbmanager.TABLE_RECORD + ".operation " + 
+        //              "!= 'null' group by " + dbmanager.TABLE_RECORD + ".operation order " + 
+        //              "by " + dbmanager.TABLE_RECORD + ".time DESC limit 3;";
+        String sql = "SELECT " + dbmanager.TABLE_RECORD + ".operation," + dbmanager.TABLE_RECORD_PETINFO + ".time " + 
+                     "from " + dbmanager.TABLE_RECORD_PETINFO + " left join " + dbmanager.TABLE_RECORD +
+                     " on " + dbmanager.TABLE_RECORD + ".id = " + dbmanager.TABLE_RECORD_PETINFO + ".record_id"
+                     + " where " + dbmanager.TABLE_RECORD_PETINFO + ".pet_id =" + pet_index +
+                     " order by " + dbmanager.TABLE_RECORD_PETINFO + ".time DESC limit 3;";
         Cursor sql_result = m_database.get_result( sql );
         if (sql_result.moveToFirst()) {
             do {
@@ -272,6 +278,7 @@ public class middleware_impl extends Application implements middleware {
 
     public boolean setCurrentPet(int id)
     {
+        Log.i( "PetBusApp", "PetBusBusiness:setCurrentPet " + id );
         m_current_petid = id;
         return true;
     }
