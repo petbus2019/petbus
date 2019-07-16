@@ -48,4 +48,5 @@
     <string name="title">标题</string>
     <string name="confirm">确定</string>
     <string name="doubletoexit">双击返回退出</string>
+    <string name="pageloading">加载中</string>
 </resources>

@@ -25,6 +25,8 @@ public class middleware_impl extends Application implements middleware {
     private ArrayList<String> m_action_list = new ArrayList<String>();
     private ArrayList<String> m_petname_list = new ArrayList<String>();
     private int m_current_petid = 1;
+    private int m_current_recordcount = 0;
+    private int m_max_recordcount = -1;
 
     public middleware_impl(){
         Log.i( "PetBusApp", "PetBusBusiness:middleware_impl" );
@@ -59,10 +61,61 @@ public class middleware_impl extends Application implements middleware {
         return 0;
     }
     public int get_record_count(){
-        String sql = "SELECT * FROM " + dbmanager.TABLE_RECORD + ";";
-        Cursor sql_result = m_database.get_result( sql );
-        return sql_result.getCount();
+        if( -1 == m_max_recordcount ) {
+            String sql = "SELECT * FROM " + dbmanager.TABLE_RECORD + ";";
+            Cursor sql_result = m_database.get_result( sql );
+            m_max_recordcount = sql_result.getCount();
+            sql_result.close();
+        }
+        return m_current_recordcount;
     }
+
+    public boolean is_loadover() {
+        return m_current_recordcount == m_max_recordcount;
+    }
+    public boolean should_loadrecord( int should_load ){
+        Log.i( "PetBusApp", "should_loadrecord: " + should_load + "m_current_recordcount： " + m_current_recordcount );
+        if( should_load != m_current_recordcount ) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean update_record_data( int load_num ){
+        Log.i( "PetBusApp", "update_record_data: " + load_num );
+        // try {
+        //     Thread.sleep(3000);//休眠10秒，模拟耗时操作
+        // } catch (InterruptedException e) {
+        //     e.printStackTrace();
+        // }
+        return true;
+    }
+
+    public int loadrecord( int load_num ) {
+        if( -1 == m_max_recordcount ){
+            String sql = "SELECT * FROM " + dbmanager.TABLE_RECORD + ";";
+            Cursor sql_result = m_database.get_result( sql );
+            m_max_recordcount = sql_result.getCount();
+            sql_result.close();
+        }
+        boolean re = m_current_recordcount == m_max_recordcount;
+        Log.i( "PetBusApp", "middleware_impl:loadrecord: " + load_num + " current:" + m_current_recordcount 
+                + " m_max_recordcount:" + m_max_recordcount );
+        if( true == re ){
+            return 0;
+        }
+        int size_left = m_max_recordcount - m_current_recordcount;
+        int size = size_left > load_num ? load_num : size_left;
+        boolean load_result = update_record_data( load_num );
+        if( true == load_result ){
+            m_current_recordcount += size;
+        }
+        Log.i( "PetBusApp", "loadrecord: " + load_num + " current:" + m_current_recordcount 
+                + " m_max_recordcount:" + m_max_recordcount );
+
+        return size;
+    }
+
 
     public int get_record( int position, StringBuffer time, List<Integer> list, StringBuffer action, StringBuffer remark, ArrayList<String> record_pic ){
         int re = middleware.RECORD_TYPE_RECORD;

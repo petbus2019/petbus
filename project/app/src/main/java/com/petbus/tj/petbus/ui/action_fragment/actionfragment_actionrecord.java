@@ -4,6 +4,8 @@ import com.petbus.tj.petbus.ui.R;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -42,6 +44,24 @@ import java.util.Map;
 import com.petbus.tj.petbus.middleware.middleware;
 import com.petbus.tj.petbus.middleware.middleware_impl;
 
+class string_bitmap_pair{
+    public string_bitmap_pair( String text , Bitmap pic ){
+        m_text = text;
+        m_bitmap = pic;
+    }
+
+    Bitmap get_bitmap() {
+        return m_bitmap;
+    }
+
+    String get_text() {
+        return m_text;
+    }
+
+    private String m_text;
+    private Bitmap m_bitmap;
+}
+
 class action_record{
     public action_record( int id, int type ){
         m_id = id;
@@ -49,76 +69,64 @@ class action_record{
         Log.i( "PetBusApp", "PetBus:new action_record id:" + id + "type:" + type );
     }
 
-    public void set_record( String time, List<Integer> list, String action, String remark, String picture_path ){
-        m_time = time;
-        m_petlist = list;
+    public void set_record( String time, List<string_bitmap_pair> list, string_bitmap_pair action, string_bitmap_pair remark ){
+        Log.i( "PetBusApp", "record:" + time + "--" + action + "--" + remark );
+        m_fulltime = time;
+
+        DateFormat format_date = new SimpleDateFormat( middleware.DATE_FORMAT_DATE );
+        java.util.Date date = null;
+        try{
+            date = format_date.parse(m_fulltime);
+        }
+        catch( ParseException e ){
+            e.printStackTrace();
+        }
+        m_date = format_date.format(date);
+
+        DateFormat format_time = new SimpleDateFormat( middleware.DATE_FORMAT_FULL );
+        java.util.Date date_time = null;
+        try{
+            date_time = format_time.parse(m_fulltime);
+        }
+        catch( ParseException e ){
+            e.printStackTrace();
+        }
+        DateFormat time_format = new SimpleDateFormat( middleware.DATE_FORMAT_TIME );
+        m_time = time_format.format(date_time);
+
         m_action = action;
+        m_petlist = list;
         m_remark = remark;
-        m_picture_path = picture_path;
-        // Log.i( "PetBusApp", "record:" + time + "--" + nickname + "--" + action + "--" + remark + "--" + picture_path );
+
+        return ;
     }
 
     public String get_full_time(){
-        return m_time;
+        return m_fulltime;
     }
 
-    public String get_date(){
-        DateFormat format = new SimpleDateFormat( middleware.DATE_FORMAT_DATE );
-        java.util.Date date = null;
-        try{
-            date = format.parse(m_time);
-        }
-        catch( ParseException e ){
-            e.printStackTrace();
-        }
-        String str = format.format(date);
-        Log.i( "PetBusApp", "get_date:" + str );
-
-        return str;
+    public String get_action_text(){
+        return m_action.get_text();
     }
 
-    public String get_time(){
-        DateFormat format = new SimpleDateFormat( middleware.DATE_FORMAT_FULL );
-        java.util.Date date = null;
-        try{
-            date = format.parse(m_time);
-        }
-        catch( ParseException e ){
-            e.printStackTrace();
-            return "0000";
-        }
-        DateFormat time_format = new SimpleDateFormat( middleware.DATE_FORMAT_TIME );
-        String str = time_format.format(date);
-        Log.i( "PetBusApp", "get_time:" + str );
-
-        return str;
+    public String get_remark_text(){
+        return m_remark.get_text();
     }
-    public List<Integer> get_petlist(){
+
+    public Bitmap get_remark_image(){
+        return m_remark.get_bitmap();
+    }
+
+    public List<string_bitmap_pair> get_petlist(){
         return m_petlist;
     }
 
-    public String get_nickphoto(){
-        return m_picture_path;
+    public String get_date(){
+        return m_date;
     }
-    public String get_action(){
-        return m_action;
-    }
-    public String get_remark(){
-        return m_remark;
-    }
-    public String get_remark_picture(){
-        return m_picture_path;
-    }
-    public String get_remark_thumbnail_picture(){
-        Log.i( "PetBusApp", "actionfragment_diary:m_picture_path::" + m_picture_path + "----" + String.valueOf(m_picture_path == null) + "---" + String.valueOf( m_picture_path.isEmpty() ) );
-        if( !m_picture_path.isEmpty() || m_picture_path == null ){
-            return m_picture_path;
-        }
-        int dot = m_picture_path.lastIndexOf('.');
-        String prefix = m_picture_path.substring( 0,dot );
-        Log.i( "PetBusApp", "actionfragment_diary:compressPixel" + prefix );
-        String thumbnail_file_name = prefix + "_thumbnail.jpg";
-        return thumbnail_file_name;
+
+    public String get_time(){
+        return m_time;
     }
 
     public int get_record_type(){
@@ -130,28 +138,26 @@ class action_record{
     
     private int m_id;
     private int m_type;
+    private String m_fulltime;
     private String m_time;
-    private List<Integer> m_petlist;
-    private String m_action;
-    private String m_remark;
-    private String m_picture_path;
-    
+    private String m_date;
+    private string_bitmap_pair m_action;
+    private string_bitmap_pair m_remark;
+    List<string_bitmap_pair> m_petlist;
 }
 
-class record_daily_listview extends ArrayAdapter<action_record> {
+class record_daily_listadapter extends ArrayAdapter<action_record> {
 
-    private middleware m_middleware;
     private int resourceID;
     private Context m_Context;
     private DisplayMetrics mDisplayMetrics;
     private List<action_record> mList;
 
-    public record_daily_listview(Context context, int textViewResourceId,List<action_record>objects){
+    public record_daily_listadapter( Context context, int textViewResourceId,List<action_record>objects ){
         super(context,textViewResourceId,objects);
         m_Context = context;
         resourceID = textViewResourceId;
         mDisplayMetrics = m_Context.getResources().getDisplayMetrics();
-        m_middleware = middleware_impl.getInstance();
         mList = objects;
     }
 
@@ -188,6 +194,80 @@ class record_daily_listview extends ArrayAdapter<action_record> {
         }
         return Week;
     }
+
+    private View get_view_for_date( action_record record, ViewGroup parent ) {
+        View convertView;
+        view_holder_date date_view = null;
+        date_view = new view_holder_date();
+        convertView = LayoutInflater.from(getContext()).inflate(R.layout.record_date
+                                                               , parent, false);
+        date_view.m_date_text = (TextView) convertView.findViewById(R.id.daily_text);
+        convertView.setTag(R.layout.record_date, date_view);
+        // String full_date_text = record.get_date() + "  " + getWeek( record.get_full_time() );
+        // date_view.m_date_text.setText( full_date_text );
+
+        return convertView;
+    }
+    private View get_view_for_record( action_record record ,ViewGroup parent ) {
+        View convertView;
+        view_holder_record record_view = null;
+        record_view = new view_holder_record();
+        convertView = LayoutInflater.from(getContext()).inflate(R.layout.record_record
+                                                               , parent, false);
+        convertView.setTag(R.layout.record_record, record_view);
+        record_view.m_record_times = (TextView) convertView.findViewById(R.id.record_times);
+        record_view.m_record_action = (TextView) convertView.findViewById(R.id.recode_actioin_text);
+
+        TextView  textview_1 = (TextView) convertView.findViewById(R.id.nickname_text_1);
+        ImageView image_1 = (ImageView) convertView.findViewById(R.id.recode_image_1);
+        record_view.m_textview_list.add( textview_1 );
+        record_view.m_image_list.add( image_1 );
+
+        TextView  textview_2 = (TextView) convertView.findViewById(R.id.nickname_text_2);
+        ImageView image_2 = (ImageView) convertView.findViewById(R.id.recode_image_2);
+        record_view.m_textview_list.add( textview_2 );
+        record_view.m_image_list.add( image_2 );
+
+        TextView  textview_3 = (TextView) convertView.findViewById(R.id.nickname_text_3);
+        ImageView image_3 = (ImageView) convertView.findViewById(R.id.recode_image_3);
+        record_view.m_textview_list.add( textview_3 );
+        record_view.m_image_list.add( image_3 );
+
+        TextView  textview_4 = (TextView) convertView.findViewById(R.id.nickname_text_4);
+        ImageView image_4 = (ImageView) convertView.findViewById(R.id.recode_image_4);
+        record_view.m_textview_list.add( textview_4 );
+        record_view.m_image_list.add( image_4 );
+
+        record_view.m_remark_text = (TextView) convertView.findViewById(R.id.recode_remark_text);
+        record_view.m_remark_image = ( ImageView )convertView.findViewById( R.id.recode_petportrait_image );
+
+        return convertView;
+    }
+
+    private void update_holder_by_record( view_holder_record holder, action_record record ) {
+        holder.m_record_times.setText( record.get_time() );
+        holder.m_record_action.setText( record.get_action_text() );
+
+        holder.disable_all_list();
+        List<string_bitmap_pair> list = record.get_petlist();
+        for( int i = 0;i < list.size();i ++ ) {
+            // TextView nickname = holder.m_textview_list.get(i);
+            // nickname.setText( list.get(i).get_text() );
+            // nickname.setVisibility( View.VISIBLE );
+
+            ImageView pet_photo_view = holder.m_image_list.get(i);
+            Bitmap bitmap = list.get(i).get_bitmap();
+            pet_photo_view.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            pet_photo_view.setImageBitmap(bitmap);
+            pet_photo_view.setVisibility( View.VISIBLE );
+        }
+
+        holder.m_remark_text.setText( record.get_remark_text() );
+        holder.m_remark_image.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        holder.m_remark_image.setImageBitmap(record.get_remark_image());
+
+        return;
+    }
     
     // http://www.360doc.com/content/14/0917/15/15077656_410189820.shtml
     // https://cloud.tencent.com/developer/article/1331002
@@ -196,147 +276,86 @@ class record_daily_listview extends ArrayAdapter<action_record> {
     public View getView(int position, View convertView, ViewGroup parent) {
         action_record record = getItem(position);
 
-        view_holder_date date_view = null;
-        view_holder_record record_view = null;
-
         switch( record.get_record_type() ){
             case middleware.RECORD_TYPE_DATE:
-                if( null == convertView )
-                {
-                    date_view = new view_holder_date();
-                    convertView = LayoutInflater.from(getContext()).inflate(R.layout.record_date
-                                                                           , parent, false);
-                    TextView date = (TextView) convertView.findViewById(R.id.daily_text);
-                    convertView.setTag(R.layout.record_date, date_view);
-                    String full_date_text = record.get_date() + "  " + getWeek( record.get_full_time() );
-                    date.setText( full_date_text );
+                if( null == convertView ) {
+                    convertView = get_view_for_date( record, parent );
                 } else {
                     Object test = convertView.getTag( R.layout.record_date );
                     if( null == test ) {
-
+                        convertView = get_view_for_date( record, parent );
                     }
                 }
+
+                view_holder_date viewHolder = (view_holder_date)convertView.getTag( R.layout.record_date );
+                String full_date_text = record.get_date() + "  " + getWeek( record.get_full_time() );
+                viewHolder.m_date_text.setText( full_date_text );
+
                 break;
             case middleware.RECORD_TYPE_RECORD:
-                if( null == convertView )
-                {
-                    record_view = new view_holder_record();
-                    convertView = LayoutInflater.from(getContext()).inflate(R.layout.record_record
-                                                                           , parent, false); 
-                    convertView.setTag(R.layout.record_record, record_view); 
-                    TextView record_times = (TextView) convertView.findViewById(R.id.record_times);
-                    record_times.setText( record.get_time() );
-
-                    TextView record_action = (TextView) convertView.findViewById(R.id.recode_actioin_text);
-                    record_action.setText( record.get_action() );
-                    
-                    List<Integer> pet_list = record.get_petlist();
-                    List<TextView> textview_list = new ArrayList<TextView>();
-                    List<ImageView> image_list = new ArrayList<ImageView>();
-
-                    // Log.i( "PetBusApp", "PetBus:pet_list " + pet_list );
-
-                    TextView nickname_text_1 = (TextView) convertView.findViewById(R.id.nickname_text_1);
-                    textview_list.add( nickname_text_1 );
-                    ImageView nickname_image_1 = (ImageView) convertView.findViewById(R.id.recode_image_1);
-                    image_list.add( nickname_image_1 );
-                    nickname_image_1.setVisibility( View.INVISIBLE );
-                    nickname_text_1.setVisibility( View.INVISIBLE );
-                    
-                    TextView nickname_text_2 = (TextView) convertView.findViewById(R.id.nickname_text_2);
-                    textview_list.add( nickname_text_2 );
-                    ImageView nickname_image_2 = (ImageView) convertView.findViewById(R.id.recode_image_2);
-                    image_list.add( nickname_image_2 );
-                    nickname_image_2.setVisibility( View.INVISIBLE );
-                    nickname_text_2.setVisibility( View.INVISIBLE );
-
-                    TextView nickname_text_3 = (TextView) convertView.findViewById(R.id.nickname_text_3);
-                    textview_list.add( nickname_text_3 );
-                    ImageView nickname_image_3 = (ImageView) convertView.findViewById(R.id.recode_image_3);
-                    image_list.add( nickname_image_3 );
-                    nickname_image_3.setVisibility( View.INVISIBLE );
-                    nickname_text_3.setVisibility( View.INVISIBLE );
-
-                    TextView nickname_text_4 = (TextView) convertView.findViewById(R.id.nickname_text_4);
-                    textview_list.add( nickname_text_4 );
-                    ImageView nickname_image_4 = (ImageView) convertView.findViewById(R.id.recode_image_4);
-                    image_list.add( nickname_image_4 );
-                    nickname_image_4.setVisibility( View.INVISIBLE );
-                    nickname_text_4.setVisibility( View.INVISIBLE );
-
-
-                    for( int i = 0;i < pet_list.size();i ++ )
-                    {
-                       // Log.i( "PetBusApp", "PetBus:pet_list )))) " + i );
-                        Map<String,Object> pet_info = m_middleware.getPetInfo( pet_list.get(i) + 1 );
-                        TextView nickname = textview_list.get(i);
-                        nickname.setText( String.valueOf( pet_info.get( middleware.PETINFO_TYPE_NAME ) ) );
-
-                        ImageView pet_photo_view = image_list.get(i);
-                        Bitmap bitmap = BitmapFactory.decodeFile( String.valueOf( pet_info.get( middleware.PETINFO_TYPE_PHOTO ) ) );
-                        pet_photo_view.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                        pet_photo_view.setImageBitmap(bitmap);
-                        pet_photo_view.setVisibility( View.VISIBLE );
-                        nickname.setVisibility( View.VISIBLE );
-                    }
-
-                    TextView remark_text = (TextView) convertView.findViewById(R.id.recode_remark_text);
-                    remark_text.setText( record.get_remark() );
-
-                    ImageView imageview_picture = ( ImageView )convertView.findViewById( R.id.recode_petportrait_image );
-                    if( null != record.get_remark_thumbnail_picture() )
-                    {
-                        Bitmap bitmap = BitmapFactory.decodeFile(record.get_remark_thumbnail_picture());
-                        imageview_picture.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                        imageview_picture.setImageBitmap(bitmap);
-                    }
+                if( null == convertView ) {
+                    convertView = get_view_for_record( record, parent );
                 } else {
                     Object test = convertView.getTag( R.layout.record_record );
                     if( null == test ) {
-
+                        convertView = get_view_for_record( record, parent );
                     }
                 }
+                view_holder_record holder_record = (view_holder_record)convertView.getTag( R.layout.record_record );
+                update_holder_by_record( holder_record, record );
                 break;
         }
 
         return convertView;
     }
     @Override public int getCount() { 
-        return m_middleware.get_record_count();
+        return mList.size();
     }
-
     @Override public action_record getItem(int position) { 
-        
-        StringBuffer time = new StringBuffer();
-        StringBuffer action = new StringBuffer();
-        StringBuffer remark = new StringBuffer();
-        List<Integer> list = new ArrayList<Integer>();
-        ArrayList<String> record_pic = new ArrayList<String>();
-        int type = m_middleware.get_record( position, time, list, action, remark,record_pic );
-        action_record record = new action_record( position, type );
-
-        record.set_record( time.toString(), list, action.toString(), remark.toString(), record_pic.get(0) );
-        return record;
+        return mList.get( position );
     }
     @Override public long getItemId(int position) {
         return position;
     }
 
     private class view_holder_date {
+        TextView m_date_text;
     }
     
     private class view_holder_record{
+        public void disable_all_list(){
+
+            int size = m_textview_list.size();
+            for (int i = 0; i < size; i++) {
+                m_textview_list.get(i).setVisibility( View.INVISIBLE );
+            }
+
+            size = m_image_list.size();
+            for (int i = 0; i < size; i++) {
+                m_image_list.get(i).setVisibility( View.INVISIBLE );
+            }
+            return ;
+        }
+        TextView m_record_times;
+        TextView m_record_action;
+        TextView m_remark_text;
+        ImageView m_remark_image;
+
+        List<TextView>  m_textview_list = new ArrayList<TextView>();
+        List<ImageView> m_image_list = new ArrayList<ImageView>();
     }
-} 
+}
 
 
 public class actionfragment_actionrecord extends Fragment implements OnClickListener
                                                                     ,OnItemClickListener
 {
+    public static final int SIZE_PER_PAGE = 6;
     private List<action_record> m_daily_record_list = new ArrayList<>();
     private middleware m_middleware;
     private ui_interface m_tigger;
-    private ArrayAdapter<action_record> m_adapter;
+    // private ArrayAdapter<action_record> m_adapter;
+    private record_daily_listadapter m_adapter;
     private ImageButton mBtn_profile;
 
     private TextView m_lastaction_1;
@@ -345,6 +364,27 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
 
     private ImageView m_pet_image;
     private TextView  m_pet_name;
+    private actionlistview m_listview;
+
+    private int m_load_number = SIZE_PER_PAGE;
+    private boolean m_is_finished = false;
+
+    private Handler m_handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            boolean result = (boolean) msg.obj;
+            Log.i( "PetBusApp", "handleMessage： " + result );
+            switch(msg.what){
+                case 0:
+                    break;
+                case 1:
+                    m_listview.onFinishLoading( result );
+                    break;
+                default:
+                    break;
+                }
+            }
+        };
 
 
     public void update_listdata(){
@@ -470,12 +510,60 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
         }
     }
 
+    private String get_remark_thumbnail_picture( String src_path ){
+        Log.i( "PetBusApp", "get_remark_thumbnail_picture:" + src_path );
+        if( !src_path.isEmpty() || src_path == null ){
+            return src_path;
+        }
+        int dot = src_path.lastIndexOf('.');
+        String prefix = src_path.substring( 0,dot );
+        String thumbnail_file_name = prefix + "_thumbnail.jpg";
+        return thumbnail_file_name;
+    }
+
+    private action_record update_item( int position ){
+        StringBuffer time = new StringBuffer();
+        StringBuffer action = new StringBuffer();
+        StringBuffer remark = new StringBuffer();
+        List<Integer> pet_list = new ArrayList<Integer>();
+        ArrayList<String> record_pic = new ArrayList<String>();
+        int type = m_middleware.get_record( position, time, pet_list, action, remark,record_pic );
+        
+        Log.i( "PetBusApp", "update_item: " + position );
+        action_record record = new action_record( position, type );
+        List<string_bitmap_pair> pet_info_list = new ArrayList<string_bitmap_pair>();
+        for( int i = 0;i < pet_list.size();i ++ )
+        {
+            Map<String,Object> pet_info = m_middleware.getPetInfo( pet_list.get(i) + 1 );
+            Log.i( "PetBusApp", "pet_list: " + pet_list.get(i) + ":-:" + String.valueOf( pet_info.get( middleware.PETINFO_TYPE_PHOTO ) ) );
+            Bitmap bitmap = BitmapFactory.decodeFile( String.valueOf( pet_info.get( middleware.PETINFO_TYPE_PHOTO ) ) );
+            String nic_name = String.valueOf( pet_info.get( middleware.PETINFO_TYPE_NAME ) );
+            string_bitmap_pair tmp = new string_bitmap_pair( String.valueOf( pet_info.get( middleware.PETINFO_TYPE_NAME ) ), bitmap );
+            pet_info_list.add( tmp );
+        }
+
+        String src_path = record_pic.get(0);
+        Bitmap remark_bitmap = null;
+        if( null != get_remark_thumbnail_picture( src_path ) )
+        {
+            remark_bitmap = BitmapFactory.decodeFile( get_remark_thumbnail_picture( src_path ) );
+        }
+        string_bitmap_pair remark_pair = new string_bitmap_pair( remark.toString(),remark_bitmap );
+        Log.i( "PetBusApp", "remark: " + remark.toString() + "--" + get_remark_thumbnail_picture( src_path ) );
+
+        /*
+        ToDo:这里需要根据不同的action的图标来转换。
+        */
+        string_bitmap_pair action_pair = new string_bitmap_pair( action.toString(),null );
+        record.set_record( time.toString(), pet_info_list, action_pair, remark_pair );
+        return record;
+    }
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState ){
         m_middleware = middleware_impl.getInstance();
 
         View view = inflater.inflate(R.layout.actionfragment_actionrecord, container, false);
-        m_adapter = new record_daily_listview(this.getActivity(),
+        m_adapter = new record_daily_listadapter(this.getActivity(),
                 R.layout.record_daily_record,m_daily_record_list);
 
         m_pet_image = (ImageView)view.findViewById(R.id.pet_photo);
@@ -485,10 +573,37 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
         m_lastaction_2 = (TextView)view.findViewById(R.id.text_lastaction2);
         m_lastaction_3 = (TextView)view.findViewById(R.id.text_lastaction3);
 
-        ListView listView =(ListView)view.findViewById(R.id.list_view);
-        listView.setAdapter(m_adapter);
-        listView.setOnItemClickListener(this);
-        Log.i( "PetBusApp", "PetBus:getView " + m_daily_record_list );
+        m_listview =(actionlistview)view.findViewById(R.id.list_view);
+        m_listview.setOnItemClickListener(this);
+        m_listview.setOnPullUpLoadMoreListener(new actionlistview.OnPullUpLoadMoreListener() {
+            @Override
+            public void onPullUpLoadMore() {
+                new Thread(){
+                    @Override
+                    public void run() {
+                        Message message = new Message();
+                        int count_org = m_middleware.get_record_count();
+                        int load_number = m_middleware.loadrecord( m_load_number );
+                        // if( load_number > 0 ){
+                        //     m_load_number += load_number;
+                        // }
+                        Log.i( "PetBusApp", "run--(" + m_load_number + ")---(" + load_number + ")(" + count_org + ")" );
+                        int count = m_middleware.get_record_count();
+                        // m_daily_record_list.clear();
+                        for( int i = count_org;i < count;i++ ){
+                            action_record record = update_item( i );
+                            m_daily_record_list.add( record );
+                        }
+                        m_load_number = count;
+                        
+                        message.what = 1;
+                        message.obj = m_middleware.is_loadover();
+                        m_handler.sendMessage(message);
+                    }
+                }.start();
+            }
+        });
+        m_listview.setAdapter(m_adapter);
 
         Button button = ( Button )view.findViewById( R.id.add_action_button );
         button.setOnClickListener(this);
@@ -503,7 +618,7 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
         return view;
     }
     public void onItemClick(AdapterView<?> var1, View var2, int position, long var4){
-        Log.i( "PetBusApp", "PetBus:onItemClick :" + position + "view:" + var2 );
+        Log.i( "PetBusApp", "PetBus:onItemClick :" + position + " view:" + var2 );
         return ;
     }
     @Override
@@ -521,5 +636,8 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
     public void onResume(){
         super.onResume();
         Log.i( "PetBusApp", "PetBus:onResume " );
+        if( m_middleware.should_loadrecord( m_load_number ) ){
+            m_listview.startloading();
+        }
     }
 }

@@ -30,7 +30,9 @@ public interface middleware{
 
     ArrayList<String> get_action_list();
     ArrayList<String> get_petname_list();
-
+    boolean should_loadrecord( int shoudl_load );
+    boolean is_loadover();
+    int loadrecord( int count );
     int get_record_count();
     int get_last_three_record( Map<String,String> record_map );
     int new_record( String time, List<Integer> list, String action, String remark, ArrayList<String> record_pic );
