@@ -23,7 +23,6 @@ import android.widget.HeaderViewListAdapter;
 
 import java.util.List;
 import java.util.ArrayList;
-import android.util.Log;
 
 class LoadMoreView extends LinearLayout {
 
@@ -71,6 +70,7 @@ public class actionlistview extends ListView {
     public void reset() {
         mIsLoading = false;
         mIsPageFinished = false;
+        startloading();
     }
 
     private void init() {
@@ -88,8 +88,8 @@ public class actionlistview extends ListView {
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                Log.i( "PetBusApp", "actionlistview:onScroll " + firstVisibleItem + " -- "
-                      + visibleItemCount + "type:" + totalItemCount );
+                // Log.i( "PetBusApp", "actionlistview:onScroll " + firstVisibleItem + " -- "
+                //       + visibleItemCount + "type:" + totalItemCount );
                 // 调用用户设置的OnScrollListener
                 if (mUserOnScrollListener != null) {
                     mUserOnScrollListener.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);

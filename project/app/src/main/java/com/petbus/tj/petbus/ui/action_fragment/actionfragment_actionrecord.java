@@ -371,7 +371,7 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
         @Override
         public void handleMessage(Message msg) {
             boolean result = (boolean) msg.obj;
-            Log.i( "PetBusApp", "handleMessage£º " + result );
+            // Log.i( "PetBusApp", "handleMessage£º " + result );
             switch(msg.what){
                 case 0:
                     break;
@@ -389,12 +389,10 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
 
     public void update_listdata(){
         int i = 0;
-        Log.i( "PetBusApp", "update_listdata" );
         Date now = new Date(System.currentTimeMillis());
 
         Map<String, String> action_map =  new HashMap<>();
         m_middleware.get_last_three_record( action_map );
-        Log.i( "PetBusApp", "actionfragment_actionrecord:update_listdata" + action_map );
 
         String text_null = getActivity().getResources().getString( R.string.nullstring );
         m_lastaction_1.setText( text_null );
@@ -402,7 +400,6 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
         m_lastaction_3.setText( text_null );
         
         Map<String,Object> pet_info = m_middleware.get_current_pet();
-        Log.i( "PetBusApp","info:" + pet_info );
 
         Bitmap bitmap = BitmapFactory.decodeFile( String.valueOf( pet_info.get( middleware.PETINFO_TYPE_PHOTO ) ) );
         m_pet_image.setScaleType(ImageView.ScaleType.FIT_CENTER);
@@ -411,7 +408,6 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
         m_pet_name.setText(  String.valueOf( pet_info.get( middleware.PETINFO_TYPE_NAME ) ) );
 
         for (Map.Entry<String, String> entry : action_map.entrySet()) {
-            Log.i("PetBusApp",entry.getKey() + ":" + entry.getValue());
             SimpleDateFormat format = new SimpleDateFormat( middleware_impl.DATE_FORMAT_FULL );
             Date d2 = null;
             try{
@@ -431,7 +427,6 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
 
             if( 0 == i )
             {
-                Log.i("PetBusApp","actioind-1");
                 if( days > 0 ){
                     String text = getActivity().getResources().getString( R.string.day_before );
                     m_lastaction_1.setText( entry.getKey() + ":" + String.valueOf(days) + text );
@@ -451,7 +446,6 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
             }
             else if( 1 == i )
             {
-                Log.i("PetBusApp","actioind-2");
                 if( days > 0 ){
                     String text = getActivity().getResources().getString( R.string.day_before );
                     m_lastaction_2.setText( entry.getKey() + ":" + String.valueOf(days) + text );
@@ -471,7 +465,6 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
             }
             else if( 2 == i )
             {
-                Log.i("PetBusApp","actioind-3");
                 if( days > 0 ){
                     String text = getActivity().getResources().getString( R.string.day_before );
                     m_lastaction_3.setText( entry.getKey() + ":" + String.valueOf(days) + text );
@@ -496,7 +489,6 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
     }
 
     public void onClick( View view ) {
-        Log.i( "PetBusApp", "actionfragment_actionrecord:onClick" );
         switch( view.getId() )
         {
             case R.id.add_action_button:
@@ -512,7 +504,6 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
     }
 
     private String get_remark_thumbnail_picture( String src_path ){
-        Log.i( "PetBusApp", "get_remark_thumbnail_picture:" + src_path );
         if( !src_path.isEmpty() || src_path == null ){
             return src_path;
         }
@@ -530,13 +521,13 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
         ArrayList<String> record_pic = new ArrayList<String>();
         int type = m_middleware.get_record( position, time, pet_list, action, remark,record_pic );
         
-        Log.i( "PetBusApp", "update_item: " + position );
+        // Log.i( "PetBusApp", "update_item: " + position );
         action_record record = new action_record( position, type );
         List<string_bitmap_pair> pet_info_list = new ArrayList<string_bitmap_pair>();
         for( int i = 0;i < pet_list.size();i ++ )
         {
             Map<String,Object> pet_info = m_middleware.getPetInfo( pet_list.get(i) + 1 );
-            Log.i( "PetBusApp", "pet_list: " + pet_list.get(i) + ":-:" + String.valueOf( pet_info.get( middleware.PETINFO_TYPE_PHOTO ) ) );
+            // Log.i( "PetBusApp", "pet_list: " + pet_list.get(i) + ":-:" + String.valueOf( pet_info.get( middleware.PETINFO_TYPE_PHOTO ) ) );
             Bitmap bitmap = BitmapFactory.decodeFile( String.valueOf( pet_info.get( middleware.PETINFO_TYPE_PHOTO ) ) );
             String nic_name = String.valueOf( pet_info.get( middleware.PETINFO_TYPE_NAME ) );
             string_bitmap_pair tmp = new string_bitmap_pair( String.valueOf( pet_info.get( middleware.PETINFO_TYPE_NAME ) ), bitmap );
@@ -550,7 +541,7 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
             remark_bitmap = BitmapFactory.decodeFile( get_remark_thumbnail_picture( src_path ) );
         }
         string_bitmap_pair remark_pair = new string_bitmap_pair( remark.toString(),remark_bitmap );
-        Log.i( "PetBusApp", "remark: " + remark.toString() + "--" + get_remark_thumbnail_picture( src_path ) );
+        // Log.i( "PetBusApp", "remark: " + remark.toString() + "--" + get_remark_thumbnail_picture( src_path ) );
 
         /*
         ToDo:这里需要根据不同的action的图标来转换。
@@ -632,7 +623,7 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
                         // if( load_number > 0 ){
                         //     m_load_number += load_number;
                         // }
-                        Log.i( "PetBusApp", "run--(" + m_load_number + ")---(" + load_number + ")(" + count_org + ")" );
+                        // Log.i( "PetBusApp", "run--(" + m_load_number + ")---(" + load_number + ")(" + count_org + ")" );
                         int count = m_middleware.get_record_count();
                         m_added_list.clear();
                         for( int i = count_org;i < count;i++ ){
@@ -663,7 +654,6 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
         return view;
     }
     public void onItemClick(AdapterView<?> var1, View var2, int position, long var4){
-        Log.i( "PetBusApp", "PetBus:onItemClick :" + position + " view:" + var2 );
         return ;
     }
     @Override
