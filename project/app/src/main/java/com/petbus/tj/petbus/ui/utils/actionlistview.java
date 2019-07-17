@@ -68,6 +68,11 @@ public class actionlistview extends ListView {
         init();
     }
 
+    public void reset() {
+        mIsLoading = false;
+        mIsPageFinished = false;
+    }
+
     private void init() {
         mIsLoading = false;
         mIsPageFinished = false;

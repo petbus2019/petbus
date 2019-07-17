@@ -203,8 +203,6 @@ class record_daily_listadapter extends ArrayAdapter<action_record> {
                                                                , parent, false);
         date_view.m_date_text = (TextView) convertView.findViewById(R.id.daily_text);
         convertView.setTag(R.layout.record_date, date_view);
-        // String full_date_text = record.get_date() + "  " + getWeek( record.get_full_time() );
-        // date_view.m_date_text.setText( full_date_text );
 
         return convertView;
     }
@@ -355,7 +353,6 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
     private List<action_record> m_added_list = new ArrayList<action_record>();
     private middleware m_middleware;
     private ui_interface m_tigger;
-    // private ArrayAdapter<action_record> m_adapter;
     private record_daily_listadapter m_adapter;
     private ImageButton mBtn_profile;
 
@@ -494,6 +491,8 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
             }
             i++;
         }
+        m_daily_record_list.clear();
+        m_listview.reset();
     }
 
     public void onClick( View view ) {
