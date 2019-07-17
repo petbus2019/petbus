@@ -545,22 +545,18 @@ public class petbus_action extends FragmentActivity implements OnClickListener,u
         return ;
     }
 
-    private long m_firstkeytime = 0;
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if( keyCode == KeyEvent.KEYCODE_BACK ){
-            if( System.currentTimeMillis() - m_firstkeytime > 3000 ){
-                Toast.makeText(petbus_action.this, R.string.doubletoexit, Toast.LENGTH_LONG ).show();
-                m_firstkeytime = System.currentTimeMillis();
-            }
-            else {
-                m_firstkeytime = 0;
+            Log.i( "PetBusApp", "back key" );
+            if( ui_interface.MAINFRAMGENT_ID == m_fragment_id ){
                 Intent home = new Intent(Intent.ACTION_MAIN);
                 home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 home.addCategory(Intent.CATEGORY_HOME);
                 startActivity(home);
+            } else {
+                active_fragment( ui_interface.MAINFRAMGENT_ID );
             }
-            Log.i( "PetBusApp", "back key" );
             return true;
         }
 

@@ -351,7 +351,8 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
                                                                     ,OnItemClickListener
 {
     public static final int SIZE_PER_PAGE = 6;
-    private List<action_record> m_daily_record_list = new ArrayList<>();
+    private List<action_record> m_daily_record_list = new ArrayList<action_record>();
+    private List<action_record> m_added_list = new ArrayList<action_record>();
     private middleware m_middleware;
     private ui_interface m_tigger;
     // private ArrayAdapter<action_record> m_adapter;
@@ -373,12 +374,14 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
         @Override
         public void handleMessage(Message msg) {
             boolean result = (boolean) msg.obj;
-            Log.i( "PetBusApp", "handleMessage： " + result );
+            Log.i( "PetBusApp", "handleMessage£º " + result );
             switch(msg.what){
                 case 0:
                     break;
                 case 1:
                     m_listview.onFinishLoading( result );
+                    m_daily_record_list.addAll( m_added_list );
+                    m_adapter.notifyDataSetChanged();
                     break;
                 default:
                     break;
@@ -390,7 +393,6 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
     public void update_listdata(){
         int i = 0;
         Log.i( "PetBusApp", "update_listdata" );
-        m_adapter.notifyDataSetChanged();
         Date now = new Date(System.currentTimeMillis());
 
         Map<String, String> action_map =  new HashMap<>();
@@ -559,12 +561,56 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
         return record;
     }
     @Override
-    public View onCreateView( LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState ){
+    public void onStart() {
+        super.onStart();
+        Log.e("PetBusApp", "PetBus onStart~~~");
+    }
+    
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.e("PetBusApp", "actionrecord:onPause~~~");
+    }
+ 
+    
+    @Override
+    public void onStop() {
+        super.onStop();
+        m_middleware.loadrecord( -1 );
+        // m_daily_record_list.clear();
+        // m_adapter.notifyDataSetChanged();
+        Log.e("PetBusApp", "actionrecord:onStop~~~");
+    }
+ 
+    
+    //销毁Fragment所包含的View组件时，调用
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.e("PetBusApp", "actionrecord:onDestroyView~~~");
+    }
+    
+ 
+    //销毁Fragment时调用
+    public void onDestroy() {
+        super.onDestroy();
+        Log.e("PetBusApp", "actionrecord:onDestroy~~~");
+    }
+
+    @Override  
+    public void onCreate(Bundle savedInstanceState)
+    {  
+        super.onCreate(savedInstanceState);
+        Log.e( "PetBusApp", "actionrecord:onCreate" );
         m_middleware = middleware_impl.getInstance();
 
-        View view = inflater.inflate(R.layout.actionfragment_actionrecord, container, false);
         m_adapter = new record_daily_listadapter(this.getActivity(),
                 R.layout.record_daily_record,m_daily_record_list);
+    }
+    @Override
+    public View onCreateView( LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState ){
+        Log.e( "PetBusApp", "actionrecord:onCreateView" );
+
+        View view = inflater.inflate(R.layout.actionfragment_actionrecord, container, false);
 
         m_pet_image = (ImageView)view.findViewById(R.id.pet_photo);
         m_pet_name = (TextView)view.findViewById(R.id.pet_nickname_text);
@@ -589,13 +635,13 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
                         // }
                         Log.i( "PetBusApp", "run--(" + m_load_number + ")---(" + load_number + ")(" + count_org + ")" );
                         int count = m_middleware.get_record_count();
-                        // m_daily_record_list.clear();
+                        m_added_list.clear();
                         for( int i = count_org;i < count;i++ ){
                             action_record record = update_item( i );
-                            m_daily_record_list.add( record );
+                            m_added_list.add( record );
                         }
                         m_load_number = count;
-                        
+
                         message.what = 1;
                         message.obj = m_middleware.is_loadover();
                         m_handler.sendMessage(message);

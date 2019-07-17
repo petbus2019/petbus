@@ -98,6 +98,10 @@ public class middleware_impl extends Application implements middleware {
             m_max_recordcount = sql_result.getCount();
             sql_result.close();
         }
+        if( -1 == load_num ){
+            m_current_recordcount = 0;
+            return 0;
+        }
         boolean re = m_current_recordcount == m_max_recordcount;
         Log.i( "PetBusApp", "middleware_impl:loadrecord: " + load_num + " current:" + m_current_recordcount 
                 + " m_max_recordcount:" + m_max_recordcount );
@@ -218,6 +222,7 @@ public class middleware_impl extends Application implements middleware {
                    + "\",\'" + strid + "\'" + ",\'" + time +  "\');";
             m_database.execute_sql( sql );
         }
+        m_current_recordcount = 0;
         return middleware.MIDDLEWARE_RETURN_OK;
     }
     public ArrayList<String> get_action_list(){
