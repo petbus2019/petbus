@@ -510,5 +510,10 @@ public class actionfragment_diary extends Fragment implements OnClickListener
             Log.i( "PetBusApp", "PetBus:onHiddenChanged time:" + time );
             m_time_text.setText( time );
         }
+        else {
+            m_imageview_picture.setImageDrawable(getResources().getDrawable((R.mipmap.camera_normal)));
+            m_picture_filename = "";
+            m_remark_edit.setText("");
+        }
     }
 }
