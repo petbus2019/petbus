@@ -461,6 +461,11 @@ public class actionfragment_diary extends Fragment implements OnClickListener
         String remark_text = m_remark_edit.getText().toString();
         ArrayList<String> picture_list = new ArrayList<String>();
         picture_list.add( m_picture_filename );
+        if( 0 == m_petid_list.size() ){
+            Toast.makeText(getActivity(), "未选择爱宠，请选择爱宠", Toast.LENGTH_LONG ).show();
+            Log.i( "PetBusApp", "PetBus:add empty pet" );
+            return ;
+        }
 
         int re = m_middleware.new_record( text, m_petid_list, action_text, remark_text, picture_list );
         if( middleware.MIDDLEWARE_RETURN_OK == re )
