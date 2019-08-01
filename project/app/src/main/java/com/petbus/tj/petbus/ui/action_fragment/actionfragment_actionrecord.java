@@ -623,14 +623,19 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
                         // if( load_number > 0 ){
                         //     m_load_number += load_number;
                         // }
-                        // Log.i( "PetBusApp", "run--(" + m_load_number + ")---(" + load_number + ")(" + count_org + ")" );
+                        Log.i( "PetBusApp", "1run--(" + m_load_number + ")---(" + load_number + ")(" + count_org + ")" );
                         int count = m_middleware.get_record_count();
+                        Log.i( "PetBusApp", "2run--(" + m_load_number + 
+                            ")---(" + load_number + ")(" + count_org + ")" + "(" + count + ")" );
                         m_added_list.clear();
                         for( int i = count_org;i < count;i++ ){
                             action_record record = update_item( i );
                             m_added_list.add( record );
                         }
-                        m_load_number = count;
+                        if( count != -1 )
+                        {
+                            m_load_number = count;
+                        }
 
                         message.what = 1;
                         message.obj = m_middleware.is_loadover();
