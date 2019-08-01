@@ -61,7 +61,8 @@ public class middleware_impl extends Application implements middleware {
         return 0;
     }
     public int get_record_count(){
-        if( -1 == m_max_recordcount ) {
+        Log.i( "PetBusApp", "get_record_count:"  );
+        // if( -1 == m_max_recordcount ) {
             String sql = "SELECT * FROM " + dbmanager.TABLE_RECORD + ";";
             Cursor sql_result = m_database.get_result( sql );
             m_max_recordcount = sql_result.getCount();
@@ -69,7 +70,8 @@ public class middleware_impl extends Application implements middleware {
                 m_max_recordcount = -1;
             }
             sql_result.close();
-        }
+        // }
+        Log.i( "PetBusApp", "get_record_count:" + m_max_recordcount  );
         return m_current_recordcount;
     }
 
@@ -229,6 +231,8 @@ public class middleware_impl extends Application implements middleware {
                    + "\",\'" + strid + "\'" + ",\'" + time +  "\');";
             m_database.execute_sql( sql );
         }
+
+        get_record_count();
         m_current_recordcount = 0;
         return middleware.MIDDLEWARE_RETURN_OK;
     }

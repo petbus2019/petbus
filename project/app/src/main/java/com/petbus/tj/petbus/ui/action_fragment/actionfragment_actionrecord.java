@@ -634,7 +634,7 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
                         }
                         if( count != -1 )
                         {
-                            m_load_number = count;
+                            m_load_number = m_load_number > count? m_load_number:count;
                         }
 
                         message.what = 1;
