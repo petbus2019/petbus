@@ -48,7 +48,7 @@ public class middleware_impl extends Application implements middleware {
         String sql = "SELECT " + dbmanager.TABLE_RECORD + ".operation," + dbmanager.TABLE_RECORD_PETINFO + ".time " + 
                      "from " + dbmanager.TABLE_RECORD_PETINFO + " left join " + dbmanager.TABLE_RECORD +
                      " on " + dbmanager.TABLE_RECORD + ".id = " + dbmanager.TABLE_RECORD_PETINFO + ".record_id"
-                     + " where " + dbmanager.TABLE_RECORD_PETINFO + ".pet_id =" + pet_index +
+                     + " where " + dbmanager.TABLE_RECORD_PETINFO + ".pet_id = " + pet_index + " GROUP BY operation" +
                      " order by " + dbmanager.TABLE_RECORD_PETINFO + ".time DESC limit 3;";
         Cursor sql_result = m_database.get_result( sql );
         if (sql_result.moveToFirst()) {
