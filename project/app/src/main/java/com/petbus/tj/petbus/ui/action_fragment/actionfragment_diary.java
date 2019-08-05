@@ -113,18 +113,20 @@ class HorizontalListViewAdapter extends BaseAdapter{
             pet_name.setText( String.valueOf( pet_map.get( middleware.PETINFO_TYPE_NAME ) ) );
             // Log.d("PetBusApp", "pet:" + pet_map + " width:" + bitmap.getWidth() + "Height:" + bitmap.getHeight() );
         }
+        String text_null = "";
         if( m_selected_index.contains(position) ) {
+            text_null = "取消选择";
             convertView.setBackgroundColor(Color.GRAY);
         }
+        else {
+            text_null = "选择";
+        }
+        // TextView button_text = (TextView)convertView.findViewById(R.id.confirm_button);
+        // button_text.setText( text_null );
 
         return convertView;
     }
  
-    private static class ViewHolder {
-        private TextView mTitle ;
-        private ImageView mImage;
-    }
-
     public void setSelectIndex(int i){
         selectIndex = i;
     }
@@ -391,8 +393,8 @@ public class actionfragment_diary extends Fragment implements OnClickListener
             }
         });
         m_imageview_picture.setAdjustViewBounds(true);
-        m_imageview_picture.setMaxHeight(100);
-        m_imageview_picture.setMaxWidth(100);
+        // m_imageview_picture.setMaxHeight(400);
+        // m_imageview_picture.setMaxWidth(400);
 
         m_imageview_picture.setOnClickListener(this);
         m_entry_button.setOnClickListener(this);
@@ -441,7 +443,7 @@ public class actionfragment_diary extends Fragment implements OnClickListener
 
         for(int i = 0;i < m_petid_list.size(); i ++){
             position_to_id = m_petid_list.get(i) + 1;
-            ImageView image = m_image_list.get(i);
+            ImageView image = m_image_list.get( i );
 
             Map<String,Object> pet_map = m_middleware.getPetInfo( position_to_id );
             Bitmap bitmap = BitmapFactory.decodeFile(String.valueOf( pet_map.get( middleware.PETINFO_TYPE_PHOTO ) ));

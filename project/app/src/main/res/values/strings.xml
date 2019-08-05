@@ -45,7 +45,7 @@
     <string name="inputEmpty">请填写宠物信息</string>
     <string name="selected">选择</string>
     <string name="unselected">取消选择</string>
-    <string name="title">标题</string>
+    <string name="pet_select_title">请选择爱宠</string>
     <string name="confirm">确定</string>
     <string name="doubletoexit">双击返回退出</string>
     <string name="pageloading">加载中</string>

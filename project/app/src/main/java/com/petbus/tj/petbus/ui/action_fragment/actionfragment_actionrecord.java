@@ -28,6 +28,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.content.res.Resources;
 
 import java.text.SimpleDateFormat;
 import java.text.DateFormat;
@@ -215,12 +216,12 @@ class record_daily_listadapter extends ArrayAdapter<action_record> {
         convertView.setTag(R.layout.record_record, record_view);
         record_view.m_record_times = (TextView) convertView.findViewById(R.id.record_times);
         record_view.m_record_action = (TextView) convertView.findViewById(R.id.recode_actioin_text);
+        record_view.m_record_image = (ImageView) convertView.findViewById(R.id.record_action_icon);
 
         TextView  textview_1 = (TextView) convertView.findViewById(R.id.nickname_text_1);
         ImageView image_1 = (ImageView) convertView.findViewById(R.id.recode_image_1);
         record_view.m_textview_list.add( textview_1 );
         record_view.m_image_list.add( image_1 );
-
         TextView  textview_2 = (TextView) convertView.findViewById(R.id.nickname_text_2);
         ImageView image_2 = (ImageView) convertView.findViewById(R.id.recode_image_2);
         record_view.m_textview_list.add( textview_2 );
@@ -243,16 +244,25 @@ class record_daily_listadapter extends ArrayAdapter<action_record> {
     }
 
     private void update_holder_by_record( view_holder_record holder, action_record record ) {
+        String action_text = record.get_action_text(); 
         holder.m_record_times.setText( record.get_time() );
         holder.m_record_action.setText( record.get_action_text() );
+        if( action_text.equals("喂食") ) {
+            holder.m_record_image.setImageDrawable(m_Context.getResources().getDrawable((R.mipmap.fade)));
+        }
+        else if( action_text.equals("铲屎") ) {
+            holder.m_record_image.setImageDrawable(m_Context.getResources().getDrawable((R.mipmap.photo_normal)));
+        }
+        else if( action_text.equals("洗澡") ) {
+            holder.m_record_image.setImageDrawable(m_Context.getResources().getDrawable((R.mipmap.setting_normal)));
+        }
+        else if( action_text.equals("遛弯") ) {
+            holder.m_record_image.setImageDrawable(m_Context.getResources().getDrawable((R.mipmap.overview_normal)));
+        }
 
         holder.disable_all_list();
         List<string_bitmap_pair> list = record.get_petlist();
         for( int i = 0;i < list.size();i ++ ) {
-            // TextView nickname = holder.m_textview_list.get(i);
-            // nickname.setText( list.get(i).get_text() );
-            // nickname.setVisibility( View.VISIBLE );
-
             ImageView pet_photo_view = holder.m_image_list.get(i);
             Bitmap bitmap = list.get(i).get_bitmap();
             pet_photo_view.setScaleType(ImageView.ScaleType.FIT_CENTER);
@@ -336,6 +346,7 @@ class record_daily_listadapter extends ArrayAdapter<action_record> {
         }
         TextView m_record_times;
         TextView m_record_action;
+        ImageView m_record_image;
         TextView m_remark_text;
         ImageView m_remark_image;
 
@@ -521,7 +532,7 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
         ArrayList<String> record_pic = new ArrayList<String>();
         int type = m_middleware.get_record( position, time, pet_list, action, remark,record_pic );
         
-        // Log.i( "PetBusApp", "update_item: " + position );
+        Log.i( "PetBusApp", "update_item: " + position );
         action_record record = new action_record( position, type );
         List<string_bitmap_pair> pet_info_list = new ArrayList<string_bitmap_pair>();
         for( int i = 0;i < pet_list.size();i ++ )
@@ -536,6 +547,14 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
 
         String src_path = record_pic.get(0);
         Bitmap remark_bitmap = null;
+        // if( "" == src_path || "null" == src_path )
+        // {
+        //     return record;
+        // }
+        if( src_path.isEmpty() ){
+            Log.i("PetBusApp", "PetBus hehe:(" + src_path + ")");
+            src_path = "null";
+        }
         if( null != get_remark_thumbnail_picture( src_path ) )
         {
             remark_bitmap = BitmapFactory.decodeFile( get_remark_thumbnail_picture( src_path ) );

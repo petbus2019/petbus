@@ -144,6 +144,7 @@ public class middleware_impl extends Application implements middleware {
         action.append(sql_result.getString(sql_result.getColumnIndex("operation")));
         remark.append(sql_result.getString(sql_result.getColumnIndex("remark")));
         record_pic.add( sql_result.getString(sql_result.getColumnIndex("picture")) );
+            Log.i( "PetBusApp", "middleware is record_pic::" + sql_result.getString(sql_result.getColumnIndex("picture")) );
         re = sql_result.getInt(sql_result.getColumnIndex("type"));
         if( middleware.RECORD_TYPE_RECORD == re )
         {
