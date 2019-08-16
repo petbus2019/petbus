@@ -285,7 +285,7 @@ public class actionfragment_diary extends Fragment implements OnClickListener
 
     private Bitmap compressPixel( Bitmap src_map, String file_name ){
         Matrix matrix = new Matrix();
-        matrix.setScale(0.25f, 0.25f);
+        matrix.setScale(0.1f, 0.1f);
         Bitmap bm = Bitmap.createBitmap(src_map, 0, 0, 
                                         src_map.getWidth(),
                                         src_map.getHeight(),

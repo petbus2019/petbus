@@ -639,9 +639,6 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
                         Message message = new Message();
                         int count_org = m_middleware.get_record_count();
                         int load_number = m_middleware.loadrecord( m_load_number );
-                        // if( load_number > 0 ){
-                        //     m_load_number += load_number;
-                        // }
                         Log.i( "PetBusApp", "1run--(" + m_load_number + ")---(" + load_number + ")(" + count_org + ")" );
                         int count = m_middleware.get_record_count();
                         Log.i( "PetBusApp", "2run--(" + m_load_number + 
