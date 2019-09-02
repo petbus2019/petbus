@@ -55,9 +55,8 @@ public class petbus_profile extends Activity implements OnClickListener {
                 Map<String, Object> clickedItem = listItem.get(position);
                 Log.i( "PetBusApp", "item = "+ clickedItem +", position = "+position+", id = "+ id );
                 m_middleware.setCurrentPet((int)(clickedItem.get(m_middleware.PETINFO_TYPE_ID)));
-                Intent intent = new Intent();
-                intent.setClass(petbus_profile.this,petbus_action.class);
-                startActivity(intent);
+                //destroy this activity
+                finish();
             }
         });
     }
@@ -73,8 +72,8 @@ public class petbus_profile extends Activity implements OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.btn_profileBack:
-                intent.setClass(petbus_profile.this,petbus_action.class);
-                startActivity(intent);
+                //destroy this activity
+                finish();
                 break;
         }
     }

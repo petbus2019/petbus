@@ -108,9 +108,8 @@ public class petbus_profileadd extends FragmentActivity implements View.OnClickL
                 trigger_getpicture();
                 break;
             case R.id.btn_profileaddBack:
-                Intent intent = new Intent();
-                intent.setClass(petbus_profileadd.this, petbus_profile.class);
-                startActivity(intent);
+                //destroy this activity
+                finish();
                 break;
             case R.id.btn_profileaddSave:
                 int genderVal = 0;
@@ -140,9 +139,8 @@ public class petbus_profileadd extends FragmentActivity implements View.OnClickL
                     }
                 }
                 addPet(strName,mCirclebitmap,strBirth,weightVal,genderVal,speciesVal );
-                Intent intent2 = new Intent();
-                intent2.setClass(petbus_profileadd.this,petbus_profile.class);
-                startActivity(intent2);
+                //destroy this activity
+                finish();
         }
     }
 
