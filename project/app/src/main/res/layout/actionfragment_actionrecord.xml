@@ -6,90 +6,59 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_marginRight="10dp"
-              android:layout_marginLeft="10dp"
+              android:background="@color/app_background"
               android:layout_height="match_parent"> 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
-            android:layout_height="100sp"
+            android:layout_height="110dp"
             android:gravity="center"
             android:id="@+id/information_layout"
-            android:orientation="horizontal">
-            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="100dp"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:baselineAligned="false">
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="133dp"
+                android:layout_height="55dp"
+                android:layout_marginTop="45dp"
+                android:layout_marginLeft="18dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical">
                 <TextView
                     android:id="@+id/text_lastaction1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="10sp"
-                    android:layout_alignParentBottom="true"
-                    android:text="上次喂食：7小时前"/>
+                    android:text="上次喂食：7小时前"
+                    android:textSize="10sp" />
                 <TextView
                     android:id="@+id/text_lastaction2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_above="@+id/text_lastaction1"
-                    android:textSize="10sp"
-                    android:text="上次铲屎：昨天"/>
+                    android:text="上次铲屎：昨天"
+                    android:textSize="10sp" />
                 <TextView
                     android:id="@+id/text_lastaction3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_above="@+id/text_lastaction2"
-                    android:textSize="10sp"
-                    android:text="上次洗澡：3天前"/>
-            </RelativeLayout>
+                    android:text="上次洗澡：3天前"
+                    android:textSize="10sp" />
+            </LinearLayout>
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:orientation="horizontal">
-                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:layout_marginRight="50dp"
-                    android:orientation="horizontal">
-                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:layout_width="match_parent"
-                        android:layout_weight="1"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="vertical">
-                    </LinearLayout>
-                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="vertical">
-                        <ImageView
-                            android:id="@+id/pet_photo"
-                            android:layout_width="55dp"
-                            android:layout_height="55dp"
-                            style="@style/headportrait"
-                            android:background="#00000000"
-                            android:clickable="false"
-                            android:src="@mipmap/photo_normal" />
-                        <TextView
-                            android:id="@+id/pet_nickname_text"
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:clickable="true"
-                            android:gravity="center_horizontal"
-                            android:text="@string/petname"
-                            android:textColor="#000000"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-                </LinearLayout>
+                <ImageView
+                    android:id="@+id/pet_photo"
+                    android:layout_marginLeft="88dp"
+                    android:layout_marginRight="12dp"
+                    android:layout_width="67dp"
+                    android:layout_height="64dp"
+                    android:clickable="false"
+                    android:src="@mipmap/photo_normal" />
                 <ImageButton
                     android:id="@+id/profile_buttom"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="9dp"
+                    android:layout_height="17dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="3dp"
                     android:background="#00000000"
@@ -99,9 +68,8 @@
         </LinearLayout>
         <View
             android:layout_width="fill_parent"
-            android:layout_marginTop="10dp"
             android:layout_height="1dp"
-            android:background="@color/colorBlack" /> 
+            android:background="@color/colorWhrite" /> 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -111,6 +79,7 @@
             android:orientation="horizontal">
             <com.petbus.tj.petbus.ui.actionlistview
                 android:id="@+id/list_view"
+                android:dividerHeight="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
         </LinearLayout>
@@ -118,11 +87,11 @@
 
     <Button
         android:id="@+id/add_action_button"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="49dp"
+        android:layout_height="49dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="30dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginRight="12dp"
         android:background="@mipmap/add_normal" />
 </RelativeLayout>

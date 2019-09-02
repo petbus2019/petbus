@@ -92,7 +92,7 @@ class action_record{
         catch( ParseException e ){
             e.printStackTrace();
         }
-        DateFormat time_format = new SimpleDateFormat( middleware.DATE_FORMAT_TIME );
+        DateFormat time_format = new SimpleDateFormat( "HH:mm" );
         m_time = time_format.format(date_time);
 
         m_action = action;
@@ -218,23 +218,15 @@ class record_daily_listadapter extends ArrayAdapter<action_record> {
         record_view.m_record_action = (TextView) convertView.findViewById(R.id.recode_actioin_text);
         record_view.m_record_image = (ImageView) convertView.findViewById(R.id.record_action_icon);
 
-        TextView  textview_1 = (TextView) convertView.findViewById(R.id.nickname_text_1);
         ImageView image_1 = (ImageView) convertView.findViewById(R.id.recode_image_1);
-        record_view.m_textview_list.add( textview_1 );
         record_view.m_image_list.add( image_1 );
-        TextView  textview_2 = (TextView) convertView.findViewById(R.id.nickname_text_2);
         ImageView image_2 = (ImageView) convertView.findViewById(R.id.recode_image_2);
-        record_view.m_textview_list.add( textview_2 );
         record_view.m_image_list.add( image_2 );
 
-        TextView  textview_3 = (TextView) convertView.findViewById(R.id.nickname_text_3);
         ImageView image_3 = (ImageView) convertView.findViewById(R.id.recode_image_3);
-        record_view.m_textview_list.add( textview_3 );
         record_view.m_image_list.add( image_3 );
 
-        TextView  textview_4 = (TextView) convertView.findViewById(R.id.nickname_text_4);
         ImageView image_4 = (ImageView) convertView.findViewById(R.id.recode_image_4);
-        record_view.m_textview_list.add( textview_4 );
         record_view.m_image_list.add( image_4 );
 
         record_view.m_remark_text = (TextView) convertView.findViewById(R.id.recode_remark_text);
@@ -298,7 +290,7 @@ class record_daily_listadapter extends ArrayAdapter<action_record> {
                 view_holder_date viewHolder = (view_holder_date)convertView.getTag( R.layout.record_date );
                 String full_date_text = record.get_date() + "  " + getWeek( record.get_full_time() );
                 viewHolder.m_date_text.setText( full_date_text );
-
+//                getListView().setDividerHeight(30);
                 break;
             case middleware.RECORD_TYPE_RECORD:
                 if( null == convertView ) {
@@ -333,12 +325,7 @@ class record_daily_listadapter extends ArrayAdapter<action_record> {
     private class view_holder_record{
         public void disable_all_list(){
 
-            int size = m_textview_list.size();
-            for (int i = 0; i < size; i++) {
-                m_textview_list.get(i).setVisibility( View.INVISIBLE );
-            }
-
-            size = m_image_list.size();
+            int size = m_image_list.size();
             for (int i = 0; i < size; i++) {
                 m_image_list.get(i).setVisibility( View.INVISIBLE );
             }
@@ -350,7 +337,6 @@ class record_daily_listadapter extends ArrayAdapter<action_record> {
         TextView m_remark_text;
         ImageView m_remark_image;
 
-        List<TextView>  m_textview_list = new ArrayList<TextView>();
         List<ImageView> m_image_list = new ArrayList<ImageView>();
     }
 }
@@ -416,7 +402,7 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
         m_pet_image.setScaleType(ImageView.ScaleType.FIT_CENTER);
         m_pet_image.setImageBitmap(bitmap);
 
-        m_pet_name.setText(  String.valueOf( pet_info.get( middleware.PETINFO_TYPE_NAME ) ) );
+        //m_pet_name.setText(  String.valueOf( pet_info.get( middleware.PETINFO_TYPE_NAME ) ) );
 
         for (Map.Entry<String, String> entry : action_map.entrySet()) {
             SimpleDateFormat format = new SimpleDateFormat( middleware_impl.DATE_FORMAT_FULL );
