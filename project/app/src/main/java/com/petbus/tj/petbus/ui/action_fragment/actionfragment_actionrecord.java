@@ -243,13 +243,13 @@ class record_daily_listadapter extends ArrayAdapter<action_record> {
             holder.m_record_image.setImageDrawable(m_Context.getResources().getDrawable((R.mipmap.fade)));
         }
         else if( action_text.equals("铲屎") ) {
-            holder.m_record_image.setImageDrawable(m_Context.getResources().getDrawable((R.mipmap.photo_normal)));
+            holder.m_record_image.setImageDrawable(m_Context.getResources().getDrawable((R.mipmap.shit)));
         }
         else if( action_text.equals("洗澡") ) {
-            holder.m_record_image.setImageDrawable(m_Context.getResources().getDrawable((R.mipmap.setting_normal)));
+            holder.m_record_image.setImageDrawable(m_Context.getResources().getDrawable((R.mipmap.shower)));
         }
         else if( action_text.equals("遛弯") ) {
-            holder.m_record_image.setImageDrawable(m_Context.getResources().getDrawable((R.mipmap.overview_normal)));
+            holder.m_record_image.setImageDrawable(m_Context.getResources().getDrawable((R.mipmap.running)));
         }
 
         holder.disable_all_list();
@@ -354,8 +354,11 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
     private ImageButton mBtn_profile;
 
     private TextView m_lastaction_1;
+    private ImageView m_lastaction_1_pic;
     private TextView m_lastaction_2;
+    private ImageView m_lastaction_2_pic;
     private TextView m_lastaction_3;
+    private ImageView m_lastaction_3_pic;
 
     private ImageView m_pet_image;
     private TextView  m_pet_name;
@@ -402,7 +405,7 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
         m_pet_image.setScaleType(ImageView.ScaleType.FIT_CENTER);
         m_pet_image.setImageBitmap(bitmap);
 
-        //m_pet_name.setText(  String.valueOf( pet_info.get( middleware.PETINFO_TYPE_NAME ) ) );
+        m_pet_name.setText(  String.valueOf( pet_info.get( middleware.PETINFO_TYPE_NAME ) ) );
 
         for (Map.Entry<String, String> entry : action_map.entrySet()) {
             SimpleDateFormat format = new SimpleDateFormat( middleware_impl.DATE_FORMAT_FULL );
@@ -427,10 +430,12 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
                 if( days > 0 ){
                     String text = getActivity().getResources().getString( R.string.day_before );
                     m_lastaction_1.setText( entry.getKey() + ":" + String.valueOf(days) + text );
+                    
                 }
                 else if( hours > 0 ){
                     String text = getActivity().getResources().getString( R.string.hour_before );
                     m_lastaction_1.setText( entry.getKey() + ":" + String.valueOf(hours) + text );
+                    
                 }
                 else if( minutes > 0 ){
                     String text = getActivity().getResources().getString( R.string.mini_before );
@@ -440,24 +445,51 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
                     String text = getActivity().getResources().getString( R.string.rightnow );
                     m_lastaction_1.setText( entry.getKey() + ":" + text );
                 }
+                if( entry.getKey().equals("喂食") ) {
+                    m_lastaction_1_pic.setImageDrawable(getActivity().getResources().getDrawable((R.mipmap.fade)));
+                }
+                else if( entry.getKey().equals("铲屎") ) {
+                    m_lastaction_1_pic.setImageDrawable(getActivity().getResources().getDrawable((R.mipmap.shit)));
+                }
+                else if( entry.getKey().equals("洗澡") ) {
+                    m_lastaction_1_pic.setImageDrawable(getActivity().getResources().getDrawable((R.mipmap.shower)));
+                }
+                else if( entry.getKey().equals("遛弯") ) {
+                    m_lastaction_1_pic.setImageDrawable(getActivity().getResources().getDrawable((R.mipmap.running)));
+                }
             }
             else if( 1 == i )
             {
                 if( days > 0 ){
                     String text = getActivity().getResources().getString( R.string.day_before );
                     m_lastaction_2.setText( entry.getKey() + ":" + String.valueOf(days) + text );
+                    
                 }
                 else if( hours > 0 ){
                     String text = getActivity().getResources().getString( R.string.hour_before );
                     m_lastaction_2.setText( entry.getKey() + ":" + String.valueOf(hours) + text );
+                    
                 }
                 else if( minutes > 0 ){
                     String text = getActivity().getResources().getString( R.string.mini_before );
                     m_lastaction_2.setText( entry.getKey() + ":" + String.valueOf(minutes) + text );
+                    
                 }
                 else{
                     String text = getActivity().getResources().getString( R.string.rightnow );
                     m_lastaction_2.setText( entry.getKey() + ":" + text );
+                }
+                if( entry.getKey().equals("喂食") ) {
+                    m_lastaction_2_pic.setImageDrawable(getActivity().getResources().getDrawable((R.mipmap.fade)));
+                }
+                else if( entry.getKey().equals("铲屎") ) {
+                    m_lastaction_2_pic.setImageDrawable(getActivity().getResources().getDrawable((R.mipmap.shit)));
+                }
+                else if( entry.getKey().equals("洗澡") ) {
+                    m_lastaction_2_pic.setImageDrawable(getActivity().getResources().getDrawable((R.mipmap.shower)));
+                }
+                else if( entry.getKey().equals("遛弯") ) {
+                    m_lastaction_2_pic.setImageDrawable(getActivity().getResources().getDrawable((R.mipmap.running)));
                 }
             }
             else if( 2 == i )
@@ -477,6 +509,18 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
                 else{
                     String text = getActivity().getResources().getString( R.string.rightnow );
                     m_lastaction_3.setText( entry.getKey() + ":" + text );
+                }
+            if( entry.getKey().equals("喂食") ) {
+                    m_lastaction_3_pic.setImageDrawable(getActivity().getResources().getDrawable((R.mipmap.fade)));
+                }
+                else if( entry.getKey().equals("铲屎") ) {
+                    m_lastaction_3_pic.setImageDrawable(getActivity().getResources().getDrawable((R.mipmap.shit)));
+                }
+                else if( entry.getKey().equals("洗澡") ) {
+                    m_lastaction_3_pic.setImageDrawable(getActivity().getResources().getDrawable((R.mipmap.shower)));
+                }
+                else if( entry.getKey().equals("遛弯") ) {
+                    m_lastaction_3_pic.setImageDrawable(getActivity().getResources().getDrawable((R.mipmap.running)));
                 }
             }
             i++;
@@ -611,8 +655,11 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
         m_pet_name = (TextView)view.findViewById(R.id.pet_nickname_text);
  
         m_lastaction_1 = (TextView)view.findViewById(R.id.text_lastaction1);
+        m_lastaction_1_pic = (ImageView)view.findViewById(R.id.image_lastaction1);
         m_lastaction_2 = (TextView)view.findViewById(R.id.text_lastaction2);
+        m_lastaction_2_pic = (ImageView)view.findViewById(R.id.image_lastaction2);
         m_lastaction_3 = (TextView)view.findViewById(R.id.text_lastaction3);
+        m_lastaction_3_pic = (ImageView)view.findViewById(R.id.image_lastaction3);
 
         m_listview =(actionlistview)view.findViewById(R.id.list_view);
         m_listview.setOnItemClickListener(this);
@@ -647,6 +694,7 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
             }
         });
         m_listview.setAdapter(m_adapter);
+        m_listview.setDivider(null);
 
         Button button = ( Button )view.findViewById( R.id.add_action_button );
         button.setOnClickListener(this);
