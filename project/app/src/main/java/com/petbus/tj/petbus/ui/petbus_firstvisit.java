@@ -53,7 +53,7 @@ public class petbus_firstvisit extends FragmentActivity implements ActivityCompa
     private static final int TIGGER_CAMERA = 1;
 
     private ImageButton btnImg;
-    private Button btnNext;
+    private ImageButton btnNext;
     private TextView name, birth, weight;
     private RadioGroup gender, species;
     private Bitmap mCirclebitmap;

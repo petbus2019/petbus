@@ -6,28 +6,28 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
+    android:background="@color/app_background"
     tools:context=".petbus_firstvisit">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="53dp"
         android:text="@string/infofirstvisit"
-        android:textSize="18dp"
-        android:layout_marginTop="20dp"/>
-
+        android:background="@color/colorWhrite"
+        android:textSize="21sp"
+        android:gravity="center"/>
     <fragment
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="551dp"
         android:id="@+id/id_fragment_firstvisit"
         android:name="com.petbus.tj.petbus.ui.info_fragment.infofragment"
         android:layout_weight="1"/>
 
-    <Button
+    <ImageButton
         android:id="@+id/btn_firstvisitNext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/infofinish"
-        android:textSize="17dp"
+        android:src="@mipmap/btn_save"
+        android:background="@color/app_background"
         android:layout_marginBottom="20dp"/>
-
 </LinearLayout>
