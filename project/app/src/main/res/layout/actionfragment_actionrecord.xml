@@ -11,7 +11,7 @@
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="110dp"
-            android:background="@color/colorWhrite"
+            android:background="@color/colorWhite"
             android:gravity="center"
             android:id="@+id/information_layout"
             android:orientation="horizontal">
@@ -129,7 +129,7 @@
         <View
             android:layout_width="fill_parent"
             android:layout_height="1dp"
-            android:background="@color/colorWhrite" /> 
+            android:background="@color/colorWhite" /> 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="0dp"
