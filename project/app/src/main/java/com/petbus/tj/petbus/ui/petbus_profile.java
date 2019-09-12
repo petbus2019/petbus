@@ -1,5 +1,7 @@
 package com.petbus.tj.petbus.ui;
 
+import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.AdapterView;
@@ -29,17 +31,27 @@ public class petbus_profile extends Activity implements OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.petbus_profile);
 
-        final List<Map<String, Object>> listItem = new ArrayList<Map<String, Object>>();
-
         ImageButton mBtnBack = (ImageButton) findViewById(R.id.btn_profileBack);
         ImageButton mBtnAdd = (ImageButton) findViewById(R.id.btn_profileAdd);
         mBtnBack.setOnClickListener(this);
         mBtnAdd.setOnClickListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        final List<Map<String, Object>> listItem = new ArrayList<Map<String, Object>>();
 
         List<Integer> ids = m_middleware.getPetIds();
         for ( int i = 0; i < ids.size(); i++)
         {
             Map<String, Object> item = m_middleware.getPetInfo(ids.get(i));
+            String photoStr = item.get(m_middleware.PETINFO_TYPE_PHOTO).toString();
+            if (photoStr.isEmpty())
+            {
+                Uri tmpUri = resourceIdToUri(this,R.mipmap.imgbtn);
+                item.put(m_middleware.PETINFO_TYPE_PHOTO, tmpUri);
+            }
             listItem.add(item);
         }
         SimpleAdapter adapter = new SimpleAdapter(this, listItem,
@@ -61,7 +73,6 @@ public class petbus_profile extends Activity implements OnClickListener {
         });
     }
 
-
     public void onClick(View view) {
         Log.i( "PetBusApp", "onClick" );
         Intent intent = new Intent();
@@ -76,5 +87,9 @@ public class petbus_profile extends Activity implements OnClickListener {
                 finish();
                 break;
         }
+    }
+
+    private static Uri resourceIdToUri(Context context, int resourceId) {
+        return Uri.parse("/" + context.getPackageName() + "android.resource://" + resourceId);
     }
 }

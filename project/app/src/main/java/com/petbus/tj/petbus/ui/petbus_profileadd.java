@@ -45,6 +45,7 @@ public class petbus_profileadd extends FragmentActivity implements View.OnClickL
 
     private ImageButton btnImg;
     private ImageButton btnSave;
+    private ImageButton btnBack;
     private TextView name, birth, weight;
     private RadioGroup gender, species;
 	private Bitmap mCirclebitmap;
@@ -68,15 +69,16 @@ public class petbus_profileadd extends FragmentActivity implements View.OnClickL
 
         btnImg = findViewById(R.id.id_imgBtn);
         btnImg.setOnClickListener(this);
+        btnBack = findViewById(R.id.btn_profileaddBack);
+        btnBack.setOnClickListener(this);
+        btnSave = findViewById(R.id.btn_profileaddSave);
+        btnSave.setOnClickListener(this);
         name = findViewById(R.id.id_inputName);
         birth = findViewById(R.id.id_inputBirth);
         weight = findViewById(R.id.id_inputWeight);
         gender = findViewById(R.id.id_inputGender);
         species = findViewById(R.id.id_inputSpecies);
-        ImageButton mBtnBack = (ImageButton) findViewById(R.id.btn_profileaddBack);
-        mBtnBack.setOnClickListener(this);
-        btnSave = findViewById(R.id.btn_profileaddSave);
-        btnSave.setOnClickListener(this);
+
 
         birth.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -101,7 +103,7 @@ public class petbus_profileadd extends FragmentActivity implements View.OnClickL
 
     @Override
     public void onClick(View view) {
-        Log.i( "PetBusApp", "onClick" );
+        Log.i( "PetBusApp", "onClick" + view.getId());
         switch( view.getId() )
         {
             case R.id.id_imgBtn:
@@ -149,7 +151,11 @@ public class petbus_profileadd extends FragmentActivity implements View.OnClickL
         Toast.makeText(petbus_profileadd.this, name+','+birth+","
                 +weight+","+gender+","+species, Toast.LENGTH_LONG ).show();
         //save photo now
-        String photoPath = saveBitmapAsFile( "PHOTO_",circlebitmap );
+        String photoPath = "";
+        if (circlebitmap != null)
+        {
+            photoPath = saveBitmapAsFile( "PHOTO_",circlebitmap );
+        }
         m_middleware.newPet(name, photoPath, birth, weight, gender, species);
     }
 

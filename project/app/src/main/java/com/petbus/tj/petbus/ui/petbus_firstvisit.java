@@ -140,7 +140,12 @@ public class petbus_firstvisit extends FragmentActivity implements ActivityCompa
         Toast.makeText(petbus_firstvisit.this, name+','+birth+","
                 +weight+","+gender+","+species, Toast.LENGTH_LONG ).show();
         //save photo now
-        String photoPath = saveBitmapAsFile( "PHOTO_",circlebitmap );
+        String photoPath = "";
+        if (circlebitmap != null)
+        {
+            photoPath = saveBitmapAsFile( "PHOTO_",circlebitmap );
+        }
+
         m_middleware.newPet(name, photoPath, birth, weight, gender, species);
     }
 
