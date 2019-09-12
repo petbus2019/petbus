@@ -21,8 +21,8 @@
     <string name="infogendermale">弟弟</string>
     <string name="infogenderfemale">妹妹</string>
     <string name="infospecies">星球</string>
-    <string name="infospeciesdog">汪星人</string>
-    <string name="infospeciescat">喵星人</string>
+    <string name="infospeciesdog">汪星</string>
+    <string name="infospeciescat">喵星</string>
     <string name="infofinish">确认  >></string>
     <string name="infosave">保存</string>
     <string name="actionphoto">相册</string>

@@ -6,37 +6,34 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
+    android:background="@color/app_background"
     tools:context=".petbus_profileadd"
     tools:ignore="MissingDefaultResource">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:background="@color/colorPrimary"
-        android:gravity="center"
-        android:id="@+id/topbar_lineralayout"
-        android:orientation="horizontal">
+        android:layout_height="53dp"
+        android:background="@color/colorWhrite"
+         android:id="@+id/topbar_lineralayout">
 
-        <TextView
-            android:id="@+id/txt_profileaddTitle"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:gravity="center_horizontal"
-            android:text="@string/addpet"
-            android:textColor="#ffffff"
-            android:textStyle="bold"
-            android:layout_marginTop="6dp"/>
         <ImageButton
             android:id="@+id/btn_profileaddBack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="3dp"
-            android:background="#00000000"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="19dp"
+            android:background="@color/colorWhrite"
             android:clickable="false"
-            android:layout_alignParentLeft ="true"
             android:src="@mipmap/arrarryleft_normal" />
+        <TextView
+            android:id="@+id/txt_profileaddTitle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="@string/addpet"
+            android:textSize="21sp"
+            android:textColor="@color/colorBlack" />
     </RelativeLayout>
     <fragment
         android:layout_width="match_parent"
@@ -45,12 +42,11 @@
         android:name="com.petbus.tj.petbus.ui.info_fragment.infofragment"
         android:layout_weight="1"/>
 
-    <Button
+    <ImageButton
         android:id="@+id/btn_profileaddSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/infosave"
-        android:textSize="17dp"
+        android:background="@color/app_background"
+        android:src="@mipmap/btn_save"
         android:layout_marginBottom="20dp"/>
-
 </LinearLayout>

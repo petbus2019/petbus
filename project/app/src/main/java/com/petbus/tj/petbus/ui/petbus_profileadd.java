@@ -44,7 +44,7 @@ public class petbus_profileadd extends FragmentActivity implements View.OnClickL
         ActivityCompat.OnRequestPermissionsResultCallback {
 
     private ImageButton btnImg;
-    private Button btnSave;
+    private ImageButton btnSave;
     private TextView name, birth, weight;
     private RadioGroup gender, species;
 	private Bitmap mCirclebitmap;
