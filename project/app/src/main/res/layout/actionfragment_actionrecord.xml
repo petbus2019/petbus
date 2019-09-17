@@ -6,13 +6,11 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_marginTop="16dp"
         android:layout_height="match_parent"> 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="110dp"
             android:background="@color/colorWhite"
-            android:gravity="center"
             android:id="@+id/information_layout"
             android:orientation="horizontal">
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -112,11 +110,10 @@
                 </LinearLayout>
 
                 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:layout_width="58dp"
+                    android:layout_width="28dp"
                     android:layout_height="match_parent"
                     android:gravity="right|center_vertical"
                     android:orientation="vertical">
-
                     <ImageButton
                         android:id="@+id/profile_buttom"
                         android:layout_width="9dp"
@@ -131,6 +128,7 @@
             android:layout_height="1dp"
             android:background="@color/colorWhite" /> 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_marginTop="17dp"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:gravity="center"

@@ -128,6 +128,7 @@
                         android:layout_height="fill_parent"
                         android:background="@color/app_background" /> 
                     <ImageView
+                        android:layout_marginTop ="13dp"
                         android:id="@+id/record_action_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="fill_parent"
@@ -139,26 +140,35 @@
                         android:layout_marginBottom ="18dp"
                         android:src="@mipmap/fade" />
             </RelativeLayout>
-            <TextView
-                android:id="@+id/recode_remark_text"
-                android:layout_width="101dp"
-                android:layout_height="68dp"
-                android:textSize="12sp"
-                android:layout_marginLeft="6dp"
-                android:singleLine="false"
-                style="@style/diary_remark_text"
-                android:text="这个是日志" />
-            <ImageView
-                android:id="@+id/recode_petportrait_image"
-                android:layout_width="101dp"
-                android:layout_height="68dp"
-                android:scaleType="center"
-                android:adjustViewBounds="true"
-                android:maxHeight="57dp"
-                android:maxWidth="85dp"
-                android:minHeight="57dp"
-                android:minWidth="85dp"
-                android:src="@mipmap/fade" />
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="230dp"
+                android:layout_height="match_parent"
+                android:id="@+id/information_layout"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/recode_remark_text"
+                    android:gravity="center_vertical|left"
+                    android:layout_width="101dp"
+                    android:layout_weight="1"
+                    android:layout_height="68dp"
+                    android:textSize="12sp"
+                    android:layout_marginLeft="6dp"
+                    android:singleLine="false"
+                    style="@style/diary_remark_text"
+                    android:text="这个是日志" />
+                <ImageView
+                    android:id="@+id/recode_petportrait_image"
+                    android:layout_weight="1"
+                    android:layout_width="101dp"
+                    android:layout_height="68dp"
+                    android:scaleType="center"
+                    android:adjustViewBounds="true"
+                    android:minHeight="57dp"
+                    android:minWidth="85dp"
+                    android:maxHeight="57dp"
+                    android:maxWidth="85dp"
+                    android:src="@mipmap/fade" />
+            </LinearLayout>
     </LinearLayout>
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
