@@ -3,6 +3,7 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants"
     android:background="@mipmap/listpetbackground">
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,11 +22,14 @@
                 android:text="猫猫1"
                 android:textSize="17dp"
                 android:layout_marginLeft="50dp"/>
-            <ImageView
+            <ImageButton
+                android:id="@+id/profile_editbtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="7dp"
+                android:clickable="true"
+                android:background="@color/colorWhite"
                 android:src="@mipmap/editbutton"
                 android:layout_toRightOf="@id/info_name"/>
         </RelativeLayout>
@@ -68,6 +72,7 @@
             android:layout_height="50dp"
             android:id="@+id/info_photo"
             android:src="@mipmap/empty"
+            android:background="@color/colorWhite"
             android:layout_marginRight="50dp"/>
     </LinearLayout>
 </LinearLayout>

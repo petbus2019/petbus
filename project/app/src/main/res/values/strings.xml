@@ -6,6 +6,7 @@
     <string name="addrecord">添加记录</string>
     <string name="petprofile">萌宠档案</string>
     <string name="addpet">添加爱宠</string>
+    <string name="editpet">编辑资料</string>
     <string name="petname">宠物名字</string>
     <string name="time">时间</string>
     <string name="lovepet">爱宠</string>
@@ -49,4 +50,6 @@
     <string name="confirm">确定</string>
     <string name="doubletoexit">双击返回退出</string>
     <string name="pageloading">加载中</string>
+    <string name="edit">编辑</string>
+    <string name="del">删除</string>
 </resources>

@@ -40,17 +40,18 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
 
-public class petbus_profileadd extends FragmentActivity implements View.OnClickListener,
+public class petbus_profiledit extends FragmentActivity implements View.OnClickListener,
         ActivityCompat.OnRequestPermissionsResultCallback {
 
     private ImageButton mBtnImg;
     private ImageButton mBtnSave;
     private ImageButton mBtnBack;
-    private TextView mName, mBirth, mWeight;
+    private TextView mName, mBirth, mWeight, mTitle;
     private RadioGroup mGender, mSpecies;
 	private Bitmap mCirclebitmap;
-    private middleware m_middleware = middleware_impl.getInstance();
+    private middleware mMiddleware = middleware_impl.getInstance();
 
     private Uri m_picture_uri;
 
@@ -68,6 +69,7 @@ public class petbus_profileadd extends FragmentActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.petbus_profileadd);
 
+        mTitle = findViewById(R.id.txt_profileaddTitle);
         mBtnImg = findViewById(R.id.id_imgBtn);
         mBtnImg.setOnClickListener(this);
         mBtnBack = findViewById(R.id.btn_profileaddBack);
@@ -75,11 +77,8 @@ public class petbus_profileadd extends FragmentActivity implements View.OnClickL
         mBtnSave = findViewById(R.id.btn_profileaddSave);
         mBtnSave.setOnClickListener(this);
         mName = findViewById(R.id.id_inputName);
-        mName.setGravity(Gravity.CENTER);
         mBirth = findViewById(R.id.id_inputBirth);
-        mBirth.setGravity(Gravity.CENTER);
         mWeight = findViewById(R.id.id_inputWeight);
-        mWeight.setGravity(Gravity.CENTER);
         mGender = findViewById(R.id.id_inputGender);
         mSpecies = findViewById(R.id.id_inputSpecies);
 
@@ -105,6 +104,12 @@ public class petbus_profileadd extends FragmentActivity implements View.OnClickL
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        showPet();
+    }
+
+    @Override
     public void onClick(View view) {
         Log.i( "PetBusApp", "onClick" + view.getId());
         switch( view.getId() )
@@ -123,13 +128,14 @@ public class petbus_profileadd extends FragmentActivity implements View.OnClickL
                 if (mBirth.getText().length()==0 || mName.getText().length()==0 || mWeight.getText().length()==0)
                 {
                     Log.i( "PetBusApp", "profileadd: your  is empty, please try again." );
-                    Toast.makeText(petbus_profileadd.this, R.string.inputEmpty, Toast.LENGTH_LONG ).show();
+                    Toast.makeText(petbus_profiledit.this, R.string.inputEmpty, Toast.LENGTH_LONG ).show();
                     break;
                 }
                 String strBirth = mBirth.getText().toString();
                 String strName = mName.getText().toString();
-                double weightVal = Double.valueOf(mWeight.getText().toString());
-                for (int i=0; i<mGender.getChildCount();i++){
+                //eg. 5.0 kg, remove kg, keep 5.0
+                double weightVal = Double.valueOf((mWeight.getText().toString()).split(" ")[0]);
+                for (int i=0; i < mGender.getChildCount();i++){
                     RadioButton r=(RadioButton)mGender.getChildAt(i);
                     if(r.isChecked()){
                         genderVal = i;
@@ -143,15 +149,62 @@ public class petbus_profileadd extends FragmentActivity implements View.OnClickL
                         break;
                     }
                 }
-                addPet(strName,mCirclebitmap,strBirth,weightVal,genderVal,speciesVal );
+                editPet(strName,mCirclebitmap,strBirth,weightVal,genderVal,speciesVal );
                 //destroy this activity
                 finish();
         }
     }
 
-    private void addPet(String name, Bitmap circlebitmap, String birth, double weight, int gender, int species)
+    private void showPet()
     {
-        Toast.makeText(petbus_profileadd.this, name+','+birth+","
+        Map<String,Object> petItem = mMiddleware.get_current_pet();
+        System.out.println(petItem);
+        String name = petItem.get(mMiddleware.PETINFO_TYPE_NAME).toString();
+        String photo = petItem.get(mMiddleware.PETINFO_TYPE_PHOTO).toString();
+        String weight = petItem.get(mMiddleware.PETINFO_TYPE_WEIGHT).toString() + " kg";
+        String birth = petItem.get(mMiddleware.PETINFO_TYPE_BIRTH).toString();
+        int gender = Integer.parseInt(petItem.get(mMiddleware.PETINFO_TYPE_GENDER).toString());
+        int species = Integer.parseInt(petItem.get(mMiddleware.PETINFO_TYPE_SPECIES).toString());
+
+        mTitle.setText(R.string.editpet);
+        mName.setText(name);
+        mName.setGravity(Gravity.CENTER);
+        mWeight.setText(weight);
+        mWeight.setGravity(Gravity.CENTER);
+        mBirth.setText(birth);
+        mBirth.setGravity(Gravity.CENTER);
+
+        if (!photo.isEmpty()){
+            Log.i( "PetBusApp_profiledit", "photo url is not empty, url is " + photo);
+            File photofile = new File(photo);
+            Uri uri = Uri.fromFile(photofile);
+            mBtnImg.setImageURI(uri);
+        }
+
+        for (int i=0; i<mGender.getChildCount(); i++){
+            RadioButton r=(RadioButton)mGender.getChildAt(i);
+            if(i == gender){
+                r.setChecked(true);
+            }
+            else{
+                r.setChecked(false);
+            }
+        }
+
+        for (int i=0; i<mSpecies.getChildCount();i++){
+            RadioButton r=(RadioButton)mSpecies.getChildAt(i);
+            if(i == species){
+                r.setChecked(true);
+            }
+            else{
+                r.setChecked(false);
+            }
+        }
+    }
+
+    private void editPet(String name, Bitmap circlebitmap, String birth, double weight, int gender, int species)
+    {
+        Toast.makeText(petbus_profiledit.this, name+','+birth+","
                 +weight+","+gender+","+species, Toast.LENGTH_LONG ).show();
         //save photo now
         String photoPath = "";
@@ -159,16 +212,16 @@ public class petbus_profileadd extends FragmentActivity implements View.OnClickL
         {
             photoPath = saveBitmapAsFile( "PHOTO_",circlebitmap );
         }
-        m_middleware.newPet(name, photoPath, birth, weight, gender, species);
+        mMiddleware.editPet(name, photoPath, birth, weight, gender, species);
     }
 
     protected void showDatePickDlg() {
         Calendar calendar = Calendar.getInstance();
-        DatePickerDialog datePickerDialog = new DatePickerDialog(petbus_profileadd.this, new DatePickerDialog.OnDateSetListener() {
+        DatePickerDialog datePickerDialog = new DatePickerDialog(petbus_profiledit.this, new DatePickerDialog.OnDateSetListener() {
 
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                petbus_profileadd.this.mBirth.setText(year + "-" + monthOfYear + "-" + dayOfMonth);
+                petbus_profiledit.this.mBirth.setText(year + "-" + monthOfYear + "-" + dayOfMonth);
             }
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.show();
@@ -184,7 +237,7 @@ public class petbus_profileadd extends FragmentActivity implements View.OnClickL
     }
 
     public int show_list(){
-        CommomDialog.Builder builder = new CommomDialog.Builder(this);
+        com.petbus.tj.petbus.ui.CommomDialog.Builder builder = new com.petbus.tj.petbus.ui.CommomDialog.Builder(this);
         String photo_dialog_title = getResources().getString(R.string.photo_dialog_title);
         String photo_dialog_message = getResources().getString(R.string.photo_dialog_message);
         builder.setMessage( photo_dialog_message );
@@ -242,7 +295,7 @@ public class petbus_profileadd extends FragmentActivity implements View.OnClickL
     {
         Uri photoURI;
         try{
-            photoURI = FileProvider.getUriForFile( petbus_profileadd.this,
+            photoURI = FileProvider.getUriForFile( petbus_profiledit.this,
                     BuildConfig.APPLICATION_ID + ".provider",createImageFile());
         }
         catch (Exception e) {
@@ -269,6 +322,7 @@ public class petbus_profileadd extends FragmentActivity implements View.OnClickL
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         String imgPath = "";
+        mCirclebitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.imgbtn);
         if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
             try
             {
@@ -285,7 +339,7 @@ public class petbus_profileadd extends FragmentActivity implements View.OnClickL
         else
         if (requestCode == IMAGE_REQUEST && resultCode == RESULT_OK) {
             Uri uri = data.getData();
-            imgPath = ImageFilePath.getPath(this, uri);
+            //imgPath = ImageFilePath.getPath(this, uri);
             try {
                 Bitmap bm = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
                 Bitmap bitmap = Bitmap.createScaledBitmap(bm, 200, 200, true);
@@ -296,11 +350,11 @@ public class petbus_profileadd extends FragmentActivity implements View.OnClickL
             }
         }
         else{
+            Log.i( "PetBusApp", "onActivityResult：Do nothing, return");
             return ;
         }
+        Log.i( "PetBusApp", "onActivityResult：setImageBitmap");
         mBtnImg.setAdjustViewBounds(true);
-        //btnImg.setMaxHeight(200);
-        //btnImg.setMaxWidth(200);
         mBtnImg.setImageBitmap(mCirclebitmap);
     }
 

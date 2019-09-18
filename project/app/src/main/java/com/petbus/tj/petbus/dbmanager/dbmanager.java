@@ -18,6 +18,8 @@ public interface dbmanager {
     public static final String COLUMN_TEXT_PICTURE = "picture";
     public static final String COLUMN_TEXT_WEIGHT = "weight";
     public static final String COLUMN_TEXT_BIRTHDAY = "birthday";
+    public static final String COLUMN_TEXT_SEX = "sex";
+    public static final String COLUMN_TEXT_PETTYPE = "pettype";
     
     long get_userid();
     int execute_sql( String sql );

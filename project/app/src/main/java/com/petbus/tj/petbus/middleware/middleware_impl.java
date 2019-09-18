@@ -8,6 +8,7 @@ import android.content.Context;
 import android.app.Application;
 import android.util.Log;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -277,6 +278,77 @@ public class middleware_impl extends Application implements middleware {
         return middleware.MIDDLEWARE_RETURN_OK;
     }
 
+    public int editPet(String name, String photoPath, String birth, double weight, int gender, int species)
+    {
+        Log.i( "PetBusApp", "PetBusBusiness:add new pet." );
+        //check whether there is the same pet name in database
+        String sqlStr = "SELECT " + m_database.COLUMN_TEXT_NICKNAME + ", " + m_database.COLUMN_TEXT_PICTURE +
+                " FROM petbus_petinfo WHERE " + m_database.COLUMN_TEXT_NICKNAME + " = \"" + name + "\";";
+        Cursor sql_result = m_database.get_result( sqlStr );
+        if( 1 == sql_result.getCount() )
+        {
+            Log.i( "PetBusApp", "there's no same pet name." );
+            if (photoPath.isEmpty())//if photoPath is empty, do not update picture column
+            {
+                sqlStr = "UPDATE " + dbmanager_impl.TABLE_PETNFO + " SET " +
+                        m_database.COLUMN_TEXT_NICKNAME + " = \"" + name + "\", " +
+                        m_database.COLUMN_TEXT_WEIGHT + " = " + String.valueOf(weight) + ", " +
+                        m_database.COLUMN_TEXT_BIRTHDAY + " = \"" + birth + "\", " +
+                        m_database.COLUMN_TEXT_SEX + " = " + String.valueOf(gender) + ", "+
+                        m_database.COLUMN_TEXT_PETTYPE + " = " + String.valueOf(species) + " " +
+                        "WHERE " + m_database.COLUMN_TEXT_NICKNAME + " = \"" + name + "\";";
+            }
+            else {
+                //delete original photo first
+                if (sql_result.moveToFirst()) {
+                    String photoUrl = sql_result.getString(sql_result.getColumnIndex(dbmanager.COLUMN_TEXT_PICTURE));
+                    delSingleFile(photoUrl);
+                }
+                sqlStr = "UPDATE " + dbmanager_impl.TABLE_PETNFO + " SET " +
+                        m_database.COLUMN_TEXT_PICTURE + " = \"" + photoPath + "\", " +
+                        m_database.COLUMN_TEXT_NICKNAME + " = \"" + name + "\", " +
+                        m_database.COLUMN_TEXT_WEIGHT + " = " + String.valueOf(weight) + ", " +
+                        m_database.COLUMN_TEXT_BIRTHDAY + " = \"" + birth + "\", " +
+                        m_database.COLUMN_TEXT_SEX + " = " + String.valueOf(gender) + ", "+
+                        m_database.COLUMN_TEXT_PETTYPE + " = " + String.valueOf(species) + " " +
+                        "WHERE " + m_database.COLUMN_TEXT_NICKNAME + " = \"" + name + "\";";
+            }
+
+            m_database.execute_sql( sqlStr );
+        }
+        else
+        {
+            Log.i( "PetBusApp", "Cannot find pet whose name is " + name );
+        }
+
+        return middleware.MIDDLEWARE_RETURN_OK;
+    }
+
+    public int delPet(int id){
+        String strId = String.valueOf(id);
+        Log.i( "PetBusApp", "PetBusBusiness:delete pet id = "+strId);
+        //check whether there is the same pet name in database
+        String sqlStr = "SELECT " + m_database.COLUMN_TEXT_ID + ", " +  m_database.COLUMN_TEXT_PICTURE +
+                " FROM petbus_petinfo WHERE " + m_database.COLUMN_TEXT_ID + " = " + strId + ";";
+        Cursor sql_result = m_database.get_result( sqlStr );
+        if( 1 == sql_result.getCount() )
+        {
+            Log.i( "PetBusApp", "Start to delete pet id = " + strId);
+            if (sql_result.moveToFirst()) {
+                String photoUrl = sql_result.getString(sql_result.getColumnIndex(dbmanager.COLUMN_TEXT_PICTURE));
+                delSingleFile(photoUrl);
+            }
+            sqlStr = "DELETE FROM " + dbmanager_impl.TABLE_PETNFO + " where " +
+                    m_database.COLUMN_TEXT_ID + " = " + strId + ";";
+            m_database.execute_sql( sqlStr );
+        }
+        else
+        {
+            Log.w( "PetBusApp", "Cannot find the pet whose id = " + strId);
+        }
+        return middleware.MIDDLEWARE_RETURN_OK;
+    }
+
     public Map<String,Object> get_current_pet() {
         Map<String, Object> result = getPetInfo( m_current_petid );
         return result;
@@ -304,7 +376,11 @@ public class middleware_impl extends Application implements middleware {
                     double getWeight = cur.getDouble(cur.getColumnIndex( dbmanager.COLUMN_TEXT_WEIGHT ));
                     petinfo.put(middleware.PETINFO_TYPE_WEIGHT, getWeight);
                     String getBirth = cur.getString(cur.getColumnIndex( dbmanager.COLUMN_TEXT_BIRTHDAY ));
-                    petinfo.put( middleware.PETINFO_TYPE_AGE, getAge(getBirth));
+                    petinfo.put( middleware.PETINFO_TYPE_BIRTH, getBirth);
+                    int getSpecies = cur.getInt(cur.getColumnIndex( dbmanager.COLUMN_TEXT_PETTYPE ));
+                    petinfo.put( middleware.PETINFO_TYPE_SPECIES, getSpecies);
+                    int getGender = cur.getInt(cur.getColumnIndex( dbmanager.COLUMN_TEXT_SEX ));
+                    petinfo.put( middleware.PETINFO_TYPE_GENDER, getGender);
                     petinfo.put( middleware.PETINFO_TYPE_ID, id);
                 } while (cur.moveToNext());
             }
@@ -351,6 +427,28 @@ public class middleware_impl extends Application implements middleware {
         Log.i( "PetBusApp", "PetBusBusiness:setCurrentPet " + id );
         m_current_petid = id;
         return true;
+    }
+
+
+    /** delete a single file
+     * @param filePath file name which would be deleted
+     * @return if delete success, return true，otherwise return false
+     */
+    private boolean delSingleFile(String filePath) {
+        File file = new File(filePath);
+        // if it is a file
+        if (file.exists() && file.isFile()) {
+            if (file.delete()) {
+                Log.i("PetBusApp", "deleteSingleFile suceed: " + filePath);
+                return true;
+            } else {
+                Log.e("PetBusApp", "deleteSingleFile fail: " + filePath);
+                return false;
+            }
+        } else {
+            Log.e("PetBusApp", "deleteSingleFile fail: file " + filePath + "does not exist.");
+            return false;
+        }
     }
 
     private static final String m_get_nickname_sql = "select nickname from petbus_petinfo;";

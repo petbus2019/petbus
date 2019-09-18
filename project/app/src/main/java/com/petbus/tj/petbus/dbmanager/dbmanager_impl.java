@@ -57,9 +57,9 @@ public class dbmanager_impl extends SQLiteOpenHelper implements dbmanager
                 "picture" + " TEXT," + 
                 dbmanager.COLUMN_TEXT_NICKNAME + " TEXT," +
                 dbmanager.COLUMN_TEXT_WEIGHT + " Double," +
-                "sex" + " integer," + 
+                dbmanager.COLUMN_TEXT_SEX + " integer," +
                 dbmanager.COLUMN_TEXT_BIRTHDAY + " DATE," + 
-                "pettype" + " integer," + 
+                dbmanager.COLUMN_TEXT_PETTYPE + " integer," +
                 "FOREIGN KEY ( " + dbmanager.COLUMN_TEXT_USERID + 
                 " ) REFERENCES " + dbmanager.TABLE_USERINFO + "(" + dbmanager.COLUMN_TEXT_ID +"));";
         Log.i( "PetBusApp", "execSQL: " + sql );
