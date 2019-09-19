@@ -48,7 +48,6 @@
 
     <ListView
         android:id="@+id/list_pet"
-        android:descendantFocusability="blocksDescendants"
         android:background="@color/app_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

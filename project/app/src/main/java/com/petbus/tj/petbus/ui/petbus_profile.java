@@ -1,9 +1,15 @@
 package com.petbus.tj.petbus.ui;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -40,21 +46,23 @@ public class petbus_profile extends Activity implements OnClickListener {
     @Override
     protected void onResume() {
         super.onResume();
+        Log.e( "PetBusApp_Profile", "petbus_profile onResume");
         final List<Map<String, Object>> listItem = new ArrayList<Map<String, Object>>();
 
         List<Integer> ids = m_middleware.getPetIds();
         for ( int i = 0; i < ids.size(); i++)
         {
             Map<String, Object> item = m_middleware.getPetInfo(ids.get(i));
-            String photoStr = item.get(m_middleware.PETINFO_TYPE_PHOTO).toString();
-            if (photoStr.isEmpty())
-            {
-                Uri tmpUri = resourceIdToUri(this,R.mipmap.imgbtn);
-                item.put(m_middleware.PETINFO_TYPE_PHOTO, tmpUri);
+
+            String photoURL = item.get(m_middleware.PETINFO_TYPE_PHOTO).toString();
+            if (photoURL.isEmpty()){
+                Log.i( "PetBusApp_Profile", "item.get(m_middleware.PETINFO_TYPE_PHOTO) is" +
+                        photoURL );
+                item.put(m_middleware.PETINFO_TYPE_PHOTO, R.mipmap.imgbtn);
             }
             listItem.add(item);
         }
-        SimpleAdapter adapter = new SimpleAdapter(this, listItem,
+        MySimpleAdapter adapter = new MySimpleAdapter(this, listItem,
                 R.layout.list_pet, new String[]{m_middleware.PETINFO_TYPE_NAME,m_middleware.PETINFO_TYPE_AGE,
                 m_middleware.PETINFO_TYPE_WEIGHT, m_middleware.PETINFO_TYPE_PHOTO},
                 new int[]{R.id.info_name, R.id.info_age, R.id.info_weight, R.id.info_photo});
@@ -65,7 +73,7 @@ public class petbus_profile extends Activity implements OnClickListener {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Map<String, Object> clickedItem = listItem.get(position);
-                Log.i( "PetBusApp", "item = "+ clickedItem +", position = "+position+", id = "+ id );
+                Log.i( "PetBusApp_Profile", "item = "+ clickedItem +", position = "+position+", id = "+ id );
                 m_middleware.setCurrentPet((int)(clickedItem.get(m_middleware.PETINFO_TYPE_ID)));
                 //destroy this activity
                 finish();
@@ -74,7 +82,7 @@ public class petbus_profile extends Activity implements OnClickListener {
     }
 
     public void onClick(View view) {
-        Log.i( "PetBusApp", "onClick" );
+        Log.i( "PetBusApp_Profile", "onClick" );
         Intent intent = new Intent();
         switch( view.getId() )
         {
@@ -87,9 +95,5 @@ public class petbus_profile extends Activity implements OnClickListener {
                 finish();
                 break;
         }
-    }
-
-    private static Uri resourceIdToUri(Context context, int resourceId) {
-        return Uri.parse("/" + context.getPackageName() + "android.resource://" + resourceId);
     }
 }

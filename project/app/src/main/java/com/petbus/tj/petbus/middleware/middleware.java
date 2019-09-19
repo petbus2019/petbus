@@ -18,7 +18,10 @@ public interface middleware{
     public static final String PETINFO_TYPE_NAME = "name";
     public static final String PETINFO_TYPE_PHOTO = "photo";
     public static final String PETINFO_TYPE_WEIGHT = "weight";
+    public static final String PETINFO_TYPE_BIRTH = "birth";
     public static final String PETINFO_TYPE_AGE = "age";
+    public static final String PETINFO_TYPE_SPECIES = "species";
+    public static final String PETINFO_TYPE_GENDER = "gender";
     public static final String PETINFO_TYPE_ID = "id";
 
     public static final int OVERVIEW_DATATYPE_YEAR = 0;
@@ -38,6 +41,8 @@ public interface middleware{
     int new_record( String time, List<Integer> list, String action, String remark, ArrayList<String> record_pic );
     int get_record( int id, StringBuffer time, List<Integer> list, StringBuffer action, StringBuffer remark, ArrayList<String> record_pic );
     int newPet(String name, String photoPath, String birth, double weight, int gender, int species);
+    int editPet(String name, String photoPath, String birth, double weight, int gender, int species);
+    int delPet(int id);
     List<Integer> getPetIds();
     Map<String,Object> get_current_pet();
     Map<String,Object> getPetInfo(int id);
