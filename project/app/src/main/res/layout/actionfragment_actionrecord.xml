@@ -128,7 +128,6 @@
             android:layout_height="1dp"
             android:background="@color/colorWhite" /> 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_marginTop="17dp"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:gravity="center"
