@@ -53,7 +53,7 @@ public class petbus_profile extends Activity implements OnClickListener {
         for ( int i = 0; i < ids.size(); i++)
         {
             Map<String, Object> item = m_middleware.getPetInfo(ids.get(i));
-            System.out.println(item);
+
             String photoURL = item.get(m_middleware.PETINFO_TYPE_PHOTO).toString();
             if (photoURL.isEmpty()){
                 Log.i( "PetBusApp_Profile", "item.get(m_middleware.PETINFO_TYPE_PHOTO) is" +
@@ -63,7 +63,7 @@ public class petbus_profile extends Activity implements OnClickListener {
             listItem.add(item);
         }
         MySimpleAdapter adapter = new MySimpleAdapter(this, listItem,
-                R.layout.list_pet, new String[]{m_middleware.PETINFO_TYPE_NAME,m_middleware.PETINFO_TYPE_BIRTH,
+                R.layout.list_pet, new String[]{m_middleware.PETINFO_TYPE_NAME,m_middleware.PETINFO_TYPE_AGE,
                 m_middleware.PETINFO_TYPE_WEIGHT, m_middleware.PETINFO_TYPE_PHOTO},
                 new int[]{R.id.info_name, R.id.info_age, R.id.info_weight, R.id.info_photo});
         ListView listView = findViewById(R.id.list_pet);

@@ -19,6 +19,7 @@ public interface middleware{
     public static final String PETINFO_TYPE_PHOTO = "photo";
     public static final String PETINFO_TYPE_WEIGHT = "weight";
     public static final String PETINFO_TYPE_BIRTH = "birth";
+    public static final String PETINFO_TYPE_AGE = "age";
     public static final String PETINFO_TYPE_SPECIES = "species";
     public static final String PETINFO_TYPE_GENDER = "gender";
     public static final String PETINFO_TYPE_ID = "id";

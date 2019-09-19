@@ -40,6 +40,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 public class petbus_profiledit extends FragmentActivity implements View.OnClickListener,
@@ -157,7 +158,9 @@ public class petbus_profiledit extends FragmentActivity implements View.OnClickL
 
     private void showPet()
     {
-        Map<String,Object> petItem = mMiddleware.get_current_pet();
+        Intent intent = getIntent();
+        HashMap petItem=(HashMap)intent.getSerializableExtra("pet_info");
+
         System.out.println(petItem);
         String name = petItem.get(mMiddleware.PETINFO_TYPE_NAME).toString();
         String photo = petItem.get(mMiddleware.PETINFO_TYPE_PHOTO).toString();

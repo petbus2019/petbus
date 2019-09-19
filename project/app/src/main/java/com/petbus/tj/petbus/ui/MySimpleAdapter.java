@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.petbus.tj.petbus.middleware.middleware;
 import com.petbus.tj.petbus.middleware.middleware_impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,16 +32,16 @@ public class MySimpleAdapter extends SimpleAdapter {
             @Override
             public void onClick(View v) {
                 Log.e("PetBus_MySimpleAdapter", "In onClick()");
-                Map<String, Object> item = mListData.get(position);
+                final HashMap<String, Object> item = (HashMap)mListData.get(position);
                 final int petId = Integer.parseInt(item.get(mMiddleware.PETINFO_TYPE_ID).toString());
                 Log.e("PetBus_MySimpleAdapter", "pedId ="+ String.valueOf(petId));
                 AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
                 dialog.setPositiveButton(R.string.edit, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mMiddleware.setCurrentPet(petId);
                         Intent intent = new Intent();
                         intent.setClass(mContext, petbus_profiledit.class);
+                        intent.putExtra("pet_info", item);
                         mContext.startActivity(intent);
                     }
                 });
