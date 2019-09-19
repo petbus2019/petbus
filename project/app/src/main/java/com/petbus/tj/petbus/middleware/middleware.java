@@ -41,7 +41,8 @@ public interface middleware{
     int new_record( String time, List<Integer> list, String action, String remark, ArrayList<String> record_pic );
     int get_record( int id, StringBuffer time, List<Integer> list, StringBuffer action, StringBuffer remark, ArrayList<String> record_pic );
     int newPet(String name, String photoPath, String birth, double weight, int gender, int species);
-    int editPet(String name, String photoPath, String birth, double weight, int gender, int species);
+    int editPet(final int id, final String name, final String photoPath, final String birth,
+                final double weight, final int gender, final int species);
     int delPet(int id);
     List<Integer> getPetIds();
     Map<String,Object> get_current_pet();

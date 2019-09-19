@@ -276,12 +276,13 @@ public class middleware_impl extends Application implements middleware {
         return middleware.MIDDLEWARE_RETURN_OK;
     }
 
-    public int editPet(String name, String photoPath, String birth, double weight, int gender, int species)
+    public int editPet(final int id, final String name, final String photoPath, final String birth,
+                       final double weight, final int gender, final int species)
     {
         Log.i( "PetBusApp", "PetBusBusiness:add new pet." );
         //check whether there is the same pet name in database
-        String sqlStr = "SELECT " + m_database.COLUMN_TEXT_NICKNAME + ", " + m_database.COLUMN_TEXT_PICTURE +
-                " FROM petbus_petinfo WHERE " + m_database.COLUMN_TEXT_NICKNAME + " = \"" + name + "\";";
+        String sqlStr = "SELECT " + m_database.COLUMN_TEXT_ID + ", " + m_database.COLUMN_TEXT_PICTURE +
+                " FROM petbus_petinfo WHERE " + m_database.COLUMN_TEXT_ID + " = " + id + ";";
         Cursor sql_result = m_database.get_result( sqlStr );
         if( 1 == sql_result.getCount() )
         {
@@ -294,7 +295,7 @@ public class middleware_impl extends Application implements middleware {
                         m_database.COLUMN_TEXT_BIRTHDAY + " = \"" + birth + "\", " +
                         m_database.COLUMN_TEXT_SEX + " = " + String.valueOf(gender) + ", "+
                         m_database.COLUMN_TEXT_PETTYPE + " = " + String.valueOf(species) + " " +
-                        "WHERE " + m_database.COLUMN_TEXT_NICKNAME + " = \"" + name + "\";";
+                        "WHERE " + m_database.COLUMN_TEXT_ID + " = " + id + ";";
             }
             else {
                 //delete original photo first
@@ -309,7 +310,7 @@ public class middleware_impl extends Application implements middleware {
                         m_database.COLUMN_TEXT_BIRTHDAY + " = \"" + birth + "\", " +
                         m_database.COLUMN_TEXT_SEX + " = " + String.valueOf(gender) + ", "+
                         m_database.COLUMN_TEXT_PETTYPE + " = " + String.valueOf(species) + " " +
-                        "WHERE " + m_database.COLUMN_TEXT_NICKNAME + " = \"" + name + "\";";
+                        "WHERE " + m_database.COLUMN_TEXT_ID + " = " + id + ";";
             }
 
             m_database.execute_sql( sqlStr );
