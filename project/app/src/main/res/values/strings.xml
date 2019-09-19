@@ -52,4 +52,7 @@
     <string name="pageloading">加载中</string>
     <string name="edit">编辑</string>
     <string name="del">删除</string>
+    <string name="age_year">岁</string>
+    <string name="age_month">个月</string>
+    <string name="age_day">天</string>
 </resources>

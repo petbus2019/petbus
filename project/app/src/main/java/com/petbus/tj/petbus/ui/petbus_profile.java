@@ -20,7 +20,6 @@ import android.view.View;
 import android.app.Activity;
 import android.view.View.OnClickListener;
 import android.content.Intent;
-import android.widget.Toast;
 
 import com.petbus.tj.petbus.middleware.middleware;
 import com.petbus.tj.petbus.middleware.middleware_impl;

@@ -27,7 +27,6 @@ import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.petbus.tj.petbus.middleware.middleware;
 import com.petbus.tj.petbus.middleware.middleware_impl;
@@ -123,7 +122,6 @@ public class petbus_profileadd extends FragmentActivity implements View.OnClickL
                 if (mBirth.getText().length()==0 || mName.getText().length()==0 || mWeight.getText().length()==0)
                 {
                     Log.i( "PetBusApp", "profileadd: your  is empty, please try again." );
-                    Toast.makeText(petbus_profileadd.this, R.string.inputEmpty, Toast.LENGTH_LONG ).show();
                     break;
                 }
                 String strBirth = mBirth.getText().toString();
@@ -151,8 +149,6 @@ public class petbus_profileadd extends FragmentActivity implements View.OnClickL
 
     private void addPet(String name, Bitmap circlebitmap, String birth, double weight, int gender, int species)
     {
-        Toast.makeText(petbus_profileadd.this, name+','+birth+","
-                +weight+","+gender+","+species, Toast.LENGTH_LONG ).show();
         //save photo now
         String photoPath = "";
         if (circlebitmap != null)

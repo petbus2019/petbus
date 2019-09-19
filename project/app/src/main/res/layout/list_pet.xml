@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="98dp"
     android:descendantFocusability="blocksDescendants"
     android:background="@mipmap/listpetbackground">
     <LinearLayout
@@ -17,7 +17,6 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:id="@+id/info_name"
                 android:text="猫猫1"
                 android:textSize="17dp"
@@ -26,7 +25,7 @@
                 android:id="@+id/profile_editbtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_centerVertical="true"
                 android:layout_marginLeft="7dp"
                 android:clickable="true"
                 android:background="@color/colorWhite"
@@ -58,8 +57,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/info_weight"
-                android:text=" Kg"
-                android:layout_marginBottom="10dp"/>
+                android:text=" Kg"/>
         </RelativeLayout>
     </LinearLayout>
     <LinearLayout

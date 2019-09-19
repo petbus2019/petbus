@@ -27,11 +27,9 @@ import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.petbus.tj.petbus.middleware.middleware;
 import com.petbus.tj.petbus.middleware.middleware_impl;
-import com.petbus.tj.petbus.ui.CircleImageView;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -61,8 +59,7 @@ public class petbus_profiledit extends FragmentActivity implements View.OnClickL
 
     public static final int MEDIA_TYPE_IMAGE = 1;
 
-    private static final int TIGGER_PHOTO = 0;
-    private static final int TIGGER_CAMERA = 1;
+    private int editPetId = 0;
 
 
     @Override
@@ -129,7 +126,6 @@ public class petbus_profiledit extends FragmentActivity implements View.OnClickL
                 if (mBirth.getText().length()==0 || mName.getText().length()==0 || mWeight.getText().length()==0)
                 {
                     Log.i( "PetBusApp", "profileadd: your  is empty, please try again." );
-                    Toast.makeText(petbus_profiledit.this, R.string.inputEmpty, Toast.LENGTH_LONG ).show();
                     break;
                 }
                 String strBirth = mBirth.getText().toString();
@@ -150,7 +146,7 @@ public class petbus_profiledit extends FragmentActivity implements View.OnClickL
                         break;
                     }
                 }
-                editPet(strName,mCirclebitmap,strBirth,weightVal,genderVal,speciesVal );
+                editPet(strName, mCirclebitmap, strBirth, weightVal, genderVal, speciesVal );
                 //destroy this activity
                 finish();
         }
@@ -162,6 +158,7 @@ public class petbus_profiledit extends FragmentActivity implements View.OnClickL
         HashMap petItem=(HashMap)intent.getSerializableExtra("pet_info");
 
         System.out.println(petItem);
+        editPetId = Integer.parseInt(petItem.get(mMiddleware.PETINFO_TYPE_ID).toString());
         String name = petItem.get(mMiddleware.PETINFO_TYPE_NAME).toString();
         String photo = petItem.get(mMiddleware.PETINFO_TYPE_PHOTO).toString();
         String weight = petItem.get(mMiddleware.PETINFO_TYPE_WEIGHT).toString() + " kg";
@@ -205,17 +202,16 @@ public class petbus_profiledit extends FragmentActivity implements View.OnClickL
         }
     }
 
-    private void editPet(String name, Bitmap circlebitmap, String birth, double weight, int gender, int species)
+    private void editPet(String name, Bitmap circlebitmap, String birth, double weight,
+                         int gender, int species)
     {
-        Toast.makeText(petbus_profiledit.this, name+','+birth+","
-                +weight+","+gender+","+species, Toast.LENGTH_LONG ).show();
         //save photo now
         String photoPath = "";
         if (circlebitmap != null)
         {
             photoPath = saveBitmapAsFile( "PHOTO_",circlebitmap );
         }
-        mMiddleware.editPet(name, photoPath, birth, weight, gender, species);
+        mMiddleware.editPet(editPetId, name, photoPath, birth, weight, gender, species);
     }
 
     protected void showDatePickDlg() {

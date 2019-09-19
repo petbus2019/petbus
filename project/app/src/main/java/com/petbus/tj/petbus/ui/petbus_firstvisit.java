@@ -26,7 +26,6 @@ import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.petbus.tj.petbus.middleware.middleware;
 import com.petbus.tj.petbus.middleware.middleware_impl;
@@ -107,7 +106,6 @@ public class petbus_firstvisit extends FragmentActivity implements ActivityCompa
                 if (birth.getText().length()==0 || name.getText().length()==0 || weight.getText().length()==0)
                 {
                     Log.i( "PetBusApp", "profileadd: your  is empty, please try again." );
-                    Toast.makeText(petbus_firstvisit.this, R.string.inputEmpty, Toast.LENGTH_LONG ).show();
                     return;
                 }
                 String strBirth = birth.getText().toString();
@@ -137,9 +135,7 @@ public class petbus_firstvisit extends FragmentActivity implements ActivityCompa
 
     private void addPet(String name, Bitmap circlebitmap, String birth, double weight, int gender, int species)
     {
-        Toast.makeText(petbus_firstvisit.this, name+','+birth+","
-                +weight+","+gender+","+species, Toast.LENGTH_LONG ).show();
-        //save photo now
+         //save photo now
         String photoPath = "";
         if (circlebitmap != null)
         {
