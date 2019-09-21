@@ -104,16 +104,49 @@ public class actionfragment_overview extends Fragment implements OnItemSelectedL
     }
 
     private void update_overview_data(){
+
         m_graphic_view.clearData();
-        m_graphic_view.addData( 2018, 10, 10, 20, 30, 40 );
-        m_graphic_view.addData( 2018, 11, 62, 64, 66, 66 );
-        m_graphic_view.addData( 2018, 12, 72, 74, 76, 76 );
-        m_graphic_view.addData( 2019, 1, 1, 2, 3, 4 );
-        m_graphic_view.addData( 2019, 2, 20, 24, 26, 26 );
-        m_graphic_view.addData( 2019, 3, 30, 34, 36, 36 );
-        m_graphic_view.addData( 2019, 4, 40, 44, 46, 46 );
-        m_graphic_view.addData( 2019, 5, 50, 55, 56, 56 );
-        m_graphic_view.addData( 2019, 6, 60, 66, 66, 66 );
+        // m_graphic_view.addData( 2018, 10, 10, 20, 30, 40 );
+        // m_graphic_view.addData( 2018, 11, 62, 64, 66, 66 );
+        // m_graphic_view.addData( 2018, 12, 72, 74, 76, 76 );
+        // m_graphic_view.addData( 2019, 1, 1, 2, 3, 4 );
+        // m_graphic_view.addData( 2019, 2, 20, 24, 26, 26 );
+        // m_graphic_view.addData( 2019, 3, 30, 34, 36, 36 );
+        // m_graphic_view.addData( 2019, 4, 40, 44, 46, 46 );
+        // m_graphic_view.addData( 2019, 5, 50, 55, 56, 56 );
+        // m_graphic_view.addData( 2019, 6, 60, 66, 66, 66 );
+
+        int years = 2019;
+        for( int i = 1;i <= 12;i++ )
+        {
+            Map<String,Integer> map = new HashMap<String,Integer>();
+            int re = m_middleware.get_overview_value( String.valueOf(years), String.format("%02d", i) , map );
+            int feed = 0;
+            int bath = 0;
+            int shit = 0;
+            int walk = 0;
+            try {
+                feed = map.get("喂食");
+            }catch (Exception e){
+                feed = 0;
+            }
+            try {
+                bath = map.get("洗澡");
+            }catch (Exception e){
+                bath = 0;
+            }
+            try {
+                shit = map.get("铲屎");
+            }catch (Exception e){
+                shit = 0;
+            }
+            try {
+                walk = map.get("遛弯");
+            }catch (Exception e){
+                walk = 0;
+            }
+            m_graphic_view.addData( years, i, feed, bath, shit, walk );
+        }
         return ;
     }
 

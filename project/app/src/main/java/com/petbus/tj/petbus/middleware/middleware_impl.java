@@ -508,4 +508,20 @@ public class middleware_impl extends Application implements middleware {
 
         return result;
     }
+    public int get_overview_value( String year, String month, Map<String,Integer> value )
+    {
+        String current_condition = year + "-" + month;
+        String sql = "SELECT count(petbus_record.operation) as count, petbus_record.operation "
+                   + "FROM  petbus_record WHERE  strftime('%Y-%m', petbus_record.time) = '"
+                   + current_condition + "' AND petbus_record.operation != 'null' GROUP BY petbus_record.operation ;";
+        Cursor cur = m_database.get_result( sql );
+        if (cur.moveToFirst()) {
+            do {
+                int value_opter = cur.getInt(cur.getColumnIndex("count"));
+                value.put( cur.getString(cur.getColumnIndex("operation")), value_opter );
+            } while (cur.moveToNext());
+        }
+        Log.d("PetBusApp", "PetBusBusiness:the action statistics for " + current_condition + " is " + value );
+        return 1;
+    }
 }

@@ -50,4 +50,5 @@ public interface middleware{
     Map<String,Object> getPetInfo(int id);
     boolean setCurrentPet(int id);
     Map<String,Integer> get_statistics( String condition,String operation );
+    int get_overview_value( String year, String month, Map<String,Integer> value );
 }
