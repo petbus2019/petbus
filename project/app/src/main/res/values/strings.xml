@@ -57,4 +57,8 @@
     <string name="age_month">个月</string>
     <string name="age_day">天</string>
     <string name="nextstep">下一步</string>
+    <string name="feed">喂食</string>
+    <string name="bath">洗澡</string>
+    <string name="shovelshit">铲屎</string>
+    <string name="walk">遛弯</string>
 </resources>

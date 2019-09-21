@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.content.Context;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -84,9 +85,9 @@ public class actionfragment_overview extends Fragment implements OnItemSelectedL
         String operation = m_spinner.getSelectedItem().toString();
         for( int i = 0;i < 12;i ++ ){
             long sysTime = System.currentTimeMillis();
-            SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-" + String.format( "%02d", i + 1 ) );
+            SimpleDateFormat sDateFormat = new SimpleDateFormat(String.format( "%02d", i + 1 ) );
             String time = sDateFormat.format(new Date(sysTime));
-            Map<String,Integer> re_ = m_middleware.get_statistics( time, operation);
+            Map<String,Integer> re_ = m_middleware.get_statistics( time, operation );
             Integer value = re_.get( operation );
             // Log.i( "PetBusApp", "PetBus:get_overview_data_year  :" + re_ );
             if( null == value )
@@ -103,20 +104,16 @@ public class actionfragment_overview extends Fragment implements OnItemSelectedL
     }
 
     private void update_overview_data(){
-        Map<String, Double> data = get_overview_data_year();
-        // ArrayList<Double> ylist = new ArrayList<Double>( data.values() );
-        // ArrayList<String> xRawDatas = new ArrayList<String>( data.keySet() );
-        ArrayList<String> xRawDatas = new ArrayList<String>();
-        ArrayList<Double> ylist = new ArrayList<Double>();
-        for (Map.Entry<String, Double> entry : data.entrySet()) {
-            ylist.add( entry.getValue() );
-            xRawDatas.add( entry.getKey() );
-            // Log.i( "PetBusApp", "PetBus:update_overview_data  :" + ylist + "111: " + xRawDatas );
-        }
-
-        Log.i( "PetBusApp", "PetBus:update_overview_data  :" + ylist + "111: " + xRawDatas );
-        
-        m_graphic_view.setData(ylist, xRawDatas, 8, 2);
+        m_graphic_view.clearData();
+        m_graphic_view.addData( 2018, 10, 10, 20, 30, 40 );
+        m_graphic_view.addData( 2018, 11, 62, 64, 66, 66 );
+        m_graphic_view.addData( 2018, 12, 72, 74, 76, 76 );
+        m_graphic_view.addData( 2019, 1, 1, 2, 3, 4 );
+        m_graphic_view.addData( 2019, 2, 20, 24, 26, 26 );
+        m_graphic_view.addData( 2019, 3, 30, 34, 36, 36 );
+        m_graphic_view.addData( 2019, 4, 40, 44, 46, 46 );
+        m_graphic_view.addData( 2019, 5, 50, 55, 56, 56 );
+        m_graphic_view.addData( 2019, 6, 60, 66, 66, 66 );
         return ;
     }
 
@@ -128,7 +125,10 @@ public class actionfragment_overview extends Fragment implements OnItemSelectedL
         View view = inflater.inflate(R.layout.actionfragment_overview, container, false);
         m_spinner = (Spinner) view.findViewById(R.id.spinner);
         m_graphic_view = (LineGraphicView) view.findViewById(R.id.tabview_id);
-        action_adapter arr_adapter = new action_adapter(this.getActivity(), m_middleware.get_action_list());
+        List<String> data_list = new ArrayList<String>();
+        data_list.add("按月统计");
+        data_list.add("按年统计");
+        ArrayAdapter arr_adapter = new ArrayAdapter<String>( this.getActivity(), R.layout.spinner_item, data_list );
         m_spinner.setAdapter(arr_adapter);
         m_spinner.setOnItemSelectedListener( this );
 

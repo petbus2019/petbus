@@ -27,8 +27,37 @@ import android.util.Log;
 // https://www.bbsmax.com/A/ke5jQ1r7Jr/
 
 // https://blog.csdn.net/w855227/article/details/80499408
-class LineGraphicView extends View
+
+class graphic_data
 {
+    public graphic_data( int years, int month,int feed,int bath,int shovelshit,int walk )
+    {
+        m_years = years;
+        m_month = month;
+        m_feed = feed;
+        m_bath = bath;
+        m_walk = walk;
+        m_shovelshit = shovelshit;
+    }
+    public int m_years;
+    public int m_month;
+    public int m_feed;
+    public int m_bath;
+    public int m_walk;
+    public int m_shovelshit;
+}
+
+public class LineGraphicView extends View
+{
+    private static int m_text_size = 12;
+    private static int m_text_space_size = 6;
+    private static int m_jiange_size = 20;
+    private static int m_item_size = 40;
+    private static int m_signal_size = 10;
+    private static int marginLeft = 30;
+    private static int marginBottom = 54;
+    private static int height_per_value = 4;
+
     private static final int NONE = 0;
     private static final int DRAG = 1;
     private static final int ZOOM = 2;
@@ -36,6 +65,8 @@ class LineGraphicView extends View
     private int m_current_xpos = 0;
     private int m_last_xpos = 0;
     private int m_last_ypos = 0;
+
+    private int m_current_years = 0;
     /**
      * 公共部分
      */
@@ -61,21 +92,11 @@ class LineGraphicView extends View
     private int bheight = 0;
     private int blwidh;
     private boolean isMeasure = true;
-    /**
-     * Y轴最大值
-     */
-    private int maxValue;
+
     /**
      * Y轴间距值
      */
-    private int averageValue;
-    private int marginTop = 20;
-    private int marginBottom = 40;
 
-    /**
-     * 曲线上总点数
-     */
-    private Point[] mPoints;
     /**
      * 纵坐标值
      */
@@ -84,12 +105,14 @@ class LineGraphicView extends View
      * 横坐标值
      */
     private ArrayList<String> xRawDatas;
-    private ArrayList<Integer> xList = new ArrayList<Integer>();// 记录每个x的值
-    private int spacingHeight;
+
+    private ArrayList<graphic_data> m_graphic_data = new ArrayList<graphic_data>();
 
     public LineGraphicView(Context context)
     {
         this(context, null);
+        mContext = context;
+        initView();
     }
 
     public LineGraphicView(Context context, AttributeSet attrs)
@@ -127,15 +150,9 @@ class LineGraphicView extends View
 
     @Override
     public boolean onTouchEvent(MotionEvent event){
-        // Log.d( "PetBusApp", "PetBusBusiness:onTouchEvent + " + event );
         int x = (int) event.getX();
         int y = (int) event.getY();
         
-        // DisplayMetrics metrics = new DisplayMetrics();
-        // getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        // int widthPixels = metrics.widthPixels;
-        // int heightPixels = metrics.heightPixels;
-
         switch (event.getAction() & MotionEvent.ACTION_MASK){
             case MotionEvent.ACTION_DOWN:
                 //单点触控
@@ -184,13 +201,13 @@ class LineGraphicView extends View
     {
         if (isMeasure)
         {
-            this.canvasHeight = getHeight() - 20;
+            this.canvasHeight = getHeight();
             this.canvasWidth = getWidth() ;
             if (bheight == 0){
                 bheight = (int) (canvasHeight - marginBottom);
             }
 
-            blwidh = dip2px(30);
+            blwidh = dip2px(m_text_size + m_text_space_size);
             isMeasure = false;
         }
 
@@ -200,31 +217,15 @@ class LineGraphicView extends View
     @Override
     protected void onDraw(Canvas canvas)
     {
-        mPaint.setColor(res.getColor(R.color.color_f2f2f2));
+        mPaint.setColor(res.getColor(R.color.colorBlack));
 
-        Log.d( "PetBusApp", "PetBusBusiness:onDraw + " + canvasWidth );
         drawAllXLine(canvas);
         drawAllYLine(canvas);
-        mPoints = getPoints();
 
-        mPaint.setColor(res.getColor(R.color.color_ff4631));
-        mPaint.setStrokeWidth(dip2px(2.5f));
+        mPaint.setColor(res.getColor(R.color.colorBlack));
+        mPaint.setStrokeWidth(dip2px(1f));
         mPaint.setStyle(Style.STROKE);
-        // if (mStyle == Linestyle.Curve)
-        // {
-        //     drawScrollLine(canvas);
-        // }
-        // else
-        // {
-        //     drawLine(canvas);
-        // }
-
         mPaint.setStyle(Style.FILL);
-        for (int i = 0; i < mPoints.length; i++)
-        {
-            canvas.drawRect( mPoints[i].x + 20, mPoints[i].y, mPoints[i].x + 100, canvasHeight - marginTop, mPaint);
-            // canvas.drawCircle(mPoints[i].x, mPoints[i].y, CIRCLE_SIZE / 2, mPaint);
-        }
     }
 
     /**
@@ -232,63 +233,59 @@ class LineGraphicView extends View
      */
     private void drawAllXLine(Canvas canvas)
     {
-        canvas.drawLine(blwidh, bheight + marginTop, (canvasWidth - blwidh)
-                       ,bheight + marginTop, mPaint);
-        for (int i = 0; i < spacingHeight + 1; i++)
-        {
-            // Log.d("PetBusApp", "PetBusBusiness:drawAllXLine");
-            drawText(String.valueOf(averageValue * i), blwidh / 2, bheight - (bheight / spacingHeight) * i + marginTop,
-                    canvas);
-        }
+        canvas.drawLine(0, bheight, (canvasWidth ),bheight , mPaint);
     }
 
+    private void draw_signal_view( int i, Canvas canvas,int feed_value,int bath_value,int shovelshit, int walk_value )
+    {
+        int item_width = dpToPx( m_item_size );
+        int total_size = dpToPx( m_item_size + m_jiange_size );
+        int left = dpToPx( marginLeft );
+        int signal_width = dpToPx( m_signal_size );
+        int offset = 0;
+
+        feed_value = feed_value * dpToPx( height_per_value );
+        bath_value = bath_value * dpToPx( height_per_value );
+        shovelshit = shovelshit * dpToPx( height_per_value );
+        walk_value = walk_value * dpToPx( height_per_value );
+
+        mPaint.setColor(res.getColor(R.color.colorBlack));
+        String month = String.valueOf(m_graphic_data.get(i).m_month);
+        drawText( month, left + (item_width - dpToPx(m_text_size) ) / 2 + total_size * i, bheight + dpToPx(m_text_size), canvas);// X坐标
+        
+        mPaint.setColor(res.getColor(R.color.overview_feed));
+        canvas.drawRect( left + offset + total_size * i , bheight - feed_value, left + offset + total_size * i + signal_width, bheight, mPaint);
+        offset += signal_width;
+
+        mPaint.setColor(res.getColor(R.color.overview_bath));
+        canvas.drawRect( left + offset + total_size * i , bheight - bath_value, left + offset + total_size * i + signal_width, bheight, mPaint);
+        offset += signal_width;
+
+        mPaint.setColor(res.getColor(R.color.overview_shovelshit));
+        canvas.drawRect( left + offset + total_size * i , bheight - shovelshit, left + offset + total_size * i + signal_width, bheight, mPaint);
+        offset += signal_width;
+
+        mPaint.setColor(res.getColor(R.color.overview_walk));
+        canvas.drawRect( left + offset + total_size * i , bheight - walk_value, left + offset + total_size * i + signal_width, bheight, mPaint);
+    }
     /**
-     * 画所有纵向表格，包括Y轴    
+     * 画所有纵向表格，包括Y轴
      */
     private void drawAllYLine(Canvas canvas)
     {
-        canvas.drawLine(blwidh, marginTop, blwidh, bheight + marginTop, mPaint);
-        for (int i = 0; i < yRawData.size(); i++)
+        int total_size = dip2px( m_item_size + m_jiange_size );
+        for (int i = 0; i < m_graphic_data.size(); i++)
         {
-            // Log.d( "PetBusApp", "PetBusBusiness:drawAllYLine + " + xRawDatas.get(i) );
-            xList.add(blwidh + (canvasWidth - blwidh) / yRawData.size() * i);
-            drawText(xRawDatas.get(i), blwidh + (canvasWidth - blwidh) / yRawData.size() * i
-                     , bheight + dip2px(18), canvas);// X坐标
-        }
-    }
-
-    private void drawScrollLine(Canvas canvas)
-    {
-        Point startp = new Point();
-        Point endp = new Point();
-        for (int i = 0; i < mPoints.length - 1; i++)
-        {
-            startp = mPoints[i];
-            endp = mPoints[i + 1];
-            int wt = (startp.x + endp.x) / 2;
-            Point p3 = new Point();
-            Point p4 = new Point();
-            p3.y = startp.y;
-            p3.x = wt;
-            p4.y = endp.y;
-            p4.x = wt;
-
-            Path path = new Path();
-            path.moveTo(startp.x, startp.y);
-            path.cubicTo(p3.x, p3.y, p4.x, p4.y, endp.x, endp.y);
-            canvas.drawPath(path, mPaint);
-        }
-    }
-
-    private void drawLine(Canvas canvas)
-    {
-        Point startp = new Point();
-        Point endp = new Point();
-        for (int i = 0; i < mPoints.length - 1; i++)
-        {
-            startp = mPoints[i];
-            endp = mPoints[i + 1];
-            canvas.drawLine(startp.x, startp.y, endp.x, endp.y, mPaint);
+            if( m_current_years != m_graphic_data.get(i).m_years )
+            {
+                m_current_years = m_graphic_data.get(i).m_years;
+                canvas.save();
+                canvas.rotate(-18, blwidh + i * total_size , bheight + dip2px( m_text_size) );
+                drawText( String.valueOf(m_current_years), i * total_size + dip2px(m_text_space_size) , bheight + dip2px(m_text_size)+ dip2px(m_text_space_size / 2), canvas);
+                canvas.restore();
+            }
+            draw_signal_view( i,canvas, m_graphic_data.get(i).m_feed, m_graphic_data.get(i).m_bath
+                            , m_graphic_data.get(i).m_shovelshit, m_graphic_data.get(i).m_walk );
         }
     }
 
@@ -296,61 +293,27 @@ class LineGraphicView extends View
     {
         Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
         p.setTextSize(dip2px(12));
-        p.setColor(res.getColor(R.color.color_999999));
+        p.setColor(res.getColor(R.color.colorBlack));
         p.setTextAlign(Paint.Align.LEFT);
         canvas.drawText(text, x, y , p);
     }
 
-    private Point[] getPoints()
-    {
-        Point[] points = new Point[yRawData.size()];
-        for (int i = 0; i < yRawData.size(); i++)
-        {
-            int ph = bheight - (int) (bheight * (yRawData.get(i) / maxValue));
-
-            points[i] = new Point(xList.get(i), ph + marginTop);
-        }
-        return points;
-    }
-
     public void setData(ArrayList<Double> yRawData, ArrayList<String> xRawData, int maxValue, int averageValue)
     {
-        this.maxValue = maxValue;
-        this.averageValue = averageValue;
-        this.mPoints = new Point[yRawData.size()];
         this.xRawDatas = xRawData;
         this.yRawData = yRawData;
-        this.spacingHeight = maxValue / averageValue;
     }
 
-    public void setTotalvalue(int maxValue)
+    public void clearData()
     {
-        this.maxValue = maxValue;
+        m_current_years = 0;
+        m_graphic_data.clear();
     }
 
-    public void setPjvalue(int averageValue)
+    public void addData( int years, int month, int feed,int bath,int shovelshit, int walk )
     {
-        this.averageValue = averageValue;
-    }
-
-    public void setMargint(int marginTop)
-    {
-        this.marginTop = marginTop;
-    }
-
-    public void setMarginb(int marginBottom)
-    {
-        this.marginBottom = marginBottom;
-    }
-
-    public void setMstyle(Linestyle mStyle)
-    {
-        this.mStyle = mStyle;
-    }
-
-    public void setBheight(int bheight)
-    {
-        this.bheight = bheight;
+        graphic_data data = new graphic_data( years, month, feed, bath, shovelshit, walk );
+        m_graphic_data.add( data );
     }
 
     /**
@@ -359,6 +322,9 @@ class LineGraphicView extends View
     private int dip2px(float dpValue)
     {
         return (int) (dpValue * dm.density + 0.5f);
+    }
+    private int dpToPx(int dps) {
+       return Math.round(getResources().getDisplayMetrics().density * dps);
     }
 
 }
