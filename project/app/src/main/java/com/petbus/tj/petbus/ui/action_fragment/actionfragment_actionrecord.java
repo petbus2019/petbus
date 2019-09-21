@@ -538,7 +538,7 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
                 break;
             case R.id.profile_buttom:
                 Log.i( "PetBusApp", "petprofile_button" );
-                Intent intent = new Intent(getActivity().getApplicationContext(),petbus_profile.class);
+                Intent intent = new Intent(getActivity().getApplicationContext(),petbus_profilelist.class);
                 startActivity(intent);
                 break;
         }

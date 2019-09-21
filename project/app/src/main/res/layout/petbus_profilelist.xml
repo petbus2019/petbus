@@ -5,45 +5,52 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
     android:background="@color/app_background"
-    tools:context=".petbus_profileadd"
-    tools:ignore="MissingDefaultResource">
-
+    tools:context=".petbus_profilelist">
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="53dp"
-        android:background="@color/colorWhite">
+        android:background="@color/colorWhite"
+        android:gravity="center"
+        android:layout_marginBottom="4dp">
         <TextView
-            android:id="@+id/txt_profileaddTitle"
+            android:id="@+id/txt_profilelistTitle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clickable="true"
             android:gravity="center"
-            android:text="@string/addpet"
+            android:text="@string/petprofile"
             android:textSize="21sp"
             android:textColor="@color/colorBlack" />
         <ImageButton
-            android:id="@+id/btn_profileaddBack"
+            android:id="@+id/btn_profilelistBack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_marginLeft="19dp"
             android:background="@color/colorWhite"
+            android:clickable="false"
+            android:layout_alignParentLeft ="true"
+            android:layout_centerVertical="true"
             android:src="@mipmap/arrarryleft_normal" />
+        <ImageButton
+            android:id="@+id/btn_profilelistAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="19dp"
+            android:background="@color/colorWhite"
+            android:layout_centerVertical="true"
+            android:clickable="false"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/add_button" />
     </RelativeLayout>
-    <fragment
+
+    <ListView
+        android:id="@+id/list_pet"
+        android:background="@color/app_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/info_profileadd"
-        android:name="com.petbus.tj.petbus.ui.info_fragment.infofragment"
-        android:layout_weight="1"/>
-
-    <ImageButton
-        android:id="@+id/btn_profileaddSave"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/app_background"
-        android:src="@mipmap/btn_save"
-        android:layout_marginBottom="20dp"/>
+        android:divider="@color/app_background"
+        android:dividerHeight="13dp"
+        android:layout_margin="16dp">
+    </ListView>
 </LinearLayout>

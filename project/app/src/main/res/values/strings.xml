@@ -5,6 +5,7 @@
     <string name="setting">设置</string>
     <string name="addrecord">添加记录</string>
     <string name="petprofile">萌宠档案</string>
+    <string name="addfirstpet">请添加第一个宠物</string>
     <string name="addpet">添加爱宠</string>
     <string name="editpet">编辑资料</string>
     <string name="petname">宠物名字</string>
@@ -55,4 +56,5 @@
     <string name="age_year">岁</string>
     <string name="age_month">个月</string>
     <string name="age_day">天</string>
+    <string name="nextstep">下一步</string>
 </resources>

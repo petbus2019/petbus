@@ -5,52 +5,204 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:gravity="center"
     android:background="@color/app_background"
-    tools:context=".petbus_profile">
+    tools:context=".petbus_profile"
+    tools:ignore="MissingDefaultResource">
+
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="53dp"
         android:background="@color/colorWhite"
-        android:gravity="center"
-        android:layout_marginBottom="4dp">
+        android:layout_marginTop="0dp">
         <TextView
             android:id="@+id/txt_profileTitle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
             android:clickable="true"
             android:gravity="center"
-            android:text="@string/petprofile"
-            android:textSize="21sp"
-            android:textColor="@color/colorBlack" />
+            android:text="@string/addpet"
+            android:textColor="@color/colorBlack"
+            android:textSize="21sp" />
         <ImageButton
             android:id="@+id/btn_profileBack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="19dp"
             android:background="@color/colorWhite"
-            android:clickable="false"
-            android:layout_alignParentLeft ="true"
-            android:layout_centerVertical="true"
             android:src="@mipmap/arrarryleft_normal" />
         <ImageButton
             android:id="@+id/btn_profileAdd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
             android:layout_marginRight="19dp"
             android:background="@color/colorWhite"
-            android:layout_centerVertical="true"
-            android:clickable="false"
-            android:layout_alignParentRight="true"
             android:src="@mipmap/add_button" />
     </RelativeLayout>
-
-    <ListView
-        android:id="@+id/list_pet"
-        android:background="@color/app_background"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="@color/app_background"
-        android:dividerHeight="13dp"
-        android:layout_margin="16dp">
-    </ListView>
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+        <ImageButton
+            android:id="@+id/btn_profileImg"
+            android:layout_width="103dp"
+            android:layout_height="103dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="30dp"
+            android:background="@color/app_background"
+            android:src="@mipmap/imgbtn" />
+        <RelativeLayout
+            android:layout_width="192dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0dp">
+            <TextView
+                android:id="@+id/id_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/infoname"
+                android:paddingTop="12dp"
+                android:textSize="16sp" />
+            <EditText
+                android:id="@+id/input_profileName"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_toRightOf="@id/id_name"
+                android:maxLines="1"
+                android:textSize="16sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="192dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0dp">
+            <TextView
+                android:id="@+id/id_birth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/infobirth"
+                android:paddingTop="12dp"
+                android:textSize="16sp" />
+            <EditText
+                android:id="@+id/input_profileBirth"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_toRightOf="@id/id_birth"
+                android:textSize="16sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="192dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp">
+            <TextView
+                android:id="@+id/id_weight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/infoweight"
+                android:paddingTop="12dp"
+                android:textSize="16sp" />
+            <EditText
+                android:id="@+id/input_profileWeight"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/id_weight"
+                android:gravity="center"
+                android:hint="                             kg"
+                android:inputType="number|numberDecimal"
+                android:textSize="16sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="192dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp">
+            <TextView
+                android:id="@+id/id_gender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/infogender"
+                android:paddingTop="5dp"
+                android:textSize="16sp" />
+            <RadioGroup
+                android:id="@+id/radio_profileGender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/id_gender"
+                android:checkedButton="@id/info_gendermale"
+                android:orientation="horizontal">
+                <RadioButton
+                    android:id="@+id/info_gendermale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="@string/infogendermale"
+                    android:textSize="16sp" />
+                <RadioButton
+                    android:id="@+id/info_genderfemale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:text="@string/infogenderfemale"
+                    android:textSize="16sp" />
+            </RadioGroup>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="192dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp">
+            <TextView
+                android:id="@+id/id_species"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:text="@string/infospecies"
+                android:textSize="16sp" />
+            <RadioGroup
+                android:id="@+id/radio_profileSpecies"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/id_species"
+                android:checkedButton="@id/info_speciescat"
+                android:orientation="horizontal">
+                <RadioButton
+                    android:id="@+id/info_speciescat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="@string/infospeciescat"
+                    android:textSize="16sp" />
+                <RadioButton
+                    android:id="@+id/info_speciesdog"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:text="@string/infospeciesdog"
+                    android:textSize="16sp" />
+            </RadioGroup>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/btn_profileNext"
+            android:layout_width="match_parent"
+            android:layout_height="43dp"
+            android:background="@color/color_btn"
+            android:text="NEXT"
+            android:textSize="16sp"
+            android:textColor="@color/colorWhite" />
+    </LinearLayout>
 </LinearLayout>

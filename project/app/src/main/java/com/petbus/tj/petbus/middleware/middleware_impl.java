@@ -253,7 +253,8 @@ public class middleware_impl extends Application implements middleware {
         return sql_result.getCount();
     }
 
-    public int newPet(String name, String photoPath, String birth, double weight, int gender, int species)
+    public int newPet(final String name, final String photoPath, final String birth,
+                      final double weight, final int gender, final int species)
     {
         Log.i( "PetBusApp", "PetBusBusiness:add new pet." );
         //check whether there is the same pet name in database
