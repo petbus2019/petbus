@@ -57,7 +57,7 @@ public class petbus_profilelist extends Activity implements OnClickListener {
             if (photoURL.isEmpty()){
                 Log.i( "PetBusApp_Profilelist", "item.get(m_middleware.PETINFO_TYPE_PHOTO) is" +
                         photoURL );
-                item.put(m_middleware.PETINFO_TYPE_PHOTO, R.mipmap.imgbtn);
+                item.put(m_middleware.PETINFO_TYPE_PHOTO, R.mipmap.default_photo);
             }
             listItem.add(item);
         }

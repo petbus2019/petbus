@@ -13,7 +13,6 @@ public class petbus_profileadd extends petbus_profile{
         Log.e("PetBus", "In Class:" + Thread.currentThread().getStackTrace()[1].getClassName()
                 + ", Method:" + Thread.currentThread().getStackTrace()[2].getMethodName());
 
-        setProfileBtnAddVisible(View.GONE);
         setProfileTitle(getString(R.string.addpet));
         setProfileNextBtnName(getString(R.string.save));
     }

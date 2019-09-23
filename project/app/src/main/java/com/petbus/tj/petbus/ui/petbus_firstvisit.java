@@ -14,7 +14,6 @@ public class petbus_firstvisit extends petbus_profile{
         Log.e("PetBus_Firstvisit", "In " +
                 Thread.currentThread().getStackTrace()[2].getMethodName());
 
-        setProfileBtnAddVisible(View.GONE);
         setProfileBtnBackVisble(View.GONE);
         setProfileTitle(getString(R.string.addfirstpet));
         setProfileNextBtnName(getString(R.string.nextstep));

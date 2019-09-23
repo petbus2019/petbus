@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="98dp"
     android:descendantFocusability="blocksDescendants"
-    android:background="@mipmap/listpetbackground">
+    android:background="@mipmap/listpet_bg">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -26,10 +26,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="7dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingLeft="7dp"
+                android:paddingRight="15dp"
                 android:clickable="true"
                 android:background="@color/colorWhite"
-                android:src="@mipmap/editbutton"
+                android:src="@mipmap/edit"
                 android:layout_toRightOf="@id/info_name"/>
         </RelativeLayout>
         <RelativeLayout
@@ -64,12 +67,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_vertical|right"
-        android:layout_weight="1">
+        android:layout_weight="2">
         <ImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:id="@+id/info_photo"
-            android:src="@mipmap/empty"
+            android:src="@mipmap/default_photo"
             android:background="@color/colorWhite"
             android:layout_marginRight="50dp"/>
     </LinearLayout>

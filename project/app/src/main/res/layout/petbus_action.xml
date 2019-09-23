@@ -34,7 +34,7 @@
             android:background="#00000000"
             android:clickable="false"
             android:layout_alignParentLeft ="true"
-            android:src="@mipmap/arrarryleft_normal" />
+            android:src="@mipmap/back_btn" />
         <ImageButton
             android:id="@+id/setting_button"
             android:layout_width="14dp"
@@ -48,7 +48,7 @@
             android:minHeight="16dp"
             android:minWidth="14dp"
             android:layout_alignParentRight="true"
-            android:src="@mipmap/setting_normal" />
+            android:src="@mipmap/bell" />
 
         <ImageButton
             android:id="@+id/add_button"
@@ -59,7 +59,7 @@
             android:background="#00000000"
             android:clickable="false"
             android:layout_alignParentRight="true"
-            android:src="@mipmap/add_normal" />
+            android:src="@mipmap/add_btn" />
         <ImageButton
             android:id="@+id/overview_button"
             android:layout_width="14dp"
@@ -69,7 +69,7 @@
             android:background="#00000000"
             android:clickable="false"
             android:layout_toLeftOf="@+id/setting_button"
-            android:src="@mipmap/overview_normal" />
+            android:src="@mipmap/chart1" />
     </RelativeLayout>
 
     <View

@@ -21,7 +21,7 @@
             android:minHeight="21dp"
             android:layout_marginLeft ="23dp"
             android:layout_marginTop ="17dp"
-            android:src="@mipmap/add_time" />
+            android:src="@mipmap/clock" />
         <TextView
             android:layout_marginLeft ="5dp"
             android:layout_width="wrap_content"
@@ -62,7 +62,7 @@
             android:minHeight="21dp"
             android:layout_marginLeft ="23dp"
             android:layout_marginTop ="17dp"
-            android:src="@mipmap/pet_pic" />
+            android:src="@mipmap/pet" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
@@ -161,7 +161,7 @@
                         android:adjustViewBounds="true"
                         android:background="#00000000"
                         android:clickable="false"
-                        android:src="@mipmap/arrayright_normal" />
+                        android:src="@mipmap/rightarrow_btn" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
@@ -182,7 +182,7 @@
             android:minHeight="21dp"
             android:layout_marginLeft ="23dp"
             android:layout_marginTop ="17dp"
-            android:src="@mipmap/add_action" />
+            android:src="@mipmap/checked" />
         <TextView
             android:layout_marginLeft ="5dp"
             android:layout_width="wrap_content"
@@ -212,7 +212,7 @@
                 android:background="#00000000"
                 android:clickable="false"
                 android:gravity="center"
-                android:src="@mipmap/arrayright_normal" />
+                android:src="@mipmap/rightarrow_btn" />
         </LinearLayout>
 
     </LinearLayout>
@@ -247,7 +247,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="left"
                 android:background="#00000000"
-                android:src="@mipmap/camera_normal"/>
+                android:src="@mipmap/camera"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"

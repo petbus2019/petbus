@@ -27,7 +27,7 @@
                     android:layout_height="16dp"
                     android:clickable="false"
                     android:gravity="center"
-                    android:src="@mipmap/overview_spinner" />
+                    android:src="@mipmap/chart2" />
 
                 <Spinner
                     android:id="@+id/spinner"

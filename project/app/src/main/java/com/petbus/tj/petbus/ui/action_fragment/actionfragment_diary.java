@@ -513,7 +513,7 @@ public class actionfragment_diary extends Fragment implements OnClickListener
             m_time_text.setText( time );
         }
         else {
-            m_imageview_picture.setImageDrawable(getResources().getDrawable((R.mipmap.camera_normal)));
+            m_imageview_picture.setImageDrawable(getResources().getDrawable((R.mipmap.camera)));
             m_picture_filename = "";
             m_remark_edit.setText("");
         }

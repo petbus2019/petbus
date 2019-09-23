@@ -119,7 +119,7 @@
                         android:layout_width="9dp"
                         android:layout_height="17dp"
                         android:clickable="false"
-                        android:src="@mipmap/arrayright_normal" />
+                        android:src="@mipmap/rightarrow_btn" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -149,5 +149,5 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="2dp"
         android:layout_marginRight="12dp"
-        android:background="@mipmap/add_normal" />
+        android:background="@mipmap/addaction_btn" />
 </RelativeLayout>

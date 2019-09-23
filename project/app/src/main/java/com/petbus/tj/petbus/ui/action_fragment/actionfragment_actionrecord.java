@@ -240,7 +240,7 @@ class record_daily_listadapter extends ArrayAdapter<action_record> {
         holder.m_record_times.setText( record.get_time() );
         holder.m_record_action.setText( record.get_action_text() );
         if( action_text.equals("喂食") ) {
-            holder.m_record_image.setImageDrawable(m_Context.getResources().getDrawable((R.mipmap.fade)));
+            holder.m_record_image.setImageDrawable(m_Context.getResources().getDrawable((R.mipmap.feed)));
         }
         else if( action_text.equals("铲屎") ) {
             holder.m_record_image.setImageDrawable(m_Context.getResources().getDrawable((R.mipmap.shit)));
@@ -446,16 +446,16 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
                     m_lastaction_1.setText( entry.getKey() + ":" + text );
                 }
                 if( entry.getKey().equals("喂食") ) {
-                    m_lastaction_1_pic.setImageDrawable(getActivity().getResources().getDrawable((R.mipmap.food_sign)));
+                    m_lastaction_1_pic.setImageDrawable(getActivity().getResources().getDrawable((R.mipmap.feed_s)));
                 }
                 else if( entry.getKey().equals("铲屎") ) {
-                    m_lastaction_1_pic.setImageDrawable(getActivity().getResources().getDrawable((R.mipmap.shit_sign)));
+                    m_lastaction_1_pic.setImageDrawable(getActivity().getResources().getDrawable((R.mipmap.shit_s)));
                 }
                 else if( entry.getKey().equals("洗澡") ) {
-                    m_lastaction_1_pic.setImageDrawable(getActivity().getResources().getDrawable((R.mipmap.shower_sign)));
+                    m_lastaction_1_pic.setImageDrawable(getActivity().getResources().getDrawable((R.mipmap.shower_s)));
                 }
                 else if( entry.getKey().equals("遛弯") ) {
-                    m_lastaction_1_pic.setImageDrawable(getActivity().getResources().getDrawable((R.mipmap.foot_sign)));
+                    m_lastaction_1_pic.setImageDrawable(getActivity().getResources().getDrawable((R.mipmap.running_s)));
                 }
             }
             else if( 1 == i )
@@ -480,16 +480,16 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
                     m_lastaction_2.setText( entry.getKey() + ":" + text );
                 }
                 if( entry.getKey().equals("喂食") ) {
-                    m_lastaction_2_pic.setImageDrawable(getActivity().getResources().getDrawable((R.mipmap.food_sign)));
+                    m_lastaction_2_pic.setImageDrawable(getActivity().getResources().getDrawable((R.mipmap.feed_s)));
                 }
                 else if( entry.getKey().equals("铲屎") ) {
-                    m_lastaction_2_pic.setImageDrawable(getActivity().getResources().getDrawable((R.mipmap.shit_sign)));
+                    m_lastaction_2_pic.setImageDrawable(getActivity().getResources().getDrawable((R.mipmap.shit_s)));
                 }
                 else if( entry.getKey().equals("洗澡") ) {
-                    m_lastaction_2_pic.setImageDrawable(getActivity().getResources().getDrawable((R.mipmap.shower_sign)));
+                    m_lastaction_2_pic.setImageDrawable(getActivity().getResources().getDrawable((R.mipmap.shower_s)));
                 }
                 else if( entry.getKey().equals("遛弯") ) {
-                    m_lastaction_2_pic.setImageDrawable(getActivity().getResources().getDrawable((R.mipmap.foot_sign)));
+                    m_lastaction_2_pic.setImageDrawable(getActivity().getResources().getDrawable((R.mipmap.running_s)));
                 }
             }
             else if( 2 == i )
@@ -511,16 +511,16 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
                     m_lastaction_3.setText( entry.getKey() + ":" + text );
                 }
             if( entry.getKey().equals("喂食") ) {
-                    m_lastaction_3_pic.setImageDrawable(getActivity().getResources().getDrawable((R.mipmap.food_sign)));
+                    m_lastaction_3_pic.setImageDrawable(getActivity().getResources().getDrawable((R.mipmap.feed_s)));
                 }
                 else if( entry.getKey().equals("铲屎") ) {
-                    m_lastaction_3_pic.setImageDrawable(getActivity().getResources().getDrawable((R.mipmap.shit_sign)));
+                    m_lastaction_3_pic.setImageDrawable(getActivity().getResources().getDrawable((R.mipmap.shit_s)));
                 }
                 else if( entry.getKey().equals("洗澡") ) {
-                    m_lastaction_3_pic.setImageDrawable(getActivity().getResources().getDrawable((R.mipmap.shower_sign)));
+                    m_lastaction_3_pic.setImageDrawable(getActivity().getResources().getDrawable((R.mipmap.shower_s)));
                 }
                 else if( entry.getKey().equals("遛弯") ) {
-                    m_lastaction_3_pic.setImageDrawable(getActivity().getResources().getDrawable((R.mipmap.foot_sign)));
+                    m_lastaction_3_pic.setImageDrawable(getActivity().getResources().getDrawable((R.mipmap.running_s)));
                 }
             }
             i++;

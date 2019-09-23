@@ -11,10 +11,12 @@
     <color name="color_f2f2f2">#c2a2b2</color>
     <color name="color_ff4631">#ff4631</color>
     <color name="color_999999">#999999</color>
-    <color name="color_btn">#B1D65B</color>
     <color name="overview_feed">#99C6F1</color>
     <color name="overview_bath">#FAE800</color>
     <color name="overview_shovelshit">#EEB7FB</color>
     <color name="overview_walk">#F3A9AC</color>
     <color name="overview_line">#808080</color>
+    <color name="btnPressed">#e7e7e7</color>
+    <color name="btnNext">#B1D65B</color>
+    <color name="btnNextPressed">#a4c654</color>
 </resources>

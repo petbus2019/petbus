@@ -64,7 +64,6 @@ public class petbus_profile extends FragmentActivity implements View.OnClickList
 
     private ImageButton mBtnImg;
     private Button mBtnNext;
-    private ImageButton mBtnAdd;
     private ImageButton mBtnBack;
     private TextView mName, mBirth, mWeight, mTitle;
     private RadioGroup mGender, mSpecies;
@@ -92,8 +91,6 @@ public class petbus_profile extends FragmentActivity implements View.OnClickList
         mBtnImg.setOnClickListener(this);
         mBtnBack = findViewById(R.id.btn_profileBack);
         mBtnBack.setOnClickListener(this);
-        mBtnAdd = findViewById(R.id.btn_profileAdd);
-        mBtnAdd.setOnClickListener(this);
         mBtnNext = findViewById(R.id.btn_profileNext);
         mBtnNext.setOnClickListener(this);
         mName = findViewById(R.id.input_profileName);
@@ -180,11 +177,6 @@ public class petbus_profile extends FragmentActivity implements View.OnClickList
 
                 doNextBtnClick();
         }
-    }
-
-    protected void setProfileBtnAddVisible(final int visible)
-    {
-        mBtnAdd.setVisibility(visible);
     }
 
     protected void setProfileBtnBackVisble(final int visible)
@@ -380,7 +372,7 @@ public class petbus_profile extends FragmentActivity implements View.OnClickList
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         String imgPath = "";
-        mCirclebitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.imgbtn);
+        mCirclebitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.default_photo);
         if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
             try
             {
