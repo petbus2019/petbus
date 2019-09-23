@@ -14,6 +14,8 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.MotionEvent;
+import android.graphics.PathEffect;
+import android.graphics.DashPathEffect;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -228,11 +230,40 @@ public class LineGraphicView extends View
         mPaint.setStyle(Style.FILL);
     }
 
+    private void drawDashlie( Canvas canvas, Paint paint_p,int x, int y, int x1, int y1 )
+    {
+        Paint paint = new Paint();
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setColor(res.getColor(R.color.colorBlack));
+        Path path = new Path();
+        path.moveTo(x, y);
+        path.lineTo(x1,y1);      
+        PathEffect effects = new DashPathEffect(new float[]{5,5,5,5},1);
+        paint.setPathEffect(effects);
+        canvas.drawPath(path, paint);
+    }
+
     /**
      *  画所有横向表格，包括X轴
      */
     private void drawAllXLine(Canvas canvas)
     {
+        int linx_x = bheight - 10 * dpToPx( height_per_value );
+        // canvas.drawLine(0, linx_x, (canvasWidth ),linx_x , mPaint);
+        drawDashlie( canvas, mPaint, 0,linx_x, canvasWidth, linx_x );
+
+        linx_x -= 10 * dpToPx( height_per_value );
+        // canvas.drawLine(0, linx_x, (canvasWidth ),linx_x , mPaint);
+        drawDashlie( canvas, mPaint, 0,linx_x, canvasWidth, linx_x );
+
+        linx_x -= 10 * dpToPx( height_per_value );
+        // canvas.drawLine(0, linx_x, (canvasWidth ),linx_x , mPaint);
+        drawDashlie( canvas, mPaint, 0,linx_x, canvasWidth, linx_x );
+
+        linx_x -= 10 * dpToPx( height_per_value );
+        // canvas.drawLine(0, linx_x, (canvasWidth ),linx_x , mPaint);
+        drawDashlie( canvas, mPaint, 0,linx_x, canvasWidth, linx_x );
+
         canvas.drawLine(0, bheight, (canvasWidth ),bheight , mPaint);
     }
 
