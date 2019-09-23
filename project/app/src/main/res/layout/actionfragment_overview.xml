@@ -66,14 +66,7 @@
                         android:layout_marginLeft="24dp"
                         android:text="40"
                         android:textSize="12sp"/>
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="2dp"
-                        android:gravity="center"
-                        android:layout_marginLeft="19dp"
-                        android:layout_marginRight="19dp"
-                        android:background="@drawable/dash_line"
-                        android:layout_marginTop="1dp" />
+                    
                 </LinearLayout>
                 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="match_parent"
@@ -86,14 +79,7 @@
                         android:layout_marginLeft="24dp"
                         android:text="30"
                         android:textSize="12sp"/>
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="2dp"
-                        android:gravity="center"
-                        android:layout_marginLeft="19dp"
-                        android:layout_marginRight="19dp"
-                        android:background="@drawable/dash_line"
-                        android:layout_marginTop="1dp" />
+                    
                 </LinearLayout>
                 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="match_parent"
@@ -106,14 +92,7 @@
                         android:layout_marginLeft="24dp"
                         android:text="20"
                         android:textSize="12sp"/>
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="2dp"
-                        android:layout_marginLeft="19dp"
-                        android:layout_marginRight="19dp"
-                        android:background="@drawable/dash_line"
-                        android:gravity="center"
-                        android:layout_marginTop="1dp" />
+
                 </LinearLayout>
                 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="match_parent"
@@ -126,14 +105,7 @@
                         android:layout_marginLeft="24dp"
                         android:text="10"
                         android:textSize="12sp"/>
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="2dp"
-                        android:gravity="center"
-                        android:layout_marginLeft="19dp"
-                        android:layout_marginRight="19dp"
-                        android:background="@drawable/dash_line"
-                        android:layout_marginTop="1dp" />
+                    
                 </LinearLayout>
 
 
@@ -148,14 +120,7 @@
                         android:layout_marginLeft="24dp"
                         android:text="0"
                         android:textSize="12sp"/>
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="2dp"
-                        android:gravity="center"
-                        android:layout_marginLeft="19dp"
-                        android:layout_marginRight="19dp"
-                        android:background="@drawable/dash_line"
-                        android:layout_marginTop="1dp" />
+                    
                 </LinearLayout>
         </RelativeLayout>
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
