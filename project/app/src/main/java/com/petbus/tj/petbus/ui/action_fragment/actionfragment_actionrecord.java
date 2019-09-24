@@ -397,7 +397,10 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
         Map<String,Object> pet_info = m_middleware.get_current_pet();
         Bitmap bitmap = null;
 
-        if( String.valueOf( pet_info.get( middleware.PETINFO_TYPE_PHOTO ) ) != "null" )
+        if( String.valueOf( pet_info.get( middleware.PETINFO_TYPE_PHOTO ) ) != "null" 
+            && String.valueOf( pet_info.get( middleware.PETINFO_TYPE_PHOTO ) ) != null 
+            && String.valueOf( pet_info.get( middleware.PETINFO_TYPE_PHOTO ) ).length() != 0
+            && String.valueOf( pet_info.get( middleware.PETINFO_TYPE_PHOTO ) ) != "" )
         {
             bitmap = BitmapFactory.decodeFile( String.valueOf( pet_info.get( middleware.PETINFO_TYPE_PHOTO ) ) );
             m_pet_image.setScaleType(ImageView.ScaleType.FIT_CENTER);
