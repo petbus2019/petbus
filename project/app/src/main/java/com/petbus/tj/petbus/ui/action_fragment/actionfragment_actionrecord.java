@@ -269,9 +269,6 @@ class record_daily_listadapter extends ArrayAdapter<action_record> {
         return;
     }
     
-    // http://www.360doc.com/content/14/0917/15/15077656_410189820.shtml
-    // https://cloud.tencent.com/developer/article/1331002
-    // https://www.cnblogs.com/snake-hand/p/3206655.html
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         action_record record = getItem(position);
@@ -290,7 +287,6 @@ class record_daily_listadapter extends ArrayAdapter<action_record> {
                 view_holder_date viewHolder = (view_holder_date)convertView.getTag( R.layout.record_date );
                 String full_date_text = record.get_date() + "  " + getWeek( record.get_full_time() );
                 viewHolder.m_date_text.setText( full_date_text );
-//                getListView().setDividerHeight(30);
                 break;
             case middleware.RECORD_TYPE_RECORD:
                 if( null == convertView ) {
@@ -371,7 +367,6 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
         @Override
         public void handleMessage(Message msg) {
             boolean result = (boolean) msg.obj;
-            // Log.i( "PetBusApp", "handleMessage£º " + result );
             switch(msg.what){
                 case 0:
                     break;
@@ -400,12 +395,28 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
         m_lastaction_3.setText( text_null );
         
         Map<String,Object> pet_info = m_middleware.get_current_pet();
+        Bitmap bitmap = null;
 
-        Bitmap bitmap = BitmapFactory.decodeFile( String.valueOf( pet_info.get( middleware.PETINFO_TYPE_PHOTO ) ) );
-        m_pet_image.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        m_pet_image.setImageBitmap(bitmap);
+        if( String.valueOf( pet_info.get( middleware.PETINFO_TYPE_PHOTO ) ) != "null" )
+        {
+            bitmap = BitmapFactory.decodeFile( String.valueOf( pet_info.get( middleware.PETINFO_TYPE_PHOTO ) ) );
+            m_pet_image.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            m_pet_image.setImageBitmap(bitmap);
+        }
+        else
+        {
+            m_pet_image.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            m_pet_image.setImageDrawable(getActivity().getResources().getDrawable((R.mipmap.default_photo)));
+        }
 
-        m_pet_name.setText(  String.valueOf( pet_info.get( middleware.PETINFO_TYPE_NAME ) ) );
+        if( "null" == String.valueOf( pet_info.get( middleware.PETINFO_TYPE_NAME ) ) )
+        {
+            m_pet_name.setVisibility( View.INVISIBLE );
+        }
+        else
+        {
+            m_pet_name.setText( String.valueOf( pet_info.get( middleware.PETINFO_TYPE_NAME ) ) );
+        }
 
         for (Map.Entry<String, String> entry : action_map.entrySet()) {
             SimpleDateFormat format = new SimpleDateFormat( middleware_impl.DATE_FORMAT_FULL );
@@ -726,6 +737,7 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
     public void onResume(){
         super.onResume();
         Log.i( "PetBusApp", "PetBus:onResume " );
+        update_listdata();
         if( m_middleware.should_loadrecord( m_load_number ) ){
             m_listview.startloading();
         }

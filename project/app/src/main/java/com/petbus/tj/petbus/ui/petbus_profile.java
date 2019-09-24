@@ -242,6 +242,7 @@ public class petbus_profile extends FragmentActivity implements View.OnClickList
     protected void setPetId(final int id)
     {
         mProfile.put(ID, id);
+        mMiddleware.set_current_pet( id );
     }
 
     public void addPet()

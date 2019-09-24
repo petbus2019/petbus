@@ -349,6 +349,13 @@ public class middleware_impl extends Application implements middleware {
         return middleware.MIDDLEWARE_RETURN_OK;
     }
 
+    public int set_current_pet( int id )
+    {
+        Log.w( "PetBusApp", "set_current_pet: id = " + id );
+        m_current_petid = id;
+        return 0;
+    }
+
     public Map<String,Object> get_current_pet() {
         Map<String, Object> result = getPetInfo( m_current_petid );
         return result;
