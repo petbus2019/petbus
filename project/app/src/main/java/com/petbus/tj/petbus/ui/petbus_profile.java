@@ -67,7 +67,6 @@ public class petbus_profile extends FragmentActivity implements View.OnClickList
     private ImageButton mBtnBack;
     private TextView mName, mBirth, mWeight, mTitle;
     private RadioGroup mGender, mSpecies;
-    private Bitmap mCirclebitmap;
     private middleware mMiddleware = middleware_impl.getInstance();
     private HashMap<String,Object> mProfile = new HashMap<String, Object>();
 
@@ -83,7 +82,7 @@ public class petbus_profile extends FragmentActivity implements View.OnClickList
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.petbus_profile);
-        Log.e("PetBus", "In Class:" + Thread.currentThread().getStackTrace()[1].getClassName()
+        Log.e("PetBus", "In Class:" + this.getClass().getName()
                 + ", Method:" + Thread.currentThread().getStackTrace()[2].getMethodName());
 
         mTitle = findViewById(R.id.txt_profileTitle);
@@ -98,6 +97,9 @@ public class petbus_profile extends FragmentActivity implements View.OnClickList
         mWeight = findViewById(R.id.input_profileWeight);
         mGender = findViewById(R.id.radio_profileGender);
         mSpecies = findViewById(R.id.radio_profileSpecies);
+
+        //default photo url is empty
+        mProfile.put(PHOTO, "");
 
         mBirth.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -117,7 +119,6 @@ public class petbus_profile extends FragmentActivity implements View.OnClickList
                 }
             }
         });
-
     }
 
     @Override
@@ -167,14 +168,6 @@ public class petbus_profile extends FragmentActivity implements View.OnClickList
                         break;
                     }
                 }
-
-                String photoPath = "";
-                if (mCirclebitmap != null)
-                {
-                    photoPath = saveBitmapAsFile( "PHOTO_",mCirclebitmap );
-                }
-                mProfile.put(PHOTO, photoPath);
-
                 doNextBtnClick();
         }
     }
@@ -201,17 +194,19 @@ public class petbus_profile extends FragmentActivity implements View.OnClickList
 
     public void showProfile(HashMap petItem)
     {
-        System.out.println(petItem);
-
         String photo = petItem.get(PHOTO).toString();
         int gender = Integer.parseInt(petItem.get(GENDER).toString());
         int species = Integer.parseInt(petItem.get(SPECIES).toString());
+
+        //Set profile id
+        mProfile.put(ID, Integer.parseInt(petItem.get(ID).toString()));
 
         mName.setText(petItem.get(NAME).toString());
         mWeight.setText(petItem.get(WEIGHT).toString() + " kg");
         mBirth.setText(petItem.get(BIRTH).toString());
 
-        if (!photo.isEmpty()){
+        //photo url does NOT equal default_photo
+        if (!photo.equals(String.valueOf(R.mipmap.default_photo))){
             Log.i( "PetBusApp", "Profile: photo url is not empty, url is " + photo);
             File photofile = new File(photo);
             Uri uri = Uri.fromFile(photofile);
@@ -242,7 +237,6 @@ public class petbus_profile extends FragmentActivity implements View.OnClickList
     protected void setPetId(final int id)
     {
         mProfile.put(ID, id);
-        mMiddleware.set_current_pet( id );
     }
 
     public void addPet()
@@ -272,7 +266,8 @@ public class petbus_profile extends FragmentActivity implements View.OnClickList
 
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                petbus_profile.this.mBirth.setText(year + "-" + monthOfYear + "-" + dayOfMonth);
+                int realMon = monthOfYear + 1;
+                petbus_profile.this.mBirth.setText(year + "-" + realMon + "-" + dayOfMonth);
             }
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.show();
@@ -373,15 +368,20 @@ public class petbus_profile extends FragmentActivity implements View.OnClickList
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         String imgPath = "";
-        mCirclebitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.default_photo);
         if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
             try
             {
+                Bitmap photpBitmap;
                 int weightNheight = dp2px((float)weight_n_height);
                 Bitmap bm = MediaStore.Images.Media.getBitmap(this.getContentResolver(), m_picture_uri);
                 Bitmap bitmap = Bitmap.createScaledBitmap(bm, weightNheight, weightNheight, true);
                 CircleImageView circleImg = new CircleImageView(getApplicationContext());
-                mCirclebitmap = circleImg.getCircleBitmap(bitmap, 0);
+                photpBitmap = circleImg.getCircleBitmap(bitmap, 0);
+                Log.i( "PetBusApp", "onActivityResult：setImageBitmap");
+                mBtnImg.setAdjustViewBounds(true);
+                mBtnImg.setImageBitmap(photpBitmap);
+                String photoPath = saveBitmapAsFile( "PHOTO_",photpBitmap );
+                mProfile.put(PHOTO, photoPath);
             }
             catch( Exception e )
             {
@@ -393,22 +393,24 @@ public class petbus_profile extends FragmentActivity implements View.OnClickList
             Uri uri = data.getData();
             //imgPath = ImageFilePath.getPath(this, uri);
             try {
+                Bitmap photpBitmap;
                 int weightNheight = dp2px((float)weight_n_height);
                 Bitmap bm = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
                 Bitmap bitmap = Bitmap.createScaledBitmap(bm, weightNheight, weightNheight, true);
                 CircleImageView circleImg = new CircleImageView(getApplicationContext());
-                mCirclebitmap = circleImg.getCircleBitmap(bitmap, 0);
+                photpBitmap = circleImg.getCircleBitmap(bitmap, 0);
+                Log.i( "PetBusApp", "onActivityResult：setImageBitmap");
+                mBtnImg.setAdjustViewBounds(true);
+                mBtnImg.setImageBitmap(photpBitmap);
+                String photoPath = saveBitmapAsFile( "PHOTO_",photpBitmap );
+                mProfile.put(PHOTO, photoPath);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
         }
         else{
             Log.i( "PetBusApp", "onActivityResult：Do nothing, return");
-            return ;
         }
-        Log.i( "PetBusApp", "onActivityResult：setImageBitmap");
-        mBtnImg.setAdjustViewBounds(true);
-        mBtnImg.setImageBitmap(mCirclebitmap);
     }
 
     /*

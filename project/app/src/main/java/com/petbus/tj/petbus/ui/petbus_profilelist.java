@@ -73,7 +73,7 @@ public class petbus_profilelist extends Activity implements OnClickListener {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Map<String, Object> clickedItem = listItem.get(position);
                 Log.i( "PetBusApp_Profilelist", "item = "+ clickedItem +", position = "+position+", id = "+ id );
-                m_middleware.setCurrentPet((int)(clickedItem.get(m_middleware.PETINFO_TYPE_ID)));
+                m_middleware.set_current_pet((int)(clickedItem.get(m_middleware.PETINFO_TYPE_ID)));
                 //destroy this activity
                 finish();
             }

@@ -432,14 +432,6 @@ public class middleware_impl extends Application implements middleware {
         return retAge;
     }
 
-    public boolean setCurrentPet(int id)
-    {
-        Log.i( "PetBusApp", "PetBusBusiness:setCurrentPet " + id );
-        m_current_petid = id;
-        return true;
-    }
-
-
     /** delete a single file
      * @param filePath file name which would be deleted
      * @return if delete success, return true，otherwise return false

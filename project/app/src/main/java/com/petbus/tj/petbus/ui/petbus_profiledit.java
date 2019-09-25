@@ -13,15 +13,14 @@ public class petbus_profiledit extends petbus_profile{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.e("PetBus", "In Class:" + Thread.currentThread().getStackTrace()[1].getClassName()
-                + ", Method:" + Thread.currentThread().getStackTrace()[2].getMethodName());
+        Log.e("PetBus", "In Class:" + this.getClass().getName()
+                +", Method:" + Thread.currentThread().getStackTrace()[2].getMethodName());
 
         setProfileTitle(getString(R.string.editpet));
         setProfileNextBtnName(getString(R.string.save));
 
         Intent intent = getIntent();
         HashMap petProfile=(HashMap)intent.getSerializableExtra("pet_info");
-        setPetId(Integer.parseInt(petProfile.get(ID).toString()));
         showProfile(petProfile);
     }
 
@@ -33,7 +32,7 @@ public class petbus_profiledit extends petbus_profile{
     @Override
     protected void doNextBtnClick() {
         super.doNextBtnClick();
-        Log.e("PetBus", "In Class:" + Thread.currentThread().getStackTrace()[1].getClassName()
+        Log.e("PetBus", "In Class:" + this.getClass().getName()
                 + ", Method:" + Thread.currentThread().getStackTrace()[2].getMethodName());
         editPet();
         finish();
@@ -42,7 +41,7 @@ public class petbus_profiledit extends petbus_profile{
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.e("PetBus", "In Class:" + Thread.currentThread().getStackTrace()[1].getClassName()
+        Log.e("PetBus", "In Class:" + this.getClass().getName()
                 + ", Method:" + Thread.currentThread().getStackTrace()[2].getMethodName());
     }
 }

@@ -28,7 +28,7 @@ public class petbus_firstvisit extends petbus_profile{
     @Override
     protected void doNextBtnClick() {
         super.doNextBtnClick();
-        Log.e("PetBus", "In Class:" + Thread.currentThread().getStackTrace()[1].getClassName()
+        Log.e("PetBus", "In Class:" + this.getClass().getName()
                 + ", Method:" + Thread.currentThread().getStackTrace()[2].getMethodName());
         addPet();
         Intent intent = new Intent(petbus_firstvisit.this, petbus_action.class);
@@ -39,7 +39,7 @@ public class petbus_firstvisit extends petbus_profile{
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.e("PetBus", "In Class:" + Thread.currentThread().getStackTrace()[1].getClassName()
+        Log.e("PetBus", "In Class:" + this.getClass().getName()
                 + ", Method:" + Thread.currentThread().getStackTrace()[2].getMethodName());
     }
 }
