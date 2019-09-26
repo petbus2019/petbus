@@ -45,6 +45,9 @@ import java.util.Map;
 import com.petbus.tj.petbus.middleware.middleware;
 import com.petbus.tj.petbus.middleware.middleware_impl;
 
+
+//https://github.com/nostra13/Android-Universal-Image-Loader
+
 class string_bitmap_pair{
     public string_bitmap_pair( String text , Bitmap pic ){
         m_text = text;
