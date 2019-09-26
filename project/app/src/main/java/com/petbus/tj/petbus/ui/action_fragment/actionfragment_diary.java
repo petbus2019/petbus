@@ -37,6 +37,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.RelativeLayout.LayoutParams;
 import android.util.Log;
+import android.graphics.Canvas;
+import android.graphics.Rect;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -300,6 +302,7 @@ public class actionfragment_diary extends Fragment implements OnClickListener
                                         src_map.getHeight(),//68dp
                                         matrix, true);
         Bitmap bm = Bitmap.createScaledBitmap(bm_tmp, dpToPx(101), dpToPx(68), true);
+        Bitmap result = Bitmap.createBitmap(bm.getWidth(), bm.getHeight(), Bitmap.Config.ARGB_8888);
         int dot = file_name.lastIndexOf('.');
         String prefix = file_name.substring( 0,dot );
         Log.i( "PetBusApp", "actionfragment_diary:compressPixel" + prefix );
@@ -314,7 +317,10 @@ public class actionfragment_diary extends Fragment implements OnClickListener
             Log.d("PetBusApp", "Saving File To Cache " + saveFile.getPath());
             os = new FileOutputStream(saveFile);
             Log.d("PetBusApp", "Saving File To file " + os);
-            bm.compress( Bitmap.CompressFormat.JPEG, 50, os );
+            Canvas canvas = new Canvas(result);
+            Rect rect = new Rect(0, 0, bm.getWidth(), bm.getHeight());
+            canvas.drawBitmap(result, null, rect, null);
+            result.compress( Bitmap.CompressFormat.JPEG, 10, os );
             os.flush();
             os.close();
         } catch (FileNotFoundException e) {
@@ -324,7 +330,7 @@ public class actionfragment_diary extends Fragment implements OnClickListener
         }
 
 
-        return bm;
+        return result;
     }
 
     public int picture_result( String picture_path ){

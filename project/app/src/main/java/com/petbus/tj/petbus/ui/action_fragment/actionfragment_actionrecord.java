@@ -583,7 +583,18 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
         {
             Map<String,Object> pet_info = m_middleware.getPetInfo( pet_list.get(i) + 1 );
             // Log.i( "PetBusApp", "pet_list: " + pet_list.get(i) + ":-:" + String.valueOf( pet_info.get( middleware.PETINFO_TYPE_PHOTO ) ) );
-            Bitmap bitmap = BitmapFactory.decodeFile( String.valueOf( pet_info.get( middleware.PETINFO_TYPE_PHOTO ) ) );
+            Bitmap bitmap = null;
+            if( String.valueOf( pet_info.get( middleware.PETINFO_TYPE_PHOTO ) ) != "null" 
+            && String.valueOf( pet_info.get( middleware.PETINFO_TYPE_PHOTO ) ) != null 
+            && String.valueOf( pet_info.get( middleware.PETINFO_TYPE_PHOTO ) ).length() != 0
+            && String.valueOf( pet_info.get( middleware.PETINFO_TYPE_PHOTO ) ) != "" )
+            {
+                bitmap = BitmapFactory.decodeFile( String.valueOf( pet_info.get( middleware.PETINFO_TYPE_PHOTO ) ) );
+            }
+            else
+            {
+                bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.default_photo);
+            }
             String nic_name = String.valueOf( pet_info.get( middleware.PETINFO_TYPE_NAME ) );
             string_bitmap_pair tmp = new string_bitmap_pair( String.valueOf( pet_info.get( middleware.PETINFO_TYPE_NAME ) ), bitmap );
             pet_info_list.add( tmp );
