@@ -92,24 +92,33 @@ class HorizontalListViewAdapter extends BaseAdapter{
  
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        int position_to_id = position + 1;
+        int position_to_id = position;
         LayoutInflater _LayoutInflater = LayoutInflater.from(mContext);
         convertView = _LayoutInflater.inflate(R.layout.petview_select_item, null);
         if( convertView != null )
         {
             ImageView pet_image = (ImageView)convertView.findViewById(R.id.pet_photo);
             TextView pet_name = (TextView)convertView.findViewById(R.id.pet_nickname_text);
-            Map<String,Object> pet_map = m_middleware.getPetInfo( position_to_id ); 
+            Map<String,Object> pet_map = m_middleware.getPetIndex( position_to_id ); 
             Log.d("PetBusApp", "Select pet item:" + pet_map + " position_to_id:" + position_to_id );
 
-            Bitmap bitmap = BitmapFactory.decodeFile(String.valueOf( pet_map.get( middleware.PETINFO_TYPE_PHOTO ) ));
-            if( null == bitmap )
+            Bitmap bitmap = null;
+            if( String.valueOf( pet_map.get( middleware.PETINFO_TYPE_PHOTO ) ) != "null" 
+            && String.valueOf( pet_map.get( middleware.PETINFO_TYPE_PHOTO ) ) != null 
+            && String.valueOf( pet_map.get( middleware.PETINFO_TYPE_PHOTO ) ).length() != 0
+            && String.valueOf( pet_map.get( middleware.PETINFO_TYPE_PHOTO ) ) != "" )
             {
-                return convertView;
+                bitmap = BitmapFactory.decodeFile( String.valueOf( pet_map.get( middleware.PETINFO_TYPE_PHOTO ) ) );
+                pet_image.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                pet_image.setImageBitmap(bitmap);
             }
-            pet_image.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            pet_image.setImageBitmap(bitmap);
-                
+            else
+            {
+                pet_image.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                pet_image.setImageDrawable(mContext.getResources().getDrawable((R.mipmap.default_photo)));
+            }
+            
+            Log.d("PetBusApp", "pet:" + String.valueOf( pet_map.get( middleware.PETINFO_TYPE_NAME ) ) );
             pet_name.setText( String.valueOf( pet_map.get( middleware.PETINFO_TYPE_NAME ) ) );
             // Log.d("PetBusApp", "pet:" + pet_map + " width:" + bitmap.getWidth() + "Height:" + bitmap.getHeight() );
         }
@@ -286,10 +295,11 @@ public class actionfragment_diary extends Fragment implements OnClickListener
     private Bitmap compressPixel( Bitmap src_map, String file_name ){
         Matrix matrix = new Matrix();
         matrix.setScale(0.1f, 0.1f);
-        Bitmap bm = Bitmap.createBitmap(src_map, 0, 0, 
-                                        src_map.getWidth(),
-                                        src_map.getHeight(),
+        Bitmap bm_tmp = Bitmap.createBitmap(src_map, 0, 0, 
+                                        src_map.getWidth(),//101dp
+                                        src_map.getHeight(),//68dp
                                         matrix, true);
+        Bitmap bm = Bitmap.createScaledBitmap(bm_tmp, dpToPx(101), dpToPx(68), true);
         int dot = file_name.lastIndexOf('.');
         String prefix = file_name.substring( 0,dot );
         Log.i( "PetBusApp", "actionfragment_diary:compressPixel" + prefix );
@@ -423,7 +433,6 @@ public class actionfragment_diary extends Fragment implements OnClickListener
                     @Override
                     public void onDismiss(DialogInterface dialog) {
                         diary_petselect_dialog myDialog = (diary_petselect_dialog) dialog;
-                        // m_petid_list = myDialog.get_petid_list();
                         update_pet_list();
                         Log.i("PetBusApp", "11111 dismiss" + m_petid_list );
                     }
@@ -442,13 +451,26 @@ public class actionfragment_diary extends Fragment implements OnClickListener
         m_image_4.setVisibility( View.INVISIBLE );
 
         for(int i = 0;i < m_petid_list.size(); i ++){
-            position_to_id = m_petid_list.get(i) + 1;
+            position_to_id = m_petid_list.get(i);
             ImageView image = m_image_list.get( i );
 
-            Map<String,Object> pet_map = m_middleware.getPetInfo( position_to_id );
-            Bitmap bitmap = BitmapFactory.decodeFile(String.valueOf( pet_map.get( middleware.PETINFO_TYPE_PHOTO ) ));
-            image.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            image.setImageBitmap(bitmap);
+            Map<String,Object> pet_map = m_middleware.getPetIndex( position_to_id );
+            Bitmap bitmap = null;
+
+            if( String.valueOf( pet_map.get( middleware.PETINFO_TYPE_PHOTO ) ) != "null" 
+            && String.valueOf( pet_map.get( middleware.PETINFO_TYPE_PHOTO ) ) != null 
+            && String.valueOf( pet_map.get( middleware.PETINFO_TYPE_PHOTO ) ).length() != 0
+            && String.valueOf( pet_map.get( middleware.PETINFO_TYPE_PHOTO ) ) != "" )
+            {
+                bitmap = BitmapFactory.decodeFile( String.valueOf( pet_map.get( middleware.PETINFO_TYPE_PHOTO ) ) );
+                image.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                image.setImageBitmap(bitmap);
+            }
+            else
+            {
+                image.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                image.setImageDrawable(getActivity().getResources().getDrawable((R.mipmap.default_photo)));
+            }
             image.setAdjustViewBounds(true);
             image.setMaxHeight(200);
             image.setMaxWidth(200);
@@ -517,5 +539,9 @@ public class actionfragment_diary extends Fragment implements OnClickListener
             m_picture_filename = "";
             m_remark_edit.setText("");
         }
+    }
+
+    private int dpToPx(int dps) {
+       return Math.round(getResources().getDisplayMetrics().density * dps);
     }
 }

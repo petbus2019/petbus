@@ -361,6 +361,41 @@ public class middleware_impl extends Application implements middleware {
         return result;
     }
 
+    public Map<String,Object> getPetIndex( int index )
+    {
+        Log.i( "PetBusApp", "PetBusBusiness:get pet information,id:" + index );
+        Map<String, Object> petinfo = new HashMap<String, Object>();
+        String sqlStr = "SELECT id,nickname,picture,weight,sex,birthday,pettype from petbus_petinfo order by id;";
+        Cursor cur = m_database.get_result( sqlStr );
+        if( 0 == cur.getCount() )
+        {
+            Log.i( "PetBusApp", "there's no pet which's id=" + index );
+        }
+        else
+        {
+            cur.moveToFirst();
+            cur.moveToPosition( index );
+            Log.i( "PetBusApp", "cur is " + cur );
+            do {
+                String getName = cur.getString(cur.getColumnIndex( dbmanager.COLUMN_TEXT_NICKNAME ));
+                petinfo.put( middleware.PETINFO_TYPE_NAME, getName);
+                String picture = cur.getString(cur.getColumnIndex( dbmanager.COLUMN_TEXT_PICTURE ));
+                petinfo.put( middleware.PETINFO_TYPE_PHOTO, picture);
+                double getWeight = cur.getDouble(cur.getColumnIndex( dbmanager.COLUMN_TEXT_WEIGHT ));
+                petinfo.put(middleware.PETINFO_TYPE_WEIGHT, getWeight);
+                String getBirth = cur.getString(cur.getColumnIndex( dbmanager.COLUMN_TEXT_BIRTHDAY ));
+                petinfo.put( middleware.PETINFO_TYPE_BIRTH, getBirth);
+                String getCurAge = getAge(getBirth);
+                petinfo.put(middleware.PETINFO_TYPE_AGE, getCurAge);
+                int getSpecies = cur.getInt(cur.getColumnIndex( dbmanager.COLUMN_TEXT_PETTYPE ));
+                petinfo.put( middleware.PETINFO_TYPE_SPECIES, getSpecies);
+                int getGender = cur.getInt(cur.getColumnIndex( dbmanager.COLUMN_TEXT_SEX ));
+                petinfo.put( middleware.PETINFO_TYPE_GENDER, getGender);
+                petinfo.put( middleware.PETINFO_TYPE_ID, cur.getInt(cur.getColumnIndex( dbmanager.COLUMN_TEXT_ID )));
+            } while ( false );
+        }
+        return petinfo;
+    }
     public Map<String, Object> getPetInfo(int id)
     {
         Log.i( "PetBusApp", "PetBusBusiness:get pet information,id:" + id );
@@ -431,6 +466,14 @@ public class middleware_impl extends Application implements middleware {
                 +",curDate="+curDate+",birthdate="+birthDate);
         return retAge;
     }
+
+    public boolean setCurrentPet(int id)
+    {
+        Log.i( "PetBusApp", "PetBusBusiness:setCurrentPet " + id );
+        m_current_petid = id;
+        return true;
+    }
+
 
     /** delete a single file
      * @param filePath file name which would be deleted
