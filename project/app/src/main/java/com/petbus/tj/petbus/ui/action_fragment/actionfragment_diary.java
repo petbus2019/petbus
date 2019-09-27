@@ -269,7 +269,7 @@ public class actionfragment_diary extends Fragment implements OnClickListener
 
     private String saveBitmapAsFile(String name, Bitmap bitmap) {
         long sysTime = System.currentTimeMillis();
-        SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy_MM_dd_hh_mm");
+        SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss");
         String time = sDateFormat.format(new Date(sysTime));
         String file_name = getActivity().getCacheDir() + "/" + name + time + ".jpg";
         File saveFile = new File( file_name );
