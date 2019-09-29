@@ -11,7 +11,7 @@
     <string name="petname">宠物名字</string>
     <string name="time">时间</string>
     <string name="lovepet">爱宠</string>
-    <string name="actiontype">活动类型</string>
+    <string name="actiontype">活动</string>
     <string name="pleaseselect">请选择</string>
     <string name="remark">备注</string>
     <string name="save">保存</string>
@@ -61,4 +61,5 @@
     <string name="bath">洗澡</string>
     <string name="shovelshit">铲屎</string>
     <string name="walk">遛弯</string>
+    <string name="fabu">发布</string>
 </resources>

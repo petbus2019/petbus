@@ -4,5 +4,7 @@
   android:layout_width="wrap_content"
   android:layout_height="wrap_content"
   android:textColor="@color/colorBlack"
-  android:textSize="16sp">   
+  android:textSize="16sp"
+  android:drawableRight="@mipmap/rightarrow_btn"
+  android:drawablePadding="30dp">   
 </TextView>

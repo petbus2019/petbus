@@ -415,8 +415,11 @@ public class actionfragment_diary extends Fragment implements OnClickListener
         m_imageview_picture.setOnClickListener(this);
         m_entry_button.setOnClickListener(this);
 
-        diary_actionadapter arr_adapter = new diary_actionadapter( this.getActivity(), m_middleware.get_action_list() );
-        m_action_item.setAdapter(arr_adapter);
+        // diary_actionadapter arr_adapter = new diary_actionadapter( this.getActivity(), m_middleware.get_action_list() );
+        ArrayAdapter adapter = ArrayAdapter.createFromResource(this.getActivity(), R.array.services_array, R.layout.spinner_layout);
+        adapter.setDropDownViewResource(R.layout.spinner_item);
+        m_action_item.setAdapter(adapter);
+
 
         return view;
     }

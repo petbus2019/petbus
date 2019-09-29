@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="services_array">
+        <item>@string/feed</item>
+        <item>@string/bath</item>
+        <item>@string/shovelshit</item>
+        <item>@string/walk</item>
+    </string-array>
+</resources>
