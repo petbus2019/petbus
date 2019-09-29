@@ -39,7 +39,7 @@ public class middleware_impl extends Application implements middleware {
     }
 
     public int get_last_three_record( Map<String,String> record_map ){
-        int pet_index = m_current_petid - 1;
+        int pet_index = m_current_petid;
         // String sql = "SELECT " + dbmanager.TABLE_RECORD + ".operation," + dbmanager.TABLE_RECORD + ".time " + 
         //              "from " + dbmanager.TABLE_RECORD + " where " + dbmanager.TABLE_RECORD + ".operation " + 
         //              "!= 'null' group by " + dbmanager.TABLE_RECORD + ".operation order " + 
@@ -166,7 +166,7 @@ public class middleware_impl extends Application implements middleware {
     {
         List<Integer> ids = new ArrayList<Integer>();
 
-        String sql = "SELECT id FROM petbus_petinfo;";
+        String sql = "SELECT id FROM petbus_petinfo order by id;";
         Cursor c = m_database.get_result( sql );
         if (c.moveToFirst()) {
             do {
@@ -180,6 +180,7 @@ public class middleware_impl extends Application implements middleware {
                          , String remark, ArrayList<String> record_pic ){
 
         String file_name = "";
+        List<Integer> ids = getPetIds();
 
         String sql = "SELECT date(time) from " + dbmanager.TABLE_RECORD + 
                      " where date(time) = date(\"" + time + "\")";
@@ -225,9 +226,10 @@ public class middleware_impl extends Application implements middleware {
 
         for (int i = 0; i < pet_list.size(); i++){
             int index = pet_list.get(i);
-            Log.i( "PetBusApp", "PetBusBusiness: index is " + index + " record_id " + strid );
+            int id_record = ids.get(index);
+            Log.i( "PetBusApp", "PetBusBusiness: index is " + id_record + " record_id " + strid );
             sql = "INSERT INTO " + dbmanager.TABLE_RECORD_PETINFO + "(pet_id,record_id,time)"
-                   + " values( "  + "\"" + index
+                   + " values( "  + "\"" + id_record
                    + "\",\'" + strid + "\'" + ",\'" + time +  "\');";
             m_database.execute_sql( sql );
         }
@@ -523,6 +525,8 @@ public class middleware_impl extends Application implements middleware {
             } while (cur.moveToNext());
         }
         Log.d("PetBusApp", "PetBusBusiness:the m_action_list is " + m_action_list );
+        List<Integer> ids = getPetIds();
+        m_current_petid = ids.get(0);
     }
 
     @Override  

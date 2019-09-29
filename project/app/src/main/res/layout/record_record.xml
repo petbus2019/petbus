@@ -22,13 +22,14 @@
                 android:layout_height="fill_parent"
                 android:gravity="center_vertical"
                 android:text="11:50"
+                android:textColor="#000000"
                 android:textSize="14sp" />
         </LinearLayout>
         <View
             android:layout_marginLeft="9dp"
-            android:layout_width="1dp"
+            android:layout_width="2dp"
             android:layout_height="fill_parent"
-            android:background="@color/app_background" /> 
+            android:background="#F5F5F5" /> 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="239dp"
             android:layout_height="fill_parent"
@@ -42,6 +43,7 @@
                 android:layout_height="fill_parent"
                 android:gravity="center_vertical"
                 android:text="@string/fead"
+                android:textColor="#000000"
                 android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
@@ -124,9 +126,9 @@
                 android:orientation="horizontal">
                     <View
                         android:layout_marginLeft="21dp"
-                        android:layout_width="1dp"
+                        android:layout_width="2dp"
                         android:layout_height="fill_parent"
-                        android:background="@color/app_background" /> 
+                        android:background="#F5F5F5" /> 
                     <ImageView
                         android:layout_marginTop ="13dp"
                         android:id="@+id/record_action_icon"
@@ -155,6 +157,7 @@
                     android:layout_marginLeft="6dp"
                     android:singleLine="false"
                     style="@style/diary_remark_text"
+                    android:textColor="#000000"
                     android:text="这个是日志" />
                 <ImageView
                     android:id="@+id/recode_petportrait_image"

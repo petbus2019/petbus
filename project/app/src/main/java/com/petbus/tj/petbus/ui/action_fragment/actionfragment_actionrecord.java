@@ -393,9 +393,12 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
         m_middleware.get_last_three_record( action_map );
 
         String text_null = getActivity().getResources().getString( R.string.nullstring );
-        m_lastaction_1.setText( text_null );
-        m_lastaction_2.setText( text_null );
-        m_lastaction_3.setText( text_null );
+        m_lastaction_1.setVisibility( View.INVISIBLE );
+        m_lastaction_2.setVisibility( View.INVISIBLE );
+        m_lastaction_3.setVisibility( View.INVISIBLE );
+        m_lastaction_1_pic.setVisibility( View.INVISIBLE );
+        m_lastaction_2_pic.setVisibility( View.INVISIBLE );
+        m_lastaction_3_pic.setVisibility( View.INVISIBLE );
         
         Map<String,Object> pet_info = m_middleware.get_current_pet();
         Bitmap bitmap = null;
@@ -415,6 +418,7 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
             m_pet_image.setImageDrawable(getActivity().getResources().getDrawable((R.mipmap.default_photo)));
         }
 
+        Log.i( "PetBusApp", "add_action_button!!!!!!!!!!![" + pet_info.get( middleware.PETINFO_TYPE_NAME ) + "]" );
         if( "null" == String.valueOf( pet_info.get( middleware.PETINFO_TYPE_NAME ) ) )
         {
             m_pet_name.setVisibility( View.INVISIBLE );
@@ -422,6 +426,7 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
         else
         {
             m_pet_name.setText( String.valueOf( pet_info.get( middleware.PETINFO_TYPE_NAME ) ) );
+            m_pet_name.setVisibility( View.VISIBLE );
         }
 
         for (Map.Entry<String, String> entry : action_map.entrySet()) {
@@ -444,14 +449,14 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
 
             if( 0 == i )
             {
+                m_lastaction_1_pic.setVisibility( View.VISIBLE );
+                m_lastaction_1.setVisibility( View.VISIBLE );
                 if( days > 0 ){
                     String text = getActivity().getResources().getString( R.string.day_before );
                     m_lastaction_1.setText( entry.getKey() + ":" + String.valueOf(days) + text );
-                    
                 }
                 else if( hours > 0 ){
                     String text = getActivity().getResources().getString( R.string.hour_before );
-                    m_lastaction_1.setText( entry.getKey() + ":" + String.valueOf(hours) + text );
                     
                 }
                 else if( minutes > 0 ){
@@ -477,6 +482,8 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
             }
             else if( 1 == i )
             {
+                m_lastaction_2_pic.setVisibility( View.VISIBLE );
+                m_lastaction_2.setVisibility( View.VISIBLE );
                 if( days > 0 ){
                     String text = getActivity().getResources().getString( R.string.day_before );
                     m_lastaction_2.setText( entry.getKey() + ":" + String.valueOf(days) + text );
@@ -511,6 +518,8 @@ public class actionfragment_actionrecord extends Fragment implements OnClickList
             }
             else if( 2 == i )
             {
+                m_lastaction_3_pic.setVisibility( View.VISIBLE );
+                m_lastaction_3.setVisibility( View.VISIBLE );
                 if( days > 0 ){
                     String text = getActivity().getResources().getString( R.string.day_before );
                     m_lastaction_3.setText( entry.getKey() + ":" + String.valueOf(days) + text );

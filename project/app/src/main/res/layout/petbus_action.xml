@@ -56,7 +56,6 @@
             android:id="@+id/overview_button"
             android:layout_width="50dp"
             android:layout_height="fill_parent"
-            android:layout_marginRight="17dp"
             android:background="@drawable/button_sector"
             android:layout_toLeftOf="@+id/setting_button"
             android:src="@mipmap/chart1" />
